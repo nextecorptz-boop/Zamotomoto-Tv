@@ -1,0 +1,120 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #0A0A0A;
+  --surface: #111111;
+  --surface-2: #1A1A1A;
+  --border: #2A2A2A;
+  --primary: #CC1F1F;
+  --primary-hover: #FF2B2B;
+  --text: #FFFFFF;
+  --text-secondary: #888888;
+  --text-tertiary: #666666;
+  --success: #22C55E;
+  --warning: #F59E0B;
+  --purple: #8B5CF6;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  background-color: #0A0A0A;
+  color: #FFFFFF;
+  font-family: 'IBM Plex Mono', monospace;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Force 0px radius everywhere */
+*, *::before, *::after {
+  border-radius: 0 !important;
+}
+
+/* Exception for truly circular elements */
+.rounded-full {
+  border-radius: 9999px !important;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+::-webkit-scrollbar-track {
+  background: #0A0A0A;
+}
+::-webkit-scrollbar-thumb {
+  background: #2A2A2A;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #CC1F1F;
+}
+
+/* Skeleton animation */
+@keyframes pulse-bg {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+.skeleton {
+  background: #1A1A1A;
+  animation: pulse-bg 1.5s ease-in-out infinite;
+}
+
+/* Page fade in */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.fade-in {
+  animation: fadeIn 250ms ease-out forwards;
+}
+
+/* Pulse for live indicator */
+@keyframes pulse-dot {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.5); opacity: 0.5; }
+}
+.live-dot {
+  animation: pulse-dot 2s infinite;
+}
+
+/* Card hover 3D tilt */
+.card-tilt {
+  transition: transform 200ms ease, box-shadow 200ms ease;
+}
+.card-tilt:hover {
+  transform: perspective(1000px) rotateX(-1deg) rotateY(1.5deg) translateZ(4px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+}
+
+/* Input focus */
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  border-color: #CC1F1F !important;
+  box-shadow: 0 0 0 1px #CC1F1F;
+}
+
+/* Drag and drop */
+.dragging {
+  opacity: 0.5;
+  cursor: grabbing !important;
+}
+.drag-over {
+  border-color: #CC1F1F !important;
+  background: rgba(204, 31, 31, 0.05) !important;
+}
+
+/* Count-up animation */
+@keyframes countUp {
+  from { transform: translateY(10px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+.count-up {
+  animation: countUp 400ms ease-out forwards;
+}
