@@ -15,11 +15,26 @@ export default async function DashboardLayout({
     redirect('/login')
   }
 
-  const { data: profileData } = await supabase
+  let { data: profileData } = await supabase
     .from('profiles')
     .select('*')
     .eq('id', user.id)
     .single()
+
+  // Auto-create profile if missing (handles new users without a DB trigger)
+  if (!profileData) {
+    const { data: created } = await supabase
+      .from('profiles')
+      .insert({
+        id: user.id,
+        full_name: user.email?.split('@')[0] ?? 'User',
+        role: 'worker_standard',
+        is_active: true,
+      })
+      .select('*')
+      .single()
+    profileData = created
+  }
 
   // Inject email from auth session since profiles table has no email col
   const profile = profileData ? { ...profileData, email: user.email } : null
