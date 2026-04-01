@@ -1,5 +1,4 @@
 import { createClient } from '@/lib/supabase/server'
-import { PRIORITY_COLORS, STATUS_COLORS } from '@/lib/constants'
 import { formatDate } from '@/lib/utils'
 import type { SpecialProject } from '@/types'
 
@@ -37,8 +36,7 @@ export default async function SpecialProjectsPage() {
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1px', background: '#2A2A2A' }}>
           {projectList.map(project => {
-            const statusColor = STATUS_COLORS[project.status] || '#888888'
-            const priorityColor = PRIORITY_COLORS[project.priority] || '#888888'
+            const urgencyColor = project.urgency === 'urgent' ? '#CC1F1F' : project.urgency === 'high' ? '#F59E0B' : project.urgency === 'low' ? '#888888' : '#22C55E'
             return (
               <div
                 key={project.id}
@@ -47,7 +45,7 @@ export default async function SpecialProjectsPage() {
                 style={{
                   background: '#111111',
                   padding: '1.25rem 1.5rem',
-                  borderLeft: `3px solid ${priorityColor}`,
+                  borderLeft: `3px solid ${urgencyColor}`,
                   display: 'flex',
                   justifyContent: 'space-between',
                   alignItems: 'flex-start',
@@ -59,7 +57,7 @@ export default async function SpecialProjectsPage() {
                     <span style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: '1.1rem', letterSpacing: '0.05em', color: '#FFFFFF' }}>
                       {project.title}
                     </span>
-                    {project.priority === 'urgent' && (
+                    {project.urgency === 'urgent' && (
                       <span style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '0.55rem', letterSpacing: '0.15em', color: '#CC1F1F', border: '1px solid #CC1F1F', padding: '0.1rem 0.35rem', background: 'rgba(204,31,31,0.1)' }}>
                         URGENT
                       </span>
@@ -72,7 +70,7 @@ export default async function SpecialProjectsPage() {
                   )}
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem', alignItems: 'flex-end', flexShrink: 0 }}>
-                  <span style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '0.6rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: statusColor, border: `1px solid ${statusColor}`, padding: '0.15rem 0.5rem' }}>
+                  <span style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '0.6rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: urgencyColor, border: `1px solid ${urgencyColor}`, padding: '0.15rem 0.5rem' }}>
                     {project.status?.replace('_', ' ')}
                   </span>
                   {project.deadline && (

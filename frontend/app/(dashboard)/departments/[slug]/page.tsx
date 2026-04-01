@@ -1,6 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
-import { STAGES, STATUS_COLORS, PRIORITY_COLORS } from '@/lib/constants'
-import { formatDateTime } from '@/lib/utils'
+import { STAGES, PRIORITY_COLORS } from '@/lib/constants'
 import Link from 'next/link'
 import type { Task } from '@/types'
 
@@ -15,7 +14,7 @@ export default async function DepartmentDetailPage({ params }: PageProps) {
 
   const { data: tasks } = await supabase
     .from('tasks')
-    .select('*, assignee:assigned_to(display_name, email)')
+    .select('*, assignee:assigned_to(full_name)')
     .eq('current_stage', slug)
     .order('created_at', { ascending: false })
 
@@ -70,7 +69,7 @@ export default async function DepartmentDetailPage({ params }: PageProps) {
                 <span style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '0.65rem', color: '#CC1F1F' }}>{task.task_ref}</span>
                 <span style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '0.75rem', color: '#FFFFFF', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{task.title}</span>
                 <span style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '0.65rem', color: '#888888', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                  {(task.assignee as { display_name?: string; email?: string } | null)?.display_name || (task.assignee as { display_name?: string; email?: string } | null)?.email || '—'}
+                  {(task.assignee as { full_name?: string } | null)?.full_name || '—'}
                 </span>
                 <span style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '0.6rem', color: PRIORITY_COLORS[task.priority], textTransform: 'uppercase' }}>{task.priority}</span>
                 <span style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '0.65rem', color: '#888888' }}>

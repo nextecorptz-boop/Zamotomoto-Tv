@@ -2,7 +2,6 @@
 import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { formatBytes, formatDate } from '@/lib/utils'
-import { STAGES } from '@/lib/constants'
 import type { TaskFile } from '@/types'
 
 const TYPE_COLORS: Record<string, string> = {
@@ -63,7 +62,7 @@ export default function FilesPage() {
       || (filterType === 'audio' && f.mime_type.startsWith('audio/'))
       || (filterType === 'pdf' && f.mime_type === 'application/pdf')
       || (filterType === 'drive' && f.provider === 'google_drive')
-    const matchSearch = !search || f.original_filename.toLowerCase().includes(search.toLowerCase())
+    const matchSearch = !search || f.file_name.toLowerCase().includes(search.toLowerCase())
     return matchType && matchSearch
   })
 
@@ -133,7 +132,7 @@ export default function FilesPage() {
                   </span>
                 </div>
                 <div style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '0.78rem', color: '#FFFFFF', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                  {file.original_filename}
+                  {file.file_name}
                 </div>
                 {file.task_ref && (
                   <div style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '0.6rem', color: '#CC1F1F' }}>{file.task_ref}</div>

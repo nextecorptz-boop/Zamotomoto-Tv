@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { STAGES, STATUS_COLORS } from '@/lib/constants'
-import type { Task } from '@/types'
+import type { Task, TaskStage } from '@/types'
 
 function BarChart({ data, colors }: { data: { label: string; value: number; color: string }[]; colors: string[] }) {
   const max = Math.max(...data.map(d => d.value), 1)
@@ -21,12 +21,17 @@ function BarChart({ data, colors }: { data: { label: string; value: number; colo
 
 export default function AnalyticsPage() {
   const [tasks, setTasks] = useState<Task[]>([])
+  const [stageRecords, setStageRecords] = useState<Pick<TaskStage, 'status'>[]>([])
   const [loading, setLoading] = useState(true)
   const supabase = createClient()
 
   useEffect(() => {
-    supabase.from('tasks').select('*').then(({ data }) => {
-      setTasks(data || [])
+    Promise.all([
+      supabase.from('tasks').select('*'),
+      supabase.from('task_stages').select('status'),
+    ]).then(([{ data: t }, { data: s }]) => {
+      setTasks(t || [])
+      setStageRecords((s || []) as Pick<TaskStage, 'status'>[])
       setLoading(false)
     })
   }, [])
@@ -38,10 +43,11 @@ export default function AnalyticsPage() {
   )
 
   const total = tasks.length
-  const approved = tasks.filter(t => t.status === 'approved').length
-  const inProgress = tasks.filter(t => t.status === 'in_progress').length
-  const review = tasks.filter(t => t.status === 'review').length
-  const pending = tasks.filter(t => t.status === 'pending').length
+  // Status lives in task_stages, not tasks
+  const approved = stageRecords.filter(s => s.status === 'approved').length
+  const inProgress = stageRecords.filter(s => s.status === 'in_progress').length
+  const review = stageRecords.filter(s => s.status === 'review').length
+  const pending = stageRecords.filter(s => s.status === 'pending').length
 
   const byStage = STAGES.map(s => ({ label: s.label, value: tasks.filter(t => t.current_stage === s.id).length, color: s.color }))
   const byPriority = ['urgent', 'high', 'normal', 'low'].map(p => ({
@@ -51,7 +57,7 @@ export default function AnalyticsPage() {
   }))
   const byStatus = Object.entries(STATUS_COLORS).map(([s, c]) => ({
     label: s.replace('_', ' ').toUpperCase(),
-    value: tasks.filter(t => t.status === s).length,
+    value: stageRecords.filter(r => r.status === s).length,
     color: c,
   }))
 

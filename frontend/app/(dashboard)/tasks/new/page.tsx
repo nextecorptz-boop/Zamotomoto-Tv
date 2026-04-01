@@ -3,7 +3,10 @@ import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useUser } from '@/hooks/useUser'
 import { useRouter } from 'next/navigation'
-import type { Profile, SpecialProject } from '@/types'
+import type { SpecialProject } from '@/types'
+
+type ProfileOption = { id: string; full_name: string | null; role: string }
+type SPOption = { id: string; sp_ref: string; title: string }
 
 const FIELD = {
   width: '100%', background: '#1A1A1A', border: '1px solid #2A2A2A',
@@ -24,8 +27,8 @@ export default function NewTaskPage() {
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
-  const [profiles, setProfiles] = useState<Profile[]>([])
-  const [specialProjects, setSpecialProjects] = useState<SpecialProject[]>([])
+  const [profiles, setProfiles] = useState<ProfileOption[]>([])
+  const [specialProjects, setSpecialProjects] = useState<SPOption[]>([])
 
   const [form, setForm] = useState({
     title: '',
@@ -44,8 +47,8 @@ export default function NewTaskPage() {
         supabase.from('profiles').select('id,full_name,role').order('full_name'),
         supabase.from('special_projects').select('id,sp_ref,title').order('created_at', { ascending: false }),
       ])
-      setProfiles(p || [])
-      setSpecialProjects(sp || [])
+      setProfiles((p || []) as ProfileOption[])
+      setSpecialProjects((sp || []) as SPOption[])
     }
     fetchData()
   }, [])

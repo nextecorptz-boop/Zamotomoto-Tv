@@ -5,15 +5,19 @@ import Link from 'next/link'
 export default async function DepartmentsPage() {
   const supabase = await createClient()
 
-  // Get tasks per stage/department
-  const { data: tasks } = await supabase.from('tasks').select('current_stage, status')
+  // Get tasks per stage (tasks have no status column — status lives in task_stages)
+  const { data: tasks } = await supabase.from('tasks').select('current_stage')
   const taskList = tasks || []
+
+  // Get stage status breakdown from task_stages
+  const { data: stageData } = await supabase.from('task_stages').select('stage, status')
+  const stageList = stageData || []
 
   const deptStats = STAGES.map(stage => ({
     ...stage,
     total: taskList.filter(t => t.current_stage === stage.id).length,
-    inProgress: taskList.filter(t => t.current_stage === stage.id && t.status === 'in_progress').length,
-    review: taskList.filter(t => t.current_stage === stage.id && t.status === 'review').length,
+    inProgress: stageList.filter(s => s.stage === stage.id && s.status === 'in_progress').length,
+    review: stageList.filter(s => s.stage === stage.id && s.status === 'review').length,
   }))
 
   // Get worker counts per department

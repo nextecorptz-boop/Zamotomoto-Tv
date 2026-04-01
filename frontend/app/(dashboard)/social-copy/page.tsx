@@ -96,7 +96,7 @@ export default function SocialCopyPage() {
               onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = '#1A1A1A'}
               onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = 'transparent'}
             >
-              <span style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '0.65rem', color: '#CC1F1F' }}>{task.task_ref}</span>
+              <span style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '0.65rem', color: '#CC1F1F' }}>{task.sc_ref}</span>
               <span style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '0.75rem', color: '#FFFFFF', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{task.title}</span>
               <span style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '0.6rem', color: '#888888' }}>{task.platform?.join(', ') || '—'}</span>
               <span style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '0.6rem', color: PRIORITY_COLORS[task.priority], textTransform: 'uppercase' }}>{task.priority}</span>

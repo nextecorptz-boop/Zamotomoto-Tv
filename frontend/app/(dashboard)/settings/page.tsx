@@ -43,7 +43,7 @@ export default async function SettingsPage() {
             ['Environment', 'Production'],
             ['Database', 'Supabase PostgreSQL'],
             ['Timezone', 'Africa/Nairobi (EAT UTC+3)'],
-            ['Super Admin', profile?.display_name || profile?.email || '—'],
+            ['Super Admin', profile?.full_name || profile?.email || '—'],
           ].map(([label, value]) => (
             <React.Fragment key={label}>
               <span style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '0.65rem', color: '#888888', letterSpacing: '0.1em', textTransform: 'uppercase' }}>{label}</span>
@@ -84,5 +84,3 @@ export default async function SettingsPage() {
     </div>
   )
 }
-
-import React from 'react'
