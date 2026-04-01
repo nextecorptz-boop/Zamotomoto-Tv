@@ -1,0 +1,115 @@
+{
+  "theme": "dark",
+  "archetype": "Performance Pro (Control Room variant)",
+  "colors": {
+    "background": "#0A0A0A",
+    "surface": "#111111",
+    "surface_secondary": "#1A1A1A",
+    "border": "#2A2A2A",
+    "primary": "#CC1F1F",
+    "primary_hover": "#FF2B2B",
+    "text_primary": "#FFFFFF",
+    "text_secondary": "#888888",
+    "text_tertiary": "#666666",
+    "success": "#22C55E",
+    "warning": "#F59E0B",
+    "sidebar_active_bg": "rgba(204,31,31,0.1)"
+  },
+  "typography": {
+    "fonts": {
+      "display": "Bebas Neue",
+      "body": "IBM Plex Mono"
+    },
+    "font_imports": [
+      "@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap');"
+    ],
+    "headings": {
+      "h1": "font-display text-4xl sm:text-5xl lg:text-6xl tracking-wide leading-none uppercase",
+      "h2": "font-display text-3xl sm:text-4xl tracking-wide leading-tight uppercase",
+      "h3": "font-display text-2xl sm:text-3xl tracking-wide uppercase",
+      "h4": "font-display text-xl sm:text-2xl tracking-wide uppercase"
+    },
+    "body": {
+      "base": "font-body text-sm sm:text-base leading-relaxed tracking-tight",
+      "small": "font-body text-xs sm:text-sm tracking-tight",
+      "data": "font-body text-sm tabular-nums tracking-tight"
+    }
+  },
+  "layout": {
+    "sidebar": {
+      "width": "256px",
+      "background": "#111111",
+      "active_style": "border-l-[3px] border-[#CC1F1F] bg-[rgba(204,31,31,0.1)]"
+    },
+    "topbar": {
+      "height": "64px",
+      "background": "#0A0A0A",
+      "border_bottom": "1px solid #2A2A2A"
+    },
+    "border_radius": "0px (rounded-none strictly enforced)",
+    "shadows": "None or minimal dark ambient shadow. ABSOLUTELY NO GLASSMORPHISM or blur effects.",
+    "spacing_strategy": "Control Room Grid (Dense, structural, highly aligned bento-style grids. 1px borders between widgets rather than padded cards where possible.)"
+  },
+  "components": {
+    "buttons": {
+      "primary": "bg-[#CC1F1F] hover:bg-[#FF2B2B] text-white rounded-none font-display uppercase tracking-widest px-6 py-2 transition-colors duration-200",
+      "secondary": "bg-transparent border border-[#2A2A2A] hover:border-[#CC1F1F] hover:text-[#CC1F1F] text-white rounded-none font-body text-sm px-4 py-2 transition-colors duration-200"
+    },
+    "cards": {
+      "base": "bg-[#111111] border border-[#2A2A2A] rounded-none p-4 lg:p-6",
+      "hover_effect": "transform transition-transform duration-300 hover:scale-[1.01] hover:shadow-[0_10px_30px_-15px_rgba(0,0,0,0.8)] [transform-style:preserve-3d] hover:[transform:perspective(1000px)_rotateX(2deg)_rotateY(1deg)]"
+    },
+    "inputs": {
+      "base": "bg-[#1A1A1A] border border-[#2A2A2A] text-white rounded-none font-body text-sm focus:ring-1 focus:ring-[#CC1F1F] focus:border-[#CC1F1F] focus:outline-none px-3 py-2 transition-colors placeholder:text-[#666666]"
+    },
+    "badges_tags": {
+      "base": "px-2 py-1 bg-[#1A1A1A] border border-[#2A2A2A] rounded-none font-body text-xs uppercase text-white"
+    },
+    "kanban_board": {
+      "column": "bg-[#0A0A0A] border-r border-[#2A2A2A] min-h-[calc(100vh-64px)] p-4 flex flex-col gap-4",
+      "task_card": "bg-[#111111] border border-[#2A2A2A] p-3 cursor-grab active:cursor-grabbing hover:border-[#888888] transition-colors rounded-none shadow-none"
+    },
+    "loading": {
+      "style": "Skeleton screens using flat blocks (animate-pulse bg-[#1A1A1A] rounded-none). NEVER use spinners."
+    }
+  },
+  "motion_and_interactions": {
+    "hover_states": "Crisp and instant. Accent colors illuminate bright red on hover. Links/Icons turn from #888888 to #FFFFFF.",
+    "transitions": "Use short durations (150ms-200ms) for color changes. Layout/transform changes (like card tilt) use 300ms ease-out.",
+    "focus_states": "All focusable elements must have focus:outline-none focus:ring-1 focus:ring-[#CC1F1F] focus:ring-offset-1 focus:ring-offset-[#0A0A0A]."
+  },
+  "accessibility": {
+    "testing_attributes": "All interactive/key elements MUST have data-testid attributes (kebab-case, role-based, e.g., data-testid='submit-task-button').",
+    "contrast": "Ensure text contrast meets APCA/WCAG standards. Do not use #666666 text on #111111 background for critical information (use #888888 minimum, or white)."
+  },
+  "media_and_icons": {
+    "icon_library": "lucide-react (using sharp/angular variants where possible) or @phosphor-icons/react (regular/bold weight for technical feel)",
+    "images": {
+      "login_hero_background": {
+        "url": "https://static.prod-images.emergentagent.com/jobs/212c0901-c46c-4a3a-8cf1-5d074fdf4df5/images/ee0cfe09ccc9a74c43f40cad255a078591e8047f812ab46a2be64c9bf4dc0a41.png",
+        "description": "Cinematic, moody dark broadcast control room background with abstract red/black glowing data streams. Use in the /login page."
+      },
+      "avatar_placeholders": [
+        {
+          "url": "https://images.unsplash.com/photo-1758534063829-a72058381e21?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxNzV8MHwxfHNlYXJjaHwxfHxwcm9mZXNzaW9uYWwlMjBoZWFkc2hvdCUyMGRhcmslMjBiYWNrZ3JvdW5kfGVufDB8fHx8MTc3NTAwMzI4NXww&ixlib=rb-4.1.0&q=85",
+          "description": "Professional team member avatar 1"
+        },
+        {
+          "url": "https://images.pexels.com/photos/262391/pexels-photo-262391.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+          "description": "Professional team member avatar 2"
+        },
+        {
+          "url": "https://images.unsplash.com/photo-1769636929231-3cd7f853d038?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxNzV8MHwxfHNlYXJjaHwyfHxwcm9mZXNzaW9uYWwlMjBoZWFkc2hvdCUyMGRhcmslMjBiYWNrZ3JvdW5kfGVufDB8fHx8MTc3NTAwMzI4NXww&ixlib=rb-4.1.0&q=85",
+          "description": "Professional team member avatar 3"
+        }
+      ]
+    }
+  },
+  "instructions_to_main_agent": {
+    "framework": "Next.js 14 App Router, Tailwind CSS, shadcn/ui",
+    "shadcn_overrides": "You MUST override all shadcn default border radii to `rounded-none`. Override default popover/dialog backgrounds to `#111111` or `#1A1A1A` with border `#2A2A2A`.",
+    "global_css_variables": "Add these exactly to globals.css -> :root { --background: 0 0% 4%; --foreground: 0 0% 100%; --card: 0 0% 7%; --card-foreground: 0 0% 100%; --popover: 0 0% 7%; --popover-foreground: 0 0% 100%; --primary: 0 74% 46%; --primary-foreground: 0 0% 100%; --secondary: 0 0% 16%; --secondary-foreground: 0 0% 100%; --muted: 0 0% 16%; --muted-foreground: 0 0% 53%; --accent: 0 74% 46%; --accent-foreground: 0 0% 100%; --destructive: 0 62.8% 30.6%; --destructive-foreground: 0 0% 100%; --border: 0 0% 16%; --input: 0 0% 16%; --ring: 0 74% 46%; --radius: 0rem; }",
+    "tailwind_config": "Extend fontFamily with display: ['\"Bebas Neue\"', 'sans-serif'] and body: ['\"IBM Plex Mono\"', 'monospace']. Extend colors manually matching the guidelines.",
+    "specific_requirements": "Currency must be formatted as TZS. Timezone logic must use Africa/Nairobi. Skeletons for loaders, NO spinners. Kanban board requires 0px borders and strict #2A2A2A lines between columns. All components must look like an elite broadcast dashboard."
+  }
+}
