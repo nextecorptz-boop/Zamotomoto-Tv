@@ -122,9 +122,7 @@ export default async function DashboardPage() {
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
               {upcoming.map(task => (
-                <Link key={task.id} href={`/tasks/${task.id}`} data-testid="deadline-item" style={{ display: 'flex', justifyContent: 'space-between', padding: '0.5rem 0.75rem', background: '#1A1A1A', textDecoration: 'none', border: '1px solid transparent', transition: 'border-color 150ms' }}
-                  onMouseEnter={e => (e.currentTarget as HTMLElement).style.borderColor = '#CC1F1F'}
-                  onMouseLeave={e => (e.currentTarget as HTMLElement).style.borderColor = 'transparent'}>
+                <Link key={task.id} href={`/tasks/${task.id}`} data-testid="deadline-item" className="hover-border-primary" style={{ display: 'flex', justifyContent: 'space-between', padding: '0.5rem 0.75rem', background: '#1A1A1A', textDecoration: 'none', border: '1px solid transparent', transition: 'border-color 150ms' }}>
                   <div>
                     <div style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '0.7rem', color: '#FFFFFF' }}>{task.title}</div>
                     <div style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '0.6rem', color: '#888888' }}>{task.task_ref} · {STAGE_MAP[task.current_stage]?.label}</div>
@@ -153,9 +151,7 @@ export default async function DashboardPage() {
           {tasks.slice(0, 8).map(task => {
             const stage = STAGE_MAP[task.current_stage]
             return (
-              <Link key={task.id} href={`/tasks/${task.id}`} data-testid="task-row" style={{ display: 'grid', gridTemplateColumns: '80px 1fr 100px 80px', gap: '0.5rem', padding: '0.6rem 0.5rem', borderBottom: '1px solid #1A1A1A', textDecoration: 'none', transition: 'background 120ms', alignItems: 'center' }}
-                onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = '#1A1A1A'}
-                onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = 'transparent'}>
+              <Link key={task.id} href={`/tasks/${task.id}`} data-testid="task-row" className="hover-row" style={{ display: 'grid', gridTemplateColumns: '80px 1fr 100px 80px', gap: '0.5rem', padding: '0.6rem 0.5rem', borderBottom: '1px solid #1A1A1A', textDecoration: 'none', transition: 'background 120ms', alignItems: 'center' }}>
                 <span style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '0.65rem', color: '#CC1F1F' }}>{task.task_ref}</span>
                 <span style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '0.7rem', color: '#FFFFFF', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{task.title}</span>
                 <span style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '0.65rem', color: stage?.color || '#888888' }}>{stage?.label}</span>

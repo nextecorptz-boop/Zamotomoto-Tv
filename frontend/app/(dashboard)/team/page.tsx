@@ -52,9 +52,8 @@ export default async function TeamPage() {
             <div
               key={member.id}
               data-testid={`team-member-${member.id}`}
+              className="hover-row"
               style={{ display: 'grid', gridTemplateColumns: '40px 1fr 140px 140px 120px', gap: '0.5rem', padding: '0.75rem 1.5rem', borderBottom: '1px solid #1A1A1A', alignItems: 'center', transition: 'background 120ms' }}
-              onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = '#1A1A1A'}
-              onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = 'transparent'}
             >
               <div style={{ width: '28px', height: '28px', borderRadius: '9999px', background: member.role === 'super_admin' || member.role === 'admin' ? '#CC1F1F' : '#2A2A2A', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: "'IBM Plex Mono', monospace", fontSize: '0.6rem', color: '#FFFFFF' }}>
                 {getInitials(member.full_name || member.email || '')}

@@ -42,7 +42,7 @@ export default async function DepartmentsPage() {
               key={dept.id}
               href={`/departments/${dept.id}`}
               data-testid={`dept-card-${dept.id}`}
-              className="card-tilt"
+              className="card-tilt hover-card"
               style={{
                 background: '#111111',
                 padding: '1.5rem',
@@ -53,8 +53,6 @@ export default async function DepartmentsPage() {
                 borderLeft: `3px solid ${dept.color}`,
                 transition: 'background 150ms',
               }}
-              onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = '#1A1A1A'}
-              onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = '#111111'}
             >
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                 <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: '1.8rem', letterSpacing: '0.1em', color: dept.color }}>{dept.label}</div>

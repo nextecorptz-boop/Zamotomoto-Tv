@@ -53,6 +53,7 @@ export default async function DepartmentDetailPage({ params }: PageProps) {
                 key={task.id}
                 href={`/tasks/${task.id}`}
                 data-testid={`dept-task-${task.id}`}
+                className="hover-row"
                 style={{
                   display: 'grid',
                   gridTemplateColumns: '80px 1fr 120px 80px 100px',
@@ -63,8 +64,6 @@ export default async function DepartmentDetailPage({ params }: PageProps) {
                   transition: 'background 120ms',
                   alignItems: 'center',
                 }}
-                onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = '#1A1A1A'}
-                onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = 'transparent'}
               >
                 <span style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '0.65rem', color: '#CC1F1F' }}>{task.task_ref}</span>
                 <span style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '0.75rem', color: '#FFFFFF', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{task.title}</span>

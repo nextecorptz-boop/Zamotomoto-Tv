@@ -1551,7 +1551,27 @@ input:focus, textarea:focus, select:focus {
   background: rgba(204, 31, 31, 0.05) !important;
 }
 
-/* Count-up animation */
+/* Row hover (transparent → #1A1A1A) — replaces JS onMouseEnter/Leave */
+.hover-row {
+  cursor: default;
+}
+.hover-row:hover {
+  background: #1A1A1A !important;
+}
+
+/* Card hover (surface → surface-2) */
+.hover-card {
+  cursor: pointer;
+}
+.hover-card:hover {
+  background: #1A1A1A !important;
+}
+
+/* Border highlight on hover */
+.hover-border-primary:hover {
+  border-color: #CC1F1F !important;
+}
+
 @keyframes countUp {
   from { transform: translateY(10px); opacity: 0; }
   to { transform: translateY(0); opacity: 1; }
