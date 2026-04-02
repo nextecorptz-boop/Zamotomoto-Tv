@@ -1,8 +1,3 @@
 {
-  "/(dashboard)/special-projects/page": "app/(dashboard)/special-projects/page.js",
-  "/(dashboard)/social-copy/page": "app/(dashboard)/social-copy/page.js",
-  "/(dashboard)/admin/settings/page": "app/(dashboard)/admin/settings/page.js",
-  "/(dashboard)/tasks/new/page": "app/(dashboard)/tasks/new/page.js",
-  "/(dashboard)/tasks/page": "app/(dashboard)/tasks/page.js",
   "/(auth)/login/page": "app/(auth)/login/page.js"
 }
