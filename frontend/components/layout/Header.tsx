@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { usePathname } from 'next/navigation'
 import type { Profile } from '@/types'
 import { getInitials } from '@/lib/utils'
+import { NotificationBell } from './NotificationBell'
 
 interface HeaderProps {
   profile: Profile | null
@@ -92,32 +93,8 @@ export default function Header({ profile }: HeaderProps) {
 
       {/* Right: Notifications + Avatar */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-        {/* Notification bell */}
-        <button
-          data-testid="notification-bell"
-          style={{
-            background: 'transparent',
-            border: 'none',
-            cursor: 'pointer',
-            position: 'relative',
-            padding: '0.25rem',
-            color: '#888888',
-            fontSize: '1rem',
-          }}
-        >
-          🔔
-          <span
-            style={{
-              position: 'absolute',
-              top: 0,
-              right: 0,
-              width: '8px',
-              height: '8px',
-              background: '#CC1F1F',
-              borderRadius: '9999px',
-            }}
-          />
-        </button>
+        {/* Realtime notification bell */}
+        <NotificationBell />
 
         {/* Avatar */}
         <div

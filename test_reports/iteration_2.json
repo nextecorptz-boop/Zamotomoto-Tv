@@ -1,0 +1,59 @@
+{
+  "summary": "Phase 3 frontend testing: Login, Dashboard, Notification Bell, Breaking Alert, Special Projects, Social Copy, Navigation. All core flows pass. One Supabase 500 error on activity_log query (handled gracefully by UI).",
+  "backend_issues": {
+    "critical": [
+      {
+        "endpoint": "https://trgzfntbzzkxtbyycegw.supabase.co/rest/v1/activity_log",
+        "issue": "Returns 500 error when queried via useNotifications hook (select id,action,metadata,created_at). Likely RLS policy missing or table not accessible for authenticated user role. UI handles gracefully showing 'No activity yet'.",
+        "priority": "HIGH"
+      }
+    ],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [
+      {
+        "flow": "Notification Bell — activity_log fetch",
+        "issue": "Supabase activity_log table returns 500, so notification panel always shows 'No activity yet' even if records exist. The unread count badge never appears.",
+        "affected_selectors": ["[data-testid='notification-bell']", "[data-testid='notification-badge']"]
+      }
+    ],
+    "design_issues": []
+  },
+  "test_report_links": ["/app/test_reports/iteration_2.json"],
+  "action_items": [
+    "Fix Supabase RLS policy (or table permissions) for activity_log so authenticated users can SELECT. Check if the table exists and has correct column names (id, action, metadata, created_at).",
+    "Verify activity_log table has RLS enabled with a SELECT policy for authenticated users."
+  ],
+  "critical_code_review_comments": [
+    "useNotifications.ts silently swallows the 500 error (checks `if (!data) return`) — consider logging the `error` object from supabase response for easier debugging",
+    "activity_log Supabase 500 error: table may not exist or RLS blocks read. Check Supabase dashboard."
+  ],
+  "updated_files": [],
+  "success_rate": {
+    "backend": "N/A (frontend-only test)",
+    "frontend": "90% — all pages load, bell opens, nav works; only activity_log integration broken"
+  },
+  "test_results": {
+    "1_login": "PASS — admin@zamoto.com / 12345678 logs in, redirected to dashboard",
+    "2_dashboard_kpis": "PASS — Total Tasks, Urgent, Overdue, Publishing KPIs visible",
+    "3_pipeline": "PASS — Pipeline Status section with SCRIPT/VOICE/EDITING/PUBLISHING",
+    "4_recent_activity": "PASS — Recent Activity section renders ('No recent activity')",
+    "5_notification_bell": "PASS — SVG bell icon visible in header (aria-label='Notifications'), data-testid='notification-bell'",
+    "6_bell_panel_opens": "PASS — Clicking bell opens panel with 'ACTIVITY' heading",
+    "7_bell_panel_content": "PASS — Panel shows 'No activity yet' (graceful empty state); unread count = 0 (activity_log 500 prevents real data)",
+    "8_mark_all_read_btn": "PASS — Button only shown when unreadCount>0; correctly absent when 0",
+    "9_no_js_errors": "PASS — No JS page errors; only network 500 from Supabase",
+    "10_breaking_alert": "PASS — Banner NOT visible (no active breaking/critical projects — expected correct behavior)",
+    "11_special_projects": "PASS — Page loads, shows project list (2 projects: SP-045, SP-002)",
+    "12_social_copy": "PASS — Page loads, shows task list (1 task SC-042)",
+    "13_tasks_page": "PASS — Tasks page loads without crash",
+    "14_navigation": "PASS — All sidebar nav links work correctly"
+  },
+  "seed_data_creation": "None",
+  "retest_needed": true,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "Phase 3 tested. All UI flows pass. The only issue is activity_log Supabase 500 error — check RLS policies in Supabase for activity_log table. The notification bell renders correctly and panel opens. Breaking alert correctly absent.",
+  "rca_of_issue": "Supabase REST API returns 500 on GET /rest/v1/activity_log. Root cause: either (1) the activity_log table does not exist in the public schema, (2) RLS is enabled but no SELECT policy exists for authenticated users, or (3) the column names queried (id, action, metadata, created_at) don't match actual table schema. Fix: check Supabase Table Editor, ensure table exists and add RLS policy: CREATE POLICY 'allow_authenticated_read' ON activity_log FOR SELECT TO authenticated USING (true);"
+}

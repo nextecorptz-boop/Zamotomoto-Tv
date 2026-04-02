@@ -3,6 +3,8 @@ import { formatRelative } from '@/lib/utils'
 import { STAGE_MAP, PRIORITY_COLORS } from '@/lib/constants'
 import type { Task, ActivityLog } from '@/types'
 import Link from 'next/link'
+import { BreakingAlert } from '@/components/dashboard/BreakingAlert'
+import { DashboardRealtime } from '@/components/dashboard/DashboardRealtime'
 
 async function getDashboardData() {
   const supabase = await createClient()
@@ -43,7 +45,12 @@ export default async function DashboardPage() {
   const overdue = tasks.filter(t => t.is_overdue).length
 
   return (
-    <div style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+    <>
+      {/* Realtime subscriptions — refreshes server data on DB changes */}
+      <DashboardRealtime />
+      {/* Breaking alert banner — admin/super_admin only */}
+      <BreakingAlert />
+      <div style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
       <div>
         <h2 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: '2rem', letterSpacing: '0.08em', color: '#FFFFFF', margin: 0, lineHeight: 1 }}>Newsroom Operations</h2>
         <p style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '0.75rem', color: '#888888', marginTop: '0.35rem' }}>
@@ -162,5 +169,6 @@ export default async function DashboardPage() {
         </div>
       </div>
     </div>
+    </>
   )
 }

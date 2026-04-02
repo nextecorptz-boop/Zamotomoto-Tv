@@ -1,8 +1,10 @@
 'use client'
-import { useState } from 'react'
+import { useState, useCallback, useRef, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import type { SocialTaskRow } from '@/app/(dashboard)/social-copy/actions'
 import { deleteSocialTask, submitSocialTask } from '@/app/(dashboard)/social-copy/actions'
 import { SCModal } from './SCModal'
+import { useSocialTasksRealtime } from '@/hooks/useSocialTasksRealtime'
 
 interface ProfileOption { id: string; full_name: string | null; role: string }
 
@@ -42,6 +44,24 @@ export function SocialCopyClient({ initialTasks, profiles, currentUserId, curren
   const [filterStatus, setFilterStatus] = useState('all')
   const [toast, setToast] = useState('')
   const [actionLoading, setActionLoading] = useState<string | null>(null)
+  const router = useRouter()
+  const refreshTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  // Sync state when server re-renders with fresh props (via router.refresh())
+  useEffect(() => {
+    setTasks(initialTasks)
+  }, [initialTasks])
+
+  // Realtime: debounced router refresh
+  const handleRealtimeChange = useCallback(() => {
+    if (refreshTimerRef.current) clearTimeout(refreshTimerRef.current)
+    refreshTimerRef.current = setTimeout(() => {
+      router.refresh()
+      refreshTimerRef.current = null
+    }, 400)
+  }, [router])
+
+  useSocialTasksRealtime(handleRealtimeChange)
 
   const isAdmin = currentRole === 'super_admin' || currentRole === 'admin'
   const isIsolated = currentRole === 'worker_isolated'

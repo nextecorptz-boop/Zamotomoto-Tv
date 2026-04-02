@@ -1,9 +1,11 @@
 'use client'
-import { useState } from 'react'
+import { useState, useCallback, useRef, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import type { SpecialProject } from '@/types'
 import type { Profile } from '@/types'
 import { deleteSpecialProject } from '@/app/(dashboard)/special-projects/actions'
 import { SPModal } from './SPModal'
+import { useSpecialProjectsRealtime } from '@/hooks/useSpecialProjectsRealtime'
 
 interface ProfileOption { id: string; full_name: string | null; role: string }
 
@@ -47,6 +49,24 @@ export function SpecialProjectsClient({ initialProjects, profiles, currentUserId
   const [sortDir, setSortDir] = useState<'asc' | 'desc'>('desc')
   const [toast, setToast] = useState('')
   const [deleting, setDeleting] = useState(false)
+  const router = useRouter()
+  const refreshTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  // Sync state when server re-renders with fresh props (via router.refresh())
+  useEffect(() => {
+    setProjects(initialProjects)
+  }, [initialProjects])
+
+  // Realtime: debounced router refresh to re-run server data fetching
+  const handleRealtimeChange = useCallback(() => {
+    if (refreshTimerRef.current) clearTimeout(refreshTimerRef.current)
+    refreshTimerRef.current = setTimeout(() => {
+      router.refresh()
+      refreshTimerRef.current = null
+    }, 400)
+  }, [router])
+
+  useSpecialProjectsRealtime(handleRealtimeChange)
 
   const canEdit = currentRole === 'super_admin' || currentRole === 'admin'
 
