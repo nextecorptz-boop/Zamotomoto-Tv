@@ -122,7 +122,14 @@ Build a fully working, immersive, cinematic dark web application for ZAMOTOMOTO 
 
 ## Prioritized Backlog
 
-### P1 — Next Up
+### P1 — Admin Control Layer (2026-04-01)
+- [x] `/admin/settings` route (super_admin only)
+- [x] AdminSettingsClient — 4-tab layout (roles, departments, status, activity)
+- [x] RoleManagementTab + RoleEditorModal — edit role/dept/active, logs to activity_log
+- [x] DepartmentSettingsTab — per-dept member breakdown
+- [x] SystemStatusTab — KPIs, DB status, role/dept bar charts
+- [x] ActivityLogsTab — paginated 20/page with refresh
+- [x] Sidebar: admin nav section (super_admin only)
 - [ ] Invite Team Member flow (super_admin invites via Supabase Auth, writes to profiles)
 - [ ] Special Projects creation form
 - [ ] Social Copy creation form

@@ -23,6 +23,10 @@ const navItems = [
   { href: '/settings', label: 'Settings', icon: '⚙' },
 ]
 
+const adminNavItems = [
+  { href: '/admin/settings', label: 'Admin Panel', icon: '⬡' },
+]
+
 export default function Sidebar({ profile }: SidebarProps) {
   const pathname = usePathname()
   const router = useRouter()
@@ -122,6 +126,54 @@ export default function Sidebar({ profile }: SidebarProps) {
             <span>{item.label}</span>
           </Link>
         ))}
+
+        {/* Admin-only section */}
+        {(profile?.role === 'super_admin') && (
+          <>
+            <div style={{ padding: '0.6rem 1rem 0.2rem', fontFamily: "'IBM Plex Mono', monospace", fontSize: '0.55rem', color: '#CC1F1F', letterSpacing: '0.25em', textTransform: 'uppercase', borderTop: '1px solid #1A1A1A', marginTop: '0.25rem' }}>
+              Admin
+            </div>
+            {adminNavItems.map(item => (
+              <Link
+                key={item.href}
+                href={item.href}
+                data-testid={`nav-${item.label.toLowerCase().replace(/\s+/g, '-')}`}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.75rem',
+                  padding: '0.65rem 1rem',
+                  textDecoration: 'none',
+                  fontFamily: "'IBM Plex Mono', monospace",
+                  fontSize: '0.75rem',
+                  letterSpacing: '0.05em',
+                  transition: 'all 120ms',
+                  color: isActive(item.href) ? '#FF2B2B' : '#CC1F1F',
+                  background: isActive(item.href) ? 'rgba(204,31,31,0.15)' : 'transparent',
+                  borderLeft: isActive(item.href) ? '3px solid #CC1F1F' : '3px solid transparent',
+                  opacity: 0.85,
+                }}
+                onMouseEnter={e => {
+                  if (!isActive(item.href)) {
+                    const el = e.currentTarget as HTMLElement
+                    el.style.background = 'rgba(204,31,31,0.08)'
+                    el.style.opacity = '1'
+                  }
+                }}
+                onMouseLeave={e => {
+                  if (!isActive(item.href)) {
+                    const el = e.currentTarget as HTMLElement
+                    el.style.background = 'transparent'
+                    el.style.opacity = '0.85'
+                  }
+                }}
+              >
+                <span style={{ fontSize: '0.8rem', opacity: 0.7, fontFamily: 'monospace' }}>{item.icon}</span>
+                <span>{item.label}</span>
+              </Link>
+            ))}
+          </>
+        )}
       </nav>
 
       {/* User section */}
