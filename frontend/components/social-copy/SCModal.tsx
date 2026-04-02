@@ -72,7 +72,7 @@ export function SCModal({ task, profiles, currentUserId, currentRole, onClose, o
     if (!result.success) { setError(result.error ?? 'Failed'); return }
 
     onSaved({
-      id: task?.id ?? crypto.randomUUID(),
+      id: result.id ?? task?.id ?? crypto.randomUUID(),
       sc_ref: result.sc_ref ?? task?.sc_ref ?? '',
       task_type: 'caption',
       title: title.trim(),

@@ -1,6 +1,14 @@
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
+  experimental: {
+    serverActions: {
+      allowedOrigins: [
+        'media-ops-desk.preview.emergentagent.com',
+        'media-ops-desk.cluster-5.preview.emergentcf.cloud',
+      ],
+    },
+  },
   images: {
     remotePatterns: [
       { protocol: 'https', hostname: 'trgzfntbzzkxtbyycegw.supabase.co' },

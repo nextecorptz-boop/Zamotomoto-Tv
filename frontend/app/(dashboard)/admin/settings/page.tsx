@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation'
 import { AdminSettingsClient } from '@/components/admin/AdminSettingsClient'
 import type { Profile } from '@/types'
 import { fetchActivityLogs, fetchSystemStats } from './actions'
+import { fetchAllSocialTasks } from '@/app/(dashboard)/social-copy/actions'
 
 export const dynamic = 'force-dynamic'
 
@@ -34,9 +35,10 @@ export default async function AdminSettingsPage() {
   }
 
   // Initial activity logs and stats
-  const [{ logs: initialLogs, total: logsTotal }, stats] = await Promise.all([
+  const [{ logs: initialLogs, total: logsTotal }, stats, socialTasks] = await Promise.all([
     fetchActivityLogs(1, 20),
     fetchSystemStats(),
+    fetchAllSocialTasks(),
   ])
 
   const membersWithEmail = ((profiles ?? []) as Profile[]).map(p => ({
@@ -51,6 +53,7 @@ export default async function AdminSettingsPage() {
       initialLogs={initialLogs}
       logsTotal={logsTotal}
       stats={stats}
+      socialTasks={socialTasks}
     />
   )
 }

@@ -4,18 +4,21 @@ import { RoleManagementTab } from './RoleManagementTab'
 import { DepartmentSettingsTab } from './DepartmentSettingsTab'
 import { SystemStatusTab } from './SystemStatusTab'
 import { ActivityLogsTab } from './ActivityLogsTab'
+import { AdminSocialCopyTab } from './AdminSocialCopyTab'
 import type { Profile } from '@/types'
 import type { ActivityLogEntry, SystemStats } from '@/app/(dashboard)/admin/settings/actions'
+import type { SocialTaskRow } from '@/app/(dashboard)/social-copy/actions'
 
 export type ProfileWithEmail = Profile & { email: string }
 
-type Tab = 'roles' | 'departments' | 'status' | 'activity'
+type Tab = 'roles' | 'departments' | 'status' | 'activity' | 'social'
 
 const TABS: { id: Tab; label: string }[] = [
   { id: 'roles', label: 'Role Management' },
   { id: 'departments', label: 'Departments' },
   { id: 'status', label: 'System Status' },
   { id: 'activity', label: 'Activity Logs' },
+  { id: 'social', label: 'Social Copy' },
 ]
 
 interface Props {
@@ -24,9 +27,10 @@ interface Props {
   initialLogs: ActivityLogEntry[]
   logsTotal: number
   stats: SystemStats
+  socialTasks: SocialTaskRow[]
 }
 
-export function AdminSettingsClient({ profiles: initialProfiles, currentUserId, initialLogs, logsTotal, stats }: Props) {
+export function AdminSettingsClient({ profiles: initialProfiles, currentUserId, initialLogs, logsTotal, stats, socialTasks }: Props) {
   const [activeTab, setActiveTab] = useState<Tab>('roles')
   const [profiles, setProfiles] = useState<ProfileWithEmail[]>(initialProfiles)
 
@@ -98,6 +102,9 @@ export function AdminSettingsClient({ profiles: initialProfiles, currentUserId, 
         )}
         {activeTab === 'activity' && (
           <ActivityLogsTab initialLogs={initialLogs} initialTotal={logsTotal} />
+        )}
+        {activeTab === 'social' && (
+          <AdminSocialCopyTab tasks={socialTasks} />
         )}
       </div>
     </div>

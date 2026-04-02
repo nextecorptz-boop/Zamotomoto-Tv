@@ -22,6 +22,7 @@ export interface SCActionResult {
   success: boolean
   error?: string
   sc_ref?: string
+  id?: string
 }
 
 export interface SocialTaskData {
@@ -54,7 +55,7 @@ export async function createSocialTask(data: SocialTaskData): Promise<SCActionRe
       content_draft: data.content_draft || null,
       created_by: me.id,
     })
-    .select('sc_ref')
+    .select('id, sc_ref')
     .single()
 
   if (error) return { success: false, error: error.message }
@@ -65,7 +66,7 @@ export async function createSocialTask(data: SocialTaskData): Promise<SCActionRe
     metadata: { action_type: 'social_task_created', sc_ref: row?.sc_ref, title: data.title, assigned_to: data.assigned_to },
   })
 
-  return { success: true, sc_ref: row?.sc_ref }
+  return { success: true, sc_ref: row?.sc_ref, id: row?.id }
 }
 
 export async function updateSocialTask(
@@ -189,7 +190,7 @@ export async function fetchAllSocialTasks(): Promise<SocialTaskRow[]> {
 
   if (error) return []
   return (data || []).map((r: Record<string, unknown>) => ({
-    ...(r as SocialTaskRow),
+    ...(r as unknown as SocialTaskRow),
     assignee_name: (r.assignee as { full_name?: string } | null)?.full_name ?? null,
   }))
 }

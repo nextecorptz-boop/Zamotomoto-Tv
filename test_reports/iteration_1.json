@@ -1,0 +1,55 @@
+{
+  "summary": "Phase 2 frontend testing complete. All 11 test scenarios passed after fixes. Two bugs found and fixed: (1) Next.js Server Actions failing due to x-forwarded-host/origin mismatch — fixed by adding allowedOrigins in next.config.ts. (2) Create SP/SC actions didn't return DB id, causing crypto.randomUUID() fallback in client state — edits on newly-created items failed with 'Cannot coerce the result to a single JSON object'. Fixed by adding id to .select() in both actions and using result.id in modal onSaved callbacks.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "bugs_found_and_fixed": [
+    {
+      "issue": "Next.js Server Actions blocked with 'Invalid Server Actions request' — x-forwarded-host (media-ops-desk.preview.emergentagent.com) did not match origin (media-ops-desk.cluster-5.preview.emergentcf.cloud)",
+      "fix": "Added experimental.serverActions.allowedOrigins to /app/frontend/next.config.ts",
+      "severity": "CRITICAL — all server actions (create/edit/delete) were returning 500"
+    },
+    {
+      "issue": "createSpecialProject and createSocialTask only returned sp_ref/sc_ref, not the DB-generated id. SPModal/SCModal used crypto.randomUUID() as fallback. Edit/Delete on newly created items (before page refresh) failed silently because the fake UUID didn't match any DB row.",
+      "fix": "Added id to .select('id, sp_ref') and .select('id, sc_ref') in both action files. Updated SPModal and SCModal to use result.id ?? project?.id ?? crypto.randomUUID()",
+      "severity": "HIGH — Edit newly created items broken in same session"
+    }
+  ],
+  "test_results": {
+    "1_sp_page_loads": "PASS — stat boxes, filter buttons, empty-state table all visible",
+    "2_create_sp": "PASS — SP-045 created, sp_ref format correct, appears in table",
+    "3_edit_sp": "PASS (after fix) — edit of newly created project works correctly",
+    "4_delete_sp": "PASS — row disappears after confirm delete",
+    "5_sc_page_loads": "PASS — 5 stat boxes, filter bar, table visible",
+    "6_create_sc": "PASS — SC-042 created with sc_ref, instagram+twitter platforms shown",
+    "7_submit_sc": "PASS — status changes to submitted, toast 'SC-042 submitted for review'",
+    "8_delete_sc": "PASS — row count decreases after delete",
+    "9_admin_social_tab": "PASS — 5th tab 'Social Copy' visible and clickable in /admin/settings",
+    "10_admin_readonly": "PASS — no create/edit/delete/submit buttons in admin Social Copy tab",
+    "11_typescript": "PASS — tsc --noEmit exits 0"
+  },
+  "test_report_links": ["/app/test_reports/iteration_1.json"],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "activity_log entries in SP and SC actions use action:'user_invited' and action:'task_assigned' as enum values for non-auth events — these are semantically incorrect labels but may be the only available enum values. Main agent should verify this is intentional.",
+    "Server actions set updated_at manually but Supabase may also have a trigger for this — the explicit set works but could cause conflicts if triggers are added later."
+  ],
+  "updated_files": [
+    "/app/frontend/next.config.ts",
+    "/app/frontend/app/(dashboard)/special-projects/actions.ts",
+    "/app/frontend/app/(dashboard)/social-copy/actions.ts",
+    "/app/frontend/components/special-projects/SPModal.tsx",
+    "/app/frontend/components/social-copy/SCModal.tsx"
+  ],
+  "success_rate": {"frontend": "100%"},
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Phase 2 fully tested and passing. Two bugs were found and fixed. Server Actions now work correctly (allowedOrigins configured). Create+Edit in same session now works. All CRUD operations for Special Projects and Social Copy verified. Admin Social Copy tab is read-only as expected. TypeScript compiles clean.",
+  "rca_of_issues": "1) Next.js security check rejects Server Actions when x-forwarded-host != origin header — this happens in the Kubernetes ingress where the public URL differs from the internal cluster URL. Fix: allowedOrigins config. 2) SPModal/SCModal onSaved callback used crypto.randomUUID() as ID fallback for new items because the action only returned sp_ref/sc_ref. The DB-assigned UUID was never propagated to client state. Fix: return id from insert action and use it in onSaved."
+}

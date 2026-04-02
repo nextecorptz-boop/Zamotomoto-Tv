@@ -22,6 +22,7 @@ export interface SPActionResult {
   success: boolean
   error?: string
   sp_ref?: string
+  id?: string
 }
 
 export interface SpecialProjectData {
@@ -52,7 +53,7 @@ export async function createSpecialProject(data: SpecialProjectData): Promise<SP
       deadline: data.deadline || null,
       created_by: me.id,
     })
-    .select('sp_ref')
+    .select('id, sp_ref')
     .single()
 
   if (error) return { success: false, error: error.message }
@@ -72,7 +73,7 @@ export async function createSpecialProject(data: SpecialProjectData): Promise<SP
     },
   })
 
-  return { success: true, sp_ref: row?.sp_ref }
+  return { success: true, sp_ref: row?.sp_ref, id: row?.id }
 }
 
 export async function updateSpecialProject(

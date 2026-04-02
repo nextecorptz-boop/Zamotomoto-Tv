@@ -69,7 +69,7 @@ export function SPModal({ project, profiles, currentUserId, onClose, onSaved }: 
     setLoading(false)
     if (!result.success) { setError(result.error ?? 'Failed'); return }
     onSaved({
-      id: project?.id ?? crypto.randomUUID(),
+      id: result.id ?? project?.id ?? crypto.randomUUID(),
       sp_ref: result.sp_ref ?? project?.sp_ref ?? '',
       title: title.trim(),
       description: description.trim() || null,
