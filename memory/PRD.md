@@ -122,25 +122,23 @@ Build a fully working, immersive, cinematic dark web application for ZAMOTOMOTO 
 
 ## Prioritized Backlog
 
-### P1 — Admin Control Layer (2026-04-01)
-- [x] `/admin/settings` route (super_admin only)
-- [x] AdminSettingsClient — 4-tab layout (roles, departments, status, activity)
-- [x] RoleManagementTab + RoleEditorModal — edit role/dept/active, logs to activity_log
-- [x] DepartmentSettingsTab — per-dept member breakdown
-- [x] SystemStatusTab — KPIs, DB status, role/dept bar charts
-- [x] ActivityLogsTab — paginated 20/page with refresh
-- [x] Sidebar: admin nav section (super_admin only)
-- [ ] Invite Team Member flow (super_admin invites via Supabase Auth, writes to profiles)
-- [ ] Special Projects creation form
-- [ ] Social Copy creation form
-- [ ] Settings — role management (super_admin change roles)
-- [ ] Activity logging completeness audit
+### Phase 2 — Core Content System (2026-04-02) ✅
+- [x] Special Projects page (`/special-projects`) — Server Component + `SpecialProjectsClient` (full CRUD: create, edit, delete with modals, sort/filter)
+- [x] Social Copy page (`/social-copy`) — Server Component + `SocialCopyClient` (full CRUD: create, edit, delete, submit; worker_isolated sees only their own tasks)
+- [x] Admin Panel Social Copy Tab — 5th read-only monitoring tab in `/admin/settings` (`AdminSocialCopyTab`) — status stats, filter bar, table view, no CRUD
+- [x] **Bug fix**: Next.js Server Actions `allowedOrigins` config (`next.config.ts`) — fixed host/origin mismatch in Kubernetes ingress
+- [x] **Bug fix**: `createSpecialProject` + `createSocialTask` now return `id` alongside `sp_ref`/`sc_ref` so edit-in-same-session works correctly
 
-### P2 — Future
-- [ ] Global search (header search bar filters tasks/files)
-- [ ] Notification system (bell icon)
+### P2 — Phase 3 (Upcoming)
+- [ ] Supabase Realtime subscriptions — live dashboard KPI updates + notification badges
+- [ ] File attachments for social tasks (chunked upload to Supabase Storage)
+- [ ] Scheduling/auto-publish for social tasks (publish_at field)
+
+### P3 — Phase 4 (Future/Backlog)
+- [ ] Global task search (header bar filters tasks/files/projects)
 - [ ] Department analytics deep-dives
 - [ ] More analytics: trend over time, per-user productivity
+- [ ] Notification bell icon (reads `notifications` table)
 
 ---
 
