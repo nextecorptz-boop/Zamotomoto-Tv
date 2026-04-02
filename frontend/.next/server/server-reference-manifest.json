@@ -3,7 +3,7 @@
     "4031c4599bd9c8757736a18f2e5530f9b32ca7ee74": {
       "workers": {
         "app/(dashboard)/special-projects/page": {
-          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Fapp%2Ffrontend%2Fapp%2F(dashboard)%2Fspecial-projects%2Factions.ts%22%2C%5B%7B%22id%22%3A%224031c4599bd9c8757736a18f2e5530f9b32ca7ee74%22%2C%22exportedName%22%3A%22deleteSpecialProject%22%2C%22filename%22%3A%22app%2F(dashboard)%2Fspecial-projects%2Factions.ts%22%7D%2C%7B%22id%22%3A%224047c42ba108a41503e2213799b85414424717685d%22%2C%22exportedName%22%3A%22createSpecialProject%22%2C%22filename%22%3A%22app%2F(dashboard)%2Fspecial-projects%2Factions.ts%22%7D%2C%7B%22id%22%3A%226030f250375c24d5cf25a56ec9f9cdba0a8b7146f2%22%2C%22exportedName%22%3A%22updateSpecialProject%22%2C%22filename%22%3A%22app%2F(dashboard)%2Fspecial-projects%2Factions.ts%22%7D%5D%5D%5D&__client_imported__=true!",
+          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Fapp%2Ffrontend%2Fapp%2F(dashboard)%2Fnotifications%2Factions.ts%22%2C%5B%7B%22id%22%3A%2240fddc7ac69dbbe304dfb2a053f84f25a6f5339385%22%2C%22exportedName%22%3A%22fetchRecentActivity%22%2C%22filename%22%3A%22app%2F(dashboard)%2Fnotifications%2Factions.ts%22%7D%5D%5D%2C%5B%22%2Fapp%2Ffrontend%2Fapp%2F(dashboard)%2Fspecial-projects%2Factions.ts%22%2C%5B%7B%22id%22%3A%224031c4599bd9c8757736a18f2e5530f9b32ca7ee74%22%2C%22exportedName%22%3A%22deleteSpecialProject%22%2C%22filename%22%3A%22app%2F(dashboard)%2Fspecial-projects%2Factions.ts%22%7D%2C%7B%22id%22%3A%224047c42ba108a41503e2213799b85414424717685d%22%2C%22exportedName%22%3A%22createSpecialProject%22%2C%22filename%22%3A%22app%2F(dashboard)%2Fspecial-projects%2Factions.ts%22%7D%2C%7B%22id%22%3A%226030f250375c24d5cf25a56ec9f9cdba0a8b7146f2%22%2C%22exportedName%22%3A%22updateSpecialProject%22%2C%22filename%22%3A%22app%2F(dashboard)%2Fspecial-projects%2Factions.ts%22%7D%5D%5D%5D&__client_imported__=true!",
           "async": false
         }
       },
@@ -16,7 +16,7 @@
     "4047c42ba108a41503e2213799b85414424717685d": {
       "workers": {
         "app/(dashboard)/special-projects/page": {
-          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Fapp%2Ffrontend%2Fapp%2F(dashboard)%2Fspecial-projects%2Factions.ts%22%2C%5B%7B%22id%22%3A%224031c4599bd9c8757736a18f2e5530f9b32ca7ee74%22%2C%22exportedName%22%3A%22deleteSpecialProject%22%2C%22filename%22%3A%22app%2F(dashboard)%2Fspecial-projects%2Factions.ts%22%7D%2C%7B%22id%22%3A%224047c42ba108a41503e2213799b85414424717685d%22%2C%22exportedName%22%3A%22createSpecialProject%22%2C%22filename%22%3A%22app%2F(dashboard)%2Fspecial-projects%2Factions.ts%22%7D%2C%7B%22id%22%3A%226030f250375c24d5cf25a56ec9f9cdba0a8b7146f2%22%2C%22exportedName%22%3A%22updateSpecialProject%22%2C%22filename%22%3A%22app%2F(dashboard)%2Fspecial-projects%2Factions.ts%22%7D%5D%5D%5D&__client_imported__=true!",
+          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Fapp%2Ffrontend%2Fapp%2F(dashboard)%2Fnotifications%2Factions.ts%22%2C%5B%7B%22id%22%3A%2240fddc7ac69dbbe304dfb2a053f84f25a6f5339385%22%2C%22exportedName%22%3A%22fetchRecentActivity%22%2C%22filename%22%3A%22app%2F(dashboard)%2Fnotifications%2Factions.ts%22%7D%5D%5D%2C%5B%22%2Fapp%2Ffrontend%2Fapp%2F(dashboard)%2Fspecial-projects%2Factions.ts%22%2C%5B%7B%22id%22%3A%224031c4599bd9c8757736a18f2e5530f9b32ca7ee74%22%2C%22exportedName%22%3A%22deleteSpecialProject%22%2C%22filename%22%3A%22app%2F(dashboard)%2Fspecial-projects%2Factions.ts%22%7D%2C%7B%22id%22%3A%224047c42ba108a41503e2213799b85414424717685d%22%2C%22exportedName%22%3A%22createSpecialProject%22%2C%22filename%22%3A%22app%2F(dashboard)%2Fspecial-projects%2Factions.ts%22%7D%2C%7B%22id%22%3A%226030f250375c24d5cf25a56ec9f9cdba0a8b7146f2%22%2C%22exportedName%22%3A%22updateSpecialProject%22%2C%22filename%22%3A%22app%2F(dashboard)%2Fspecial-projects%2Factions.ts%22%7D%5D%5D%5D&__client_imported__=true!",
           "async": false
         }
       },
@@ -29,7 +29,7 @@
     "6030f250375c24d5cf25a56ec9f9cdba0a8b7146f2": {
       "workers": {
         "app/(dashboard)/special-projects/page": {
-          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Fapp%2Ffrontend%2Fapp%2F(dashboard)%2Fspecial-projects%2Factions.ts%22%2C%5B%7B%22id%22%3A%224031c4599bd9c8757736a18f2e5530f9b32ca7ee74%22%2C%22exportedName%22%3A%22deleteSpecialProject%22%2C%22filename%22%3A%22app%2F(dashboard)%2Fspecial-projects%2Factions.ts%22%7D%2C%7B%22id%22%3A%224047c42ba108a41503e2213799b85414424717685d%22%2C%22exportedName%22%3A%22createSpecialProject%22%2C%22filename%22%3A%22app%2F(dashboard)%2Fspecial-projects%2Factions.ts%22%7D%2C%7B%22id%22%3A%226030f250375c24d5cf25a56ec9f9cdba0a8b7146f2%22%2C%22exportedName%22%3A%22updateSpecialProject%22%2C%22filename%22%3A%22app%2F(dashboard)%2Fspecial-projects%2Factions.ts%22%7D%5D%5D%5D&__client_imported__=true!",
+          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Fapp%2Ffrontend%2Fapp%2F(dashboard)%2Fnotifications%2Factions.ts%22%2C%5B%7B%22id%22%3A%2240fddc7ac69dbbe304dfb2a053f84f25a6f5339385%22%2C%22exportedName%22%3A%22fetchRecentActivity%22%2C%22filename%22%3A%22app%2F(dashboard)%2Fnotifications%2Factions.ts%22%7D%5D%5D%2C%5B%22%2Fapp%2Ffrontend%2Fapp%2F(dashboard)%2Fspecial-projects%2Factions.ts%22%2C%5B%7B%22id%22%3A%224031c4599bd9c8757736a18f2e5530f9b32ca7ee74%22%2C%22exportedName%22%3A%22deleteSpecialProject%22%2C%22filename%22%3A%22app%2F(dashboard)%2Fspecial-projects%2Factions.ts%22%7D%2C%7B%22id%22%3A%224047c42ba108a41503e2213799b85414424717685d%22%2C%22exportedName%22%3A%22createSpecialProject%22%2C%22filename%22%3A%22app%2F(dashboard)%2Fspecial-projects%2Factions.ts%22%7D%2C%7B%22id%22%3A%226030f250375c24d5cf25a56ec9f9cdba0a8b7146f2%22%2C%22exportedName%22%3A%22updateSpecialProject%22%2C%22filename%22%3A%22app%2F(dashboard)%2Fspecial-projects%2Factions.ts%22%7D%5D%5D%5D&__client_imported__=true!",
           "async": false
         }
       },
@@ -107,7 +107,7 @@
     "40bf87532a97395713aa9f44fb4665890876aca6cb": {
       "workers": {
         "app/(dashboard)/tasks/page": {
-          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Fapp%2Ffrontend%2Fapp%2F(dashboard)%2Ftasks%2Factions.ts%22%2C%5B%7B%22id%22%3A%2240bf87532a97395713aa9f44fb4665890876aca6cb%22%2C%22exportedName%22%3A%22createTask%22%2C%22filename%22%3A%22app%2F(dashboard)%2Ftasks%2Factions.ts%22%7D%2C%7B%22id%22%3A%2240f34f04868b592d1de77577d7cb54dbe74ffd7ec2%22%2C%22exportedName%22%3A%22fetchTaskById%22%2C%22filename%22%3A%22app%2F(dashboard)%2Ftasks%2Factions.ts%22%7D%2C%7B%22id%22%3A%22709ffd791e8c362bcd196cf371558e65b94a9a6e37%22%2C%22exportedName%22%3A%22fetchTasks%22%2C%22filename%22%3A%22app%2F(dashboard)%2Ftasks%2Factions.ts%22%7D%5D%5D%5D&__client_imported__=true!",
+          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Fapp%2Ffrontend%2Fapp%2F(dashboard)%2Fnotifications%2Factions.ts%22%2C%5B%7B%22id%22%3A%2240fddc7ac69dbbe304dfb2a053f84f25a6f5339385%22%2C%22exportedName%22%3A%22fetchRecentActivity%22%2C%22filename%22%3A%22app%2F(dashboard)%2Fnotifications%2Factions.ts%22%7D%5D%5D%2C%5B%22%2Fapp%2Ffrontend%2Fapp%2F(dashboard)%2Ftasks%2Factions.ts%22%2C%5B%7B%22id%22%3A%2240bf87532a97395713aa9f44fb4665890876aca6cb%22%2C%22exportedName%22%3A%22createTask%22%2C%22filename%22%3A%22app%2F(dashboard)%2Ftasks%2Factions.ts%22%7D%2C%7B%22id%22%3A%2240f34f04868b592d1de77577d7cb54dbe74ffd7ec2%22%2C%22exportedName%22%3A%22fetchTaskById%22%2C%22filename%22%3A%22app%2F(dashboard)%2Ftasks%2Factions.ts%22%7D%2C%7B%22id%22%3A%22709ffd791e8c362bcd196cf371558e65b94a9a6e37%22%2C%22exportedName%22%3A%22fetchTasks%22%2C%22filename%22%3A%22app%2F(dashboard)%2Ftasks%2Factions.ts%22%7D%5D%5D%5D&__client_imported__=true!",
           "async": false
         }
       },
@@ -120,7 +120,7 @@
     "40f34f04868b592d1de77577d7cb54dbe74ffd7ec2": {
       "workers": {
         "app/(dashboard)/tasks/page": {
-          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Fapp%2Ffrontend%2Fapp%2F(dashboard)%2Ftasks%2Factions.ts%22%2C%5B%7B%22id%22%3A%2240bf87532a97395713aa9f44fb4665890876aca6cb%22%2C%22exportedName%22%3A%22createTask%22%2C%22filename%22%3A%22app%2F(dashboard)%2Ftasks%2Factions.ts%22%7D%2C%7B%22id%22%3A%2240f34f04868b592d1de77577d7cb54dbe74ffd7ec2%22%2C%22exportedName%22%3A%22fetchTaskById%22%2C%22filename%22%3A%22app%2F(dashboard)%2Ftasks%2Factions.ts%22%7D%2C%7B%22id%22%3A%22709ffd791e8c362bcd196cf371558e65b94a9a6e37%22%2C%22exportedName%22%3A%22fetchTasks%22%2C%22filename%22%3A%22app%2F(dashboard)%2Ftasks%2Factions.ts%22%7D%5D%5D%5D&__client_imported__=true!",
+          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Fapp%2Ffrontend%2Fapp%2F(dashboard)%2Fnotifications%2Factions.ts%22%2C%5B%7B%22id%22%3A%2240fddc7ac69dbbe304dfb2a053f84f25a6f5339385%22%2C%22exportedName%22%3A%22fetchRecentActivity%22%2C%22filename%22%3A%22app%2F(dashboard)%2Fnotifications%2Factions.ts%22%7D%5D%5D%2C%5B%22%2Fapp%2Ffrontend%2Fapp%2F(dashboard)%2Ftasks%2Factions.ts%22%2C%5B%7B%22id%22%3A%2240bf87532a97395713aa9f44fb4665890876aca6cb%22%2C%22exportedName%22%3A%22createTask%22%2C%22filename%22%3A%22app%2F(dashboard)%2Ftasks%2Factions.ts%22%7D%2C%7B%22id%22%3A%2240f34f04868b592d1de77577d7cb54dbe74ffd7ec2%22%2C%22exportedName%22%3A%22fetchTaskById%22%2C%22filename%22%3A%22app%2F(dashboard)%2Ftasks%2Factions.ts%22%7D%2C%7B%22id%22%3A%22709ffd791e8c362bcd196cf371558e65b94a9a6e37%22%2C%22exportedName%22%3A%22fetchTasks%22%2C%22filename%22%3A%22app%2F(dashboard)%2Ftasks%2Factions.ts%22%7D%5D%5D%5D&__client_imported__=true!",
           "async": false
         }
       },
@@ -133,7 +133,7 @@
     "709ffd791e8c362bcd196cf371558e65b94a9a6e37": {
       "workers": {
         "app/(dashboard)/tasks/page": {
-          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Fapp%2Ffrontend%2Fapp%2F(dashboard)%2Ftasks%2Factions.ts%22%2C%5B%7B%22id%22%3A%2240bf87532a97395713aa9f44fb4665890876aca6cb%22%2C%22exportedName%22%3A%22createTask%22%2C%22filename%22%3A%22app%2F(dashboard)%2Ftasks%2Factions.ts%22%7D%2C%7B%22id%22%3A%2240f34f04868b592d1de77577d7cb54dbe74ffd7ec2%22%2C%22exportedName%22%3A%22fetchTaskById%22%2C%22filename%22%3A%22app%2F(dashboard)%2Ftasks%2Factions.ts%22%7D%2C%7B%22id%22%3A%22709ffd791e8c362bcd196cf371558e65b94a9a6e37%22%2C%22exportedName%22%3A%22fetchTasks%22%2C%22filename%22%3A%22app%2F(dashboard)%2Ftasks%2Factions.ts%22%7D%5D%5D%5D&__client_imported__=true!",
+          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Fapp%2Ffrontend%2Fapp%2F(dashboard)%2Fnotifications%2Factions.ts%22%2C%5B%7B%22id%22%3A%2240fddc7ac69dbbe304dfb2a053f84f25a6f5339385%22%2C%22exportedName%22%3A%22fetchRecentActivity%22%2C%22filename%22%3A%22app%2F(dashboard)%2Fnotifications%2Factions.ts%22%7D%5D%5D%2C%5B%22%2Fapp%2Ffrontend%2Fapp%2F(dashboard)%2Ftasks%2Factions.ts%22%2C%5B%7B%22id%22%3A%2240bf87532a97395713aa9f44fb4665890876aca6cb%22%2C%22exportedName%22%3A%22createTask%22%2C%22filename%22%3A%22app%2F(dashboard)%2Ftasks%2Factions.ts%22%7D%2C%7B%22id%22%3A%2240f34f04868b592d1de77577d7cb54dbe74ffd7ec2%22%2C%22exportedName%22%3A%22fetchTaskById%22%2C%22filename%22%3A%22app%2F(dashboard)%2Ftasks%2Factions.ts%22%7D%2C%7B%22id%22%3A%22709ffd791e8c362bcd196cf371558e65b94a9a6e37%22%2C%22exportedName%22%3A%22fetchTasks%22%2C%22filename%22%3A%22app%2F(dashboard)%2Ftasks%2Factions.ts%22%7D%5D%5D%5D&__client_imported__=true!",
           "async": false
         }
       },
@@ -142,6 +142,34 @@
       },
       "filename": "app/(dashboard)/tasks/actions.ts",
       "exportedName": "fetchTasks"
+    },
+    "40fddc7ac69dbbe304dfb2a053f84f25a6f5339385": {
+      "workers": {
+        "app/(dashboard)/page": {
+          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Fapp%2Ffrontend%2Fapp%2F(dashboard)%2Fnotifications%2Factions.ts%22%2C%5B%7B%22id%22%3A%2240fddc7ac69dbbe304dfb2a053f84f25a6f5339385%22%2C%22exportedName%22%3A%22fetchRecentActivity%22%2C%22filename%22%3A%22app%2F(dashboard)%2Fnotifications%2Factions.ts%22%7D%5D%5D%5D&__client_imported__=true!",
+          "async": false
+        },
+        "app/(dashboard)/special-projects/page": {
+          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Fapp%2Ffrontend%2Fapp%2F(dashboard)%2Fnotifications%2Factions.ts%22%2C%5B%7B%22id%22%3A%2240fddc7ac69dbbe304dfb2a053f84f25a6f5339385%22%2C%22exportedName%22%3A%22fetchRecentActivity%22%2C%22filename%22%3A%22app%2F(dashboard)%2Fnotifications%2Factions.ts%22%7D%5D%5D%2C%5B%22%2Fapp%2Ffrontend%2Fapp%2F(dashboard)%2Fspecial-projects%2Factions.ts%22%2C%5B%7B%22id%22%3A%224031c4599bd9c8757736a18f2e5530f9b32ca7ee74%22%2C%22exportedName%22%3A%22deleteSpecialProject%22%2C%22filename%22%3A%22app%2F(dashboard)%2Fspecial-projects%2Factions.ts%22%7D%2C%7B%22id%22%3A%224047c42ba108a41503e2213799b85414424717685d%22%2C%22exportedName%22%3A%22createSpecialProject%22%2C%22filename%22%3A%22app%2F(dashboard)%2Fspecial-projects%2Factions.ts%22%7D%2C%7B%22id%22%3A%226030f250375c24d5cf25a56ec9f9cdba0a8b7146f2%22%2C%22exportedName%22%3A%22updateSpecialProject%22%2C%22filename%22%3A%22app%2F(dashboard)%2Fspecial-projects%2Factions.ts%22%7D%5D%5D%5D&__client_imported__=true!",
+          "async": false
+        },
+        "app/(dashboard)/social-copy/page": {
+          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Fapp%2Ffrontend%2Fapp%2F(dashboard)%2Fnotifications%2Factions.ts%22%2C%5B%7B%22id%22%3A%2240fddc7ac69dbbe304dfb2a053f84f25a6f5339385%22%2C%22exportedName%22%3A%22fetchRecentActivity%22%2C%22filename%22%3A%22app%2F(dashboard)%2Fnotifications%2Factions.ts%22%7D%5D%5D%5D&__client_imported__=true!",
+          "async": false
+        },
+        "app/(dashboard)/tasks/page": {
+          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Fapp%2Ffrontend%2Fapp%2F(dashboard)%2Fnotifications%2Factions.ts%22%2C%5B%7B%22id%22%3A%2240fddc7ac69dbbe304dfb2a053f84f25a6f5339385%22%2C%22exportedName%22%3A%22fetchRecentActivity%22%2C%22filename%22%3A%22app%2F(dashboard)%2Fnotifications%2Factions.ts%22%7D%5D%5D%2C%5B%22%2Fapp%2Ffrontend%2Fapp%2F(dashboard)%2Ftasks%2Factions.ts%22%2C%5B%7B%22id%22%3A%2240bf87532a97395713aa9f44fb4665890876aca6cb%22%2C%22exportedName%22%3A%22createTask%22%2C%22filename%22%3A%22app%2F(dashboard)%2Ftasks%2Factions.ts%22%7D%2C%7B%22id%22%3A%2240f34f04868b592d1de77577d7cb54dbe74ffd7ec2%22%2C%22exportedName%22%3A%22fetchTaskById%22%2C%22filename%22%3A%22app%2F(dashboard)%2Ftasks%2Factions.ts%22%7D%2C%7B%22id%22%3A%22709ffd791e8c362bcd196cf371558e65b94a9a6e37%22%2C%22exportedName%22%3A%22fetchTasks%22%2C%22filename%22%3A%22app%2F(dashboard)%2Ftasks%2Factions.ts%22%7D%5D%5D%5D&__client_imported__=true!",
+          "async": false
+        }
+      },
+      "layer": {
+        "app/(dashboard)/page": "action-browser",
+        "app/(dashboard)/special-projects/page": "action-browser",
+        "app/(dashboard)/social-copy/page": "action-browser",
+        "app/(dashboard)/tasks/page": "action-browser"
+      },
+      "filename": "app/(dashboard)/notifications/actions.ts",
+      "exportedName": "fetchRecentActivity"
     }
   },
   "edge": {},

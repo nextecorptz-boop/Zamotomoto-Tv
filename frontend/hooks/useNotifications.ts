@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useState, useCallback, useRef } from 'react'
 import { createClient } from '@/lib/supabase/client'
+import { fetchRecentActivity } from '@/app/(dashboard)/notifications/actions'
 
 export interface AppNotification {
   id: string
@@ -27,22 +28,17 @@ export function useNotifications() {
   const loadedRef = useRef(false)
 
   const loadNotifications = useCallback(async () => {
-    const supabase = createClient()
-    const { data } = await supabase
-      .from('activity_log')
-      .select('id, action, metadata, created_at')
-      .order('created_at', { ascending: false })
-      .limit(20)
-
-    if (!data) return
+    // Use server action to bypass activity_log RLS restrictions
+    const data = await fetchRecentActivity(20)
+    if (!data.length) return
 
     const readAt = getReadAt()
     const mapped: AppNotification[] = data.map((item) => ({
-      id: item.id as string,
-      title: (item.action as string).replace(/_/g, ' '),
+      id: item.id,
+      title: item.action.replace(/_/g, ' '),
       description: ((item.metadata as Record<string, string> | null)?.description) ?? '',
-      timestamp: item.created_at as string,
-      read: readAt ? new Date(item.created_at as string) <= readAt : false,
+      timestamp: item.created_at,
+      read: readAt ? new Date(item.created_at) <= readAt : false,
     }))
 
     setNotifications(mapped)
@@ -54,6 +50,7 @@ export function useNotifications() {
     loadedRef.current = true
     loadNotifications()
 
+    // Subscribe to new activity via realtime (browser client)
     const supabase = createClient()
     const channel = supabase
       .channel('zmm_activity_notifications')

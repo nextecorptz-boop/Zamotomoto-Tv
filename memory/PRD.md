@@ -6,7 +6,7 @@
 ## Original Problem Statement
 Build a fully working, immersive, cinematic dark web application for ZAMOTOMOTO TV — an internal Media Operations Management System.
 
-**Tech Stack**: Next.js 14 (App Router), TypeScript, Tailwind CSS, Supabase (Auth, DB, Realtime, Storage). DO NOT use FastAPI or MongoDB.
+**Tech Stack**: Next.js 14 App Router, TypeScript, Tailwind CSS, Supabase (Auth, DB, Realtime, Storage). DO NOT use FastAPI or MongoDB.
 
 **Design System**: Cinematic broadcast control room.
 - Colors: `#0A0A0A` (bg), `#CC1F1F` (primary), `#111111` (surface), `#2A2A2A` (border)
@@ -25,30 +25,42 @@ Build a fully working, immersive, cinematic dark web application for ZAMOTOMOTO 
 │   ├── (auth)/login/page.tsx
 │   ├── (dashboard)/
 │   │   ├── layout.tsx           — auth guard, Sidebar + Header
-│   │   ├── page.tsx             — dashboard with KPIs, pipeline, activity
-│   │   ├── tasks/page.tsx       — Kanban board + list view + realtime
+│   │   ├── page.tsx             — dashboard with KPIs, pipeline, activity + BreakingAlert + DashboardRealtime
+│   │   ├── tasks/page.tsx       — Kanban board + list view
 │   │   ├── tasks/[id]/page.tsx  — task detail, stages, file attachments, activity
 │   │   ├── tasks/new/page.tsx   — new task form
-│   │   ├── analytics/page.tsx   — charts (stage, priority, status from task_stages)
-│   │   ├── team/page.tsx        — team member list
-│   │   ├── files/page.tsx       — media library
-│   │   ├── departments/page.tsx — department cards with task_stages counts
-│   │   ├── departments/[slug]/  — per-dept task list
-│   │   ├── special-projects/    — executive projects
-│   │   ├── social-copy/         — social copy tasks (sc_ref)
-│   │   └── settings/page.tsx    — super_admin only
+│   │   ├── tasks/actions.ts     — server actions (service role bypass for RLS)
+│   │   ├── notifications/actions.ts — fetchRecentActivity server action
+│   │   ├── analytics/page.tsx
+│   │   ├── team/page.tsx
+│   │   ├── files/page.tsx
+│   │   ├── departments/page.tsx
+│   │   ├── special-projects/page.tsx + actions.ts
+│   │   ├── social-copy/page.tsx + actions.ts
+│   │   └── admin/settings/page.tsx
 ├── components/layout/
 │   ├── Sidebar.tsx
-│   └── Header.tsx
-├── hooks/useUser.ts
+│   ├── Header.tsx              — injects NotificationBell
+│   └── NotificationBell.tsx   — live bell, reads activity_log
+├── components/dashboard/
+│   ├── BreakingAlert.tsx       — red banner for breaking/critical special projects
+│   └── DashboardRealtime.tsx  — invisible client component for router.refresh() on changes
+├── components/special-projects/SpecialProjectsClient.tsx — realtime integrated
+├── components/social-copy/SocialCopyClient.tsx — realtime integrated
+├── hooks/
+│   ├── useUser.ts
+│   ├── useRealtimeSubscription.ts  — core realtime hook (Supabase postgres_changes)
+│   ├── useTasksRealtime.ts
+│   ├── useSpecialProjectsRealtime.ts
+│   ├── useSocialTasksRealtime.ts
+│   ├── useActivityLogRealtime.ts
+│   └── useNotifications.ts         — activity_log reader + realtime badge
 ├── lib/
 │   ├── supabase/client.ts       — browser client
 │   ├── supabase/server.ts       — server/admin client
-│   ├── constants.ts             — STAGES, STATUS_COLORS, PRIORITY_COLORS, ROLE_LABELS
+│   ├── constants.ts
 │   └── utils.ts
-└── types/
-    ├── index.ts                 — all DB interfaces
-    └── css.d.ts                 — CSS module declaration
+└── types/index.ts
 ```
 
 ---
@@ -77,60 +89,53 @@ Build a fully working, immersive, cinematic dark web application for ZAMOTOMOTO 
 
 ---
 
-## What's Been Implemented (as of 2026-04-01)
+## What's Been Implemented
 
-### Phase 0 — Scaffold
-- [x] Next.js 14 App Router environment
-- [x] Tailwind CSS with cinematic design tokens
-- [x] Supabase server + client utilities
-- [x] DB types in `/types/index.ts`
-- [x] Auth (login/logout via Supabase Auth)
-- [x] Protected dashboard layout
+### Phase 0 — Scaffold ✅
+- Next.js 14 App Router environment
+- Tailwind CSS with cinematic design tokens
+- Supabase server + client utilities
+- DB types in `/types/index.ts`
+- Auth (login/logout via Supabase Auth)
+- Protected dashboard layout
 
-### Phase 1 — Core Pages + Invite Flow
-- [x] Dashboard KPIs + pipeline status + activity feed
-- [x] Tasks Kanban board (drag-and-drop, stage transitions, realtime)
-- [x] Tasks list view + filters
-- [x] New task form (writes to tasks + activity_log)
-- [x] Task detail page (stages tracker, file attachments, activity timeline, approval modal)
-- [x] Analytics (stage + priority + status charts using task_stages for status)
-- [x] Team page (member list with roles)
-- [x] **Invite Team Member** (super_admin only — `InviteModal.tsx` + `actions.ts` server action)
-  - creates auth user (service role, email_confirm: true)
-  - inserts profile row (full_name, role, department, invited_by)
-  - rollback on profile failure
-  - displays one-time temp password
-  - `router.refresh()` on close
-- [x] Files / Media Library
-- [x] Departments overview + department detail
-- [x] Special Projects list
-- [x] Social Copy list
-- [x] Settings (super_admin only)
+### Phase 1 — Core Pages + Invite Flow ✅
+- Dashboard KPIs + pipeline status + activity feed
+- Tasks Kanban board (drag-and-drop, stage transitions)
+- Tasks list view + filters
+- New task form (writes to tasks + activity_log)
+- Task detail page (stages tracker, file attachments, activity timeline, approval modal)
+- Analytics (stage + priority + status charts using task_stages for status)
+- Team page (member list with roles)
+- Invite Team Member (super_admin only)
+- Files / Media Library
+- Departments overview + department detail
+- Settings (super_admin only)
 
-### P0 Fixes Applied (2026-04-01)
-- [x] analytics: removed `t.status`, now queries `task_stages` for status data
-- [x] files: `original_filename` → `file_name`
-- [x] settings: removed duplicate React import, `display_name` → `full_name`
-- [x] social-copy: `task_ref` → `sc_ref`
-- [x] special-projects: `priority` → `urgency`
-- [x] tasks/new: ProfileOption/SPOption local types (partial query cast)
-- [x] departments/[slug]: join query `email` removed (not a profiles column), `display_name` → `full_name`
-- [x] departments/page: `task.status` removed, now queries `task_stages` for status counts
-- [x] css.d.ts: CSS module declaration added
+### Phase 2 — Core Content System ✅ (2026-04-02)
+- Special Projects page (`/special-projects`) — full CRUD with modals, sort/filter
+- Social Copy page (`/social-copy`) — full CRUD + submit workflow, worker_isolated isolation
+- Admin Panel Social Copy Tab — 5th read-only monitoring tab in `/admin/settings`
+- Bug fix: Next.js Server Actions `allowedOrigins` config
+- Bug fix: `createSpecialProject` + `createSocialTask` return `id` alongside refs
+
+### Phase 3 — Realtime System ✅ (2026-04-02)
+- `useRealtimeSubscription` core hook — subscribes to postgres_changes on any table
+- Table-specific wrappers: `useTasksRealtime`, `useSpecialProjectsRealtime`, `useSocialTasksRealtime`, `useActivityLogRealtime`
+- `DashboardRealtime` — invisible client component, calls `router.refresh()` when tasks/activity change
+- `BreakingAlert` — red banner for urgency IN ('breaking', 'critical') + status='active' special projects (admins only, dismissable, realtime)
+- `NotificationBell` + `useNotifications` — SVG bell in header, reads `activity_log` via server action, realtime INSERT subscription, unread badge, mark-all-read
+- Realtime integrated into `SpecialProjectsClient` + `SocialCopyClient` via `router.refresh()`
+
+### Known Issues / Pending
+- Phase 0 RLS fix: `tasks` table has recursive SELECT policy — `fix_tasks_rls.sql` ready for manual execution in Supabase Studio. Once applied, remove service-role bypass in `tasks/actions.ts`
+- `activity_log` RLS: browser client SELECT returns 500; fixed via server action (`notifications/actions.ts`)
 
 ---
 
 ## Prioritized Backlog
 
-### Phase 2 — Core Content System (2026-04-02) ✅
-- [x] Special Projects page (`/special-projects`) — Server Component + `SpecialProjectsClient` (full CRUD: create, edit, delete with modals, sort/filter)
-- [x] Social Copy page (`/social-copy`) — Server Component + `SocialCopyClient` (full CRUD: create, edit, delete, submit; worker_isolated sees only their own tasks)
-- [x] Admin Panel Social Copy Tab — 5th read-only monitoring tab in `/admin/settings` (`AdminSocialCopyTab`) — status stats, filter bar, table view, no CRUD
-- [x] **Bug fix**: Next.js Server Actions `allowedOrigins` config (`next.config.ts`) — fixed host/origin mismatch in Kubernetes ingress
-- [x] **Bug fix**: `createSpecialProject` + `createSocialTask` now return `id` alongside `sp_ref`/`sc_ref` so edit-in-same-session works correctly
-
-### P2 — Phase 3 (Upcoming)
-- [ ] Supabase Realtime subscriptions — live dashboard KPI updates + notification badges
+### P2 — Phase 3 Remaining (Upcoming)
 - [ ] File attachments for social tasks (chunked upload to Supabase Storage)
 - [ ] Scheduling/auto-publish for social tasks (publish_at field)
 
@@ -138,13 +143,12 @@ Build a fully working, immersive, cinematic dark web application for ZAMOTOMOTO 
 - [ ] Global task search (header bar filters tasks/files/projects)
 - [ ] Department analytics deep-dives
 - [ ] More analytics: trend over time, per-user productivity
-- [ ] Notification bell icon (reads `notifications` table)
 
 ---
 
 ## Test Credentials
 - Email: admin@zamoto.com
-- Password: ZMM@admin2026
+- Password: 12345678
 - Role: super_admin
-- Name: Wiseman Robert
+- Full Name: Admin User
 - App: https://media-ops-desk.preview.emergentagent.com
