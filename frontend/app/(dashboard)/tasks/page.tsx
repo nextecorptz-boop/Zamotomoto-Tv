@@ -3,6 +3,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useUser } from '@/hooks/useUser'
 import { STAGES, PRIORITY_COLORS } from '@/lib/constants'
+import { fetchTasks } from './actions'
 import type { Task } from '@/types'
 import Link from 'next/link'
 
@@ -47,12 +48,13 @@ export default function TasksPage() {
   const supabase = createClient()
 
   const loadTasks = useCallback(async () => {
-    let query = supabase.from('tasks').select('*').order('created_at', { ascending: false })
-    if (filterPriority !== 'all') query = query.eq('priority', filterPriority)
-    // Workers see only their own tasks
-    if (profile && !isAdminOrAbove) query = query.eq('assigned_to', profile.id)
-    const { data } = await query
-    setTasks(data || [])
+    // fetchTasks server action uses admin client — bypasses broken SELECT RLS policy
+    const data = await fetchTasks(
+      filterPriority !== 'all' ? filterPriority : undefined,
+      profile?.id,
+      isAdminOrAbove
+    )
+    setTasks(data)
     setLoading(false)
   }, [filterPriority, profile, isAdminOrAbove])
 

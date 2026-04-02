@@ -167,6 +167,73 @@
       },
       "filename": "app/(dashboard)/admin/settings/actions.ts",
       "exportedName": "fetchActivityLogs"
+    },
+    "40411970066ab8942bc93f3bac7b1d90748ba7143b": {
+      "workers": {
+        "app/(dashboard)/team/page": {
+          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Fapp%2Ffrontend%2Fapp%2F(dashboard)%2Fteam%2Factions.ts%22%2C%5B%7B%22id%22%3A%2240411970066ab8942bc93f3bac7b1d90748ba7143b%22%2C%22exportedName%22%3A%22inviteTeamMember%22%2C%22filename%22%3A%22app%2F(dashboard)%2Fteam%2Factions.ts%22%7D%5D%5D%5D&__client_imported__=true!",
+          "async": false
+        }
+      },
+      "layer": {
+        "app/(dashboard)/team/page": "action-browser"
+      },
+      "filename": "app/(dashboard)/team/actions.ts",
+      "exportedName": "inviteTeamMember"
+    },
+    "40bf87532a97395713aa9f44fb4665890876aca6cb": {
+      "workers": {
+        "app/(dashboard)/tasks/new/page": {
+          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Fapp%2Ffrontend%2Fapp%2F(dashboard)%2Ftasks%2Factions.ts%22%2C%5B%7B%22id%22%3A%2240bf87532a97395713aa9f44fb4665890876aca6cb%22%2C%22exportedName%22%3A%22createTask%22%2C%22filename%22%3A%22app%2F(dashboard)%2Ftasks%2Factions.ts%22%7D%2C%7B%22id%22%3A%2240f34f04868b592d1de77577d7cb54dbe74ffd7ec2%22%2C%22exportedName%22%3A%22fetchTaskById%22%2C%22filename%22%3A%22app%2F(dashboard)%2Ftasks%2Factions.ts%22%7D%2C%7B%22id%22%3A%22709ffd791e8c362bcd196cf371558e65b94a9a6e37%22%2C%22exportedName%22%3A%22fetchTasks%22%2C%22filename%22%3A%22app%2F(dashboard)%2Ftasks%2Factions.ts%22%7D%5D%5D%5D&__client_imported__=true!",
+          "async": false
+        },
+        "app/(dashboard)/tasks/page": {
+          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Fapp%2Ffrontend%2Fapp%2F(dashboard)%2Ftasks%2Factions.ts%22%2C%5B%7B%22id%22%3A%2240bf87532a97395713aa9f44fb4665890876aca6cb%22%2C%22exportedName%22%3A%22createTask%22%2C%22filename%22%3A%22app%2F(dashboard)%2Ftasks%2Factions.ts%22%7D%2C%7B%22id%22%3A%2240f34f04868b592d1de77577d7cb54dbe74ffd7ec2%22%2C%22exportedName%22%3A%22fetchTaskById%22%2C%22filename%22%3A%22app%2F(dashboard)%2Ftasks%2Factions.ts%22%7D%2C%7B%22id%22%3A%22709ffd791e8c362bcd196cf371558e65b94a9a6e37%22%2C%22exportedName%22%3A%22fetchTasks%22%2C%22filename%22%3A%22app%2F(dashboard)%2Ftasks%2Factions.ts%22%7D%5D%5D%5D&__client_imported__=true!",
+          "async": false
+        }
+      },
+      "layer": {
+        "app/(dashboard)/tasks/new/page": "action-browser",
+        "app/(dashboard)/tasks/page": "action-browser"
+      },
+      "filename": "app/(dashboard)/tasks/actions.ts",
+      "exportedName": "createTask"
+    },
+    "40f34f04868b592d1de77577d7cb54dbe74ffd7ec2": {
+      "workers": {
+        "app/(dashboard)/tasks/new/page": {
+          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Fapp%2Ffrontend%2Fapp%2F(dashboard)%2Ftasks%2Factions.ts%22%2C%5B%7B%22id%22%3A%2240bf87532a97395713aa9f44fb4665890876aca6cb%22%2C%22exportedName%22%3A%22createTask%22%2C%22filename%22%3A%22app%2F(dashboard)%2Ftasks%2Factions.ts%22%7D%2C%7B%22id%22%3A%2240f34f04868b592d1de77577d7cb54dbe74ffd7ec2%22%2C%22exportedName%22%3A%22fetchTaskById%22%2C%22filename%22%3A%22app%2F(dashboard)%2Ftasks%2Factions.ts%22%7D%2C%7B%22id%22%3A%22709ffd791e8c362bcd196cf371558e65b94a9a6e37%22%2C%22exportedName%22%3A%22fetchTasks%22%2C%22filename%22%3A%22app%2F(dashboard)%2Ftasks%2Factions.ts%22%7D%5D%5D%5D&__client_imported__=true!",
+          "async": false
+        },
+        "app/(dashboard)/tasks/page": {
+          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Fapp%2Ffrontend%2Fapp%2F(dashboard)%2Ftasks%2Factions.ts%22%2C%5B%7B%22id%22%3A%2240bf87532a97395713aa9f44fb4665890876aca6cb%22%2C%22exportedName%22%3A%22createTask%22%2C%22filename%22%3A%22app%2F(dashboard)%2Ftasks%2Factions.ts%22%7D%2C%7B%22id%22%3A%2240f34f04868b592d1de77577d7cb54dbe74ffd7ec2%22%2C%22exportedName%22%3A%22fetchTaskById%22%2C%22filename%22%3A%22app%2F(dashboard)%2Ftasks%2Factions.ts%22%7D%2C%7B%22id%22%3A%22709ffd791e8c362bcd196cf371558e65b94a9a6e37%22%2C%22exportedName%22%3A%22fetchTasks%22%2C%22filename%22%3A%22app%2F(dashboard)%2Ftasks%2Factions.ts%22%7D%5D%5D%5D&__client_imported__=true!",
+          "async": false
+        }
+      },
+      "layer": {
+        "app/(dashboard)/tasks/new/page": "action-browser",
+        "app/(dashboard)/tasks/page": "action-browser"
+      },
+      "filename": "app/(dashboard)/tasks/actions.ts",
+      "exportedName": "fetchTaskById"
+    },
+    "709ffd791e8c362bcd196cf371558e65b94a9a6e37": {
+      "workers": {
+        "app/(dashboard)/tasks/new/page": {
+          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Fapp%2Ffrontend%2Fapp%2F(dashboard)%2Ftasks%2Factions.ts%22%2C%5B%7B%22id%22%3A%2240bf87532a97395713aa9f44fb4665890876aca6cb%22%2C%22exportedName%22%3A%22createTask%22%2C%22filename%22%3A%22app%2F(dashboard)%2Ftasks%2Factions.ts%22%7D%2C%7B%22id%22%3A%2240f34f04868b592d1de77577d7cb54dbe74ffd7ec2%22%2C%22exportedName%22%3A%22fetchTaskById%22%2C%22filename%22%3A%22app%2F(dashboard)%2Ftasks%2Factions.ts%22%7D%2C%7B%22id%22%3A%22709ffd791e8c362bcd196cf371558e65b94a9a6e37%22%2C%22exportedName%22%3A%22fetchTasks%22%2C%22filename%22%3A%22app%2F(dashboard)%2Ftasks%2Factions.ts%22%7D%5D%5D%5D&__client_imported__=true!",
+          "async": false
+        },
+        "app/(dashboard)/tasks/page": {
+          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Fapp%2Ffrontend%2Fapp%2F(dashboard)%2Ftasks%2Factions.ts%22%2C%5B%7B%22id%22%3A%2240bf87532a97395713aa9f44fb4665890876aca6cb%22%2C%22exportedName%22%3A%22createTask%22%2C%22filename%22%3A%22app%2F(dashboard)%2Ftasks%2Factions.ts%22%7D%2C%7B%22id%22%3A%2240f34f04868b592d1de77577d7cb54dbe74ffd7ec2%22%2C%22exportedName%22%3A%22fetchTaskById%22%2C%22filename%22%3A%22app%2F(dashboard)%2Ftasks%2Factions.ts%22%7D%2C%7B%22id%22%3A%22709ffd791e8c362bcd196cf371558e65b94a9a6e37%22%2C%22exportedName%22%3A%22fetchTasks%22%2C%22filename%22%3A%22app%2F(dashboard)%2Ftasks%2Factions.ts%22%7D%5D%5D%5D&__client_imported__=true!",
+          "async": false
+        }
+      },
+      "layer": {
+        "app/(dashboard)/tasks/new/page": "action-browser",
+        "app/(dashboard)/tasks/page": "action-browser"
+      },
+      "filename": "app/(dashboard)/tasks/actions.ts",
+      "exportedName": "fetchTasks"
     }
   },
   "edge": {},

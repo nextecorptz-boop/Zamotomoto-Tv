@@ -5,6 +5,7 @@ import { useUser } from '@/hooks/useUser'
 import { useParams } from 'next/navigation'
 import { STAGES, STATUS_COLORS, PRIORITY_COLORS } from '@/lib/constants'
 import { formatDateTime, formatRelative } from '@/lib/utils'
+import { fetchTaskById } from '../actions'
 import type { Task, TaskStage, TaskFile, ActivityLog } from '@/types'
 
 function ApprovalModal({ stage, taskId, onClose, onUpdate, profile }: {
@@ -87,13 +88,14 @@ export default function TaskDetailPage() {
   const [uploadError, setUploadError] = useState('')
 
   const loadData = async () => {
-    const [{ data: t }, { data: ts }, { data: tf }, { data: al }] = await Promise.all([
-      supabase.from('tasks').select('*, assignee:assigned_to(id,full_name,avatar_url)').eq('id', taskId).single(),
+    // fetchTaskById server action uses admin client — bypasses broken SELECT RLS policy
+    const [taskData, { data: ts }, { data: tf }, { data: al }] = await Promise.all([
+      fetchTaskById(taskId),
       supabase.from('task_stages').select('*').eq('task_id', taskId).order('created_at'),
       supabase.from('task_files').select('*').eq('task_id', taskId).eq('is_deleted', false).order('created_at', { ascending: false }),
       supabase.from('activity_log').select('*').eq('task_id', taskId).order('created_at', { ascending: false }).limit(20),
     ])
-    if (t) setTask(t as Task)
+    if (taskData) setTask(taskData)
     setStages(ts || [])
     setFiles(tf || [])
     setActivity(al || [])
