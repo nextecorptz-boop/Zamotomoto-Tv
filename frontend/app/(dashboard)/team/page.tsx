@@ -2,10 +2,18 @@ import { createClient } from '@/lib/supabase/server'
 import { formatDate, getInitials } from '@/lib/utils'
 import { ROLE_LABELS } from '@/lib/constants'
 import type { Profile } from '@/types'
-import Link from 'next/link'
+import { InviteModal } from '@/components/team/InviteModal'
 
 export default async function TeamPage() {
   const supabase = await createClient()
+
+  // Fetch current user's role for permission check
+  const { data: { user } } = await supabase.auth.getUser()
+  const { data: currentProfile } = user
+    ? await supabase.from('profiles').select('role').eq('id', user.id).single()
+    : { data: null }
+  const isSuperAdmin = currentProfile?.role === 'super_admin'
+
   const { data: profiles } = await supabase
     .from('profiles')
     .select('*')
@@ -22,6 +30,7 @@ export default async function TeamPage() {
           <h2 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: '2rem', letterSpacing: '0.08em', color: '#FFFFFF', margin: 0 }}>Team</h2>
           <p style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '0.75rem', color: '#888888', marginTop: '0.25rem' }}>{members.length} members</p>
         </div>
+        {isSuperAdmin && <InviteModal />}
       </div>
 
       {/* Stats */}

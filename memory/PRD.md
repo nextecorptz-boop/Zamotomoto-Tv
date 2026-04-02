@@ -87,7 +87,7 @@ Build a fully working, immersive, cinematic dark web application for ZAMOTOMOTO 
 - [x] Auth (login/logout via Supabase Auth)
 - [x] Protected dashboard layout
 
-### Phase 1 — Core Pages
+### Phase 1 — Core Pages + Invite Flow
 - [x] Dashboard KPIs + pipeline status + activity feed
 - [x] Tasks Kanban board (drag-and-drop, stage transitions, realtime)
 - [x] Tasks list view + filters
@@ -95,6 +95,12 @@ Build a fully working, immersive, cinematic dark web application for ZAMOTOMOTO 
 - [x] Task detail page (stages tracker, file attachments, activity timeline, approval modal)
 - [x] Analytics (stage + priority + status charts using task_stages for status)
 - [x] Team page (member list with roles)
+- [x] **Invite Team Member** (super_admin only — `InviteModal.tsx` + `actions.ts` server action)
+  - creates auth user (service role, email_confirm: true)
+  - inserts profile row (full_name, role, department, invited_by)
+  - rollback on profile failure
+  - displays one-time temp password
+  - `router.refresh()` on close
 - [x] Files / Media Library
 - [x] Departments overview + department detail
 - [x] Special Projects list
