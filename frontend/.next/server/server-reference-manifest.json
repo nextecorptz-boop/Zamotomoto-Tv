@@ -1,5 +1,177 @@
 {
-  "node": {},
+  "node": {
+    "40fddc7ac69dbbe304dfb2a053f84f25a6f5339385": {
+      "workers": {
+        "app/(dashboard)/page": {
+          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Fapp%2Ffrontend%2Fapp%2F(dashboard)%2Fnotifications%2Factions.ts%22%2C%5B%7B%22id%22%3A%2240fddc7ac69dbbe304dfb2a053f84f25a6f5339385%22%2C%22exportedName%22%3A%22fetchRecentActivity%22%2C%22filename%22%3A%22app%2F(dashboard)%2Fnotifications%2Factions.ts%22%7D%5D%5D%5D&__client_imported__=true!",
+          "async": false
+        },
+        "app/(dashboard)/tasks/page": {
+          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Fapp%2Ffrontend%2Fapp%2F(dashboard)%2Fnotifications%2Factions.ts%22%2C%5B%7B%22id%22%3A%2240fddc7ac69dbbe304dfb2a053f84f25a6f5339385%22%2C%22exportedName%22%3A%22fetchRecentActivity%22%2C%22filename%22%3A%22app%2F(dashboard)%2Fnotifications%2Factions.ts%22%7D%5D%5D%2C%5B%22%2Fapp%2Ffrontend%2Fapp%2F(dashboard)%2Ftasks%2Factions.ts%22%2C%5B%7B%22id%22%3A%2240bf87532a97395713aa9f44fb4665890876aca6cb%22%2C%22exportedName%22%3A%22createTask%22%2C%22filename%22%3A%22app%2F(dashboard)%2Ftasks%2Factions.ts%22%7D%2C%7B%22id%22%3A%2240f34f04868b592d1de77577d7cb54dbe74ffd7ec2%22%2C%22exportedName%22%3A%22fetchTaskById%22%2C%22filename%22%3A%22app%2F(dashboard)%2Ftasks%2Factions.ts%22%7D%2C%7B%22id%22%3A%22709ffd791e8c362bcd196cf371558e65b94a9a6e37%22%2C%22exportedName%22%3A%22fetchTasks%22%2C%22filename%22%3A%22app%2F(dashboard)%2Ftasks%2Factions.ts%22%7D%5D%5D%5D&__client_imported__=true!",
+          "async": false
+        },
+        "app/(dashboard)/special-projects/page": {
+          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Fapp%2Ffrontend%2Fapp%2F(dashboard)%2Fnotifications%2Factions.ts%22%2C%5B%7B%22id%22%3A%2240fddc7ac69dbbe304dfb2a053f84f25a6f5339385%22%2C%22exportedName%22%3A%22fetchRecentActivity%22%2C%22filename%22%3A%22app%2F(dashboard)%2Fnotifications%2Factions.ts%22%7D%5D%5D%2C%5B%22%2Fapp%2Ffrontend%2Fapp%2F(dashboard)%2Fspecial-projects%2Factions.ts%22%2C%5B%7B%22id%22%3A%224031c4599bd9c8757736a18f2e5530f9b32ca7ee74%22%2C%22exportedName%22%3A%22deleteSpecialProject%22%2C%22filename%22%3A%22app%2F(dashboard)%2Fspecial-projects%2Factions.ts%22%7D%2C%7B%22id%22%3A%224047c42ba108a41503e2213799b85414424717685d%22%2C%22exportedName%22%3A%22createSpecialProject%22%2C%22filename%22%3A%22app%2F(dashboard)%2Fspecial-projects%2Factions.ts%22%7D%2C%7B%22id%22%3A%226030f250375c24d5cf25a56ec9f9cdba0a8b7146f2%22%2C%22exportedName%22%3A%22updateSpecialProject%22%2C%22filename%22%3A%22app%2F(dashboard)%2Fspecial-projects%2Factions.ts%22%7D%5D%5D%5D&__client_imported__=true!",
+          "async": false
+        },
+        "app/(dashboard)/social-copy/page": {
+          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Fapp%2Ffrontend%2Fapp%2F(dashboard)%2Fnotifications%2Factions.ts%22%2C%5B%7B%22id%22%3A%2240fddc7ac69dbbe304dfb2a053f84f25a6f5339385%22%2C%22exportedName%22%3A%22fetchRecentActivity%22%2C%22filename%22%3A%22app%2F(dashboard)%2Fnotifications%2Factions.ts%22%7D%5D%5D%5D&__client_imported__=true!",
+          "async": false
+        }
+      },
+      "layer": {
+        "app/(dashboard)/page": "action-browser",
+        "app/(dashboard)/tasks/page": "action-browser",
+        "app/(dashboard)/special-projects/page": "action-browser",
+        "app/(dashboard)/social-copy/page": "action-browser"
+      },
+      "filename": "app/(dashboard)/notifications/actions.ts",
+      "exportedName": "fetchRecentActivity"
+    },
+    "40bf87532a97395713aa9f44fb4665890876aca6cb": {
+      "workers": {
+        "app/(dashboard)/tasks/page": {
+          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Fapp%2Ffrontend%2Fapp%2F(dashboard)%2Fnotifications%2Factions.ts%22%2C%5B%7B%22id%22%3A%2240fddc7ac69dbbe304dfb2a053f84f25a6f5339385%22%2C%22exportedName%22%3A%22fetchRecentActivity%22%2C%22filename%22%3A%22app%2F(dashboard)%2Fnotifications%2Factions.ts%22%7D%5D%5D%2C%5B%22%2Fapp%2Ffrontend%2Fapp%2F(dashboard)%2Ftasks%2Factions.ts%22%2C%5B%7B%22id%22%3A%2240bf87532a97395713aa9f44fb4665890876aca6cb%22%2C%22exportedName%22%3A%22createTask%22%2C%22filename%22%3A%22app%2F(dashboard)%2Ftasks%2Factions.ts%22%7D%2C%7B%22id%22%3A%2240f34f04868b592d1de77577d7cb54dbe74ffd7ec2%22%2C%22exportedName%22%3A%22fetchTaskById%22%2C%22filename%22%3A%22app%2F(dashboard)%2Ftasks%2Factions.ts%22%7D%2C%7B%22id%22%3A%22709ffd791e8c362bcd196cf371558e65b94a9a6e37%22%2C%22exportedName%22%3A%22fetchTasks%22%2C%22filename%22%3A%22app%2F(dashboard)%2Ftasks%2Factions.ts%22%7D%5D%5D%5D&__client_imported__=true!",
+          "async": false
+        }
+      },
+      "layer": {
+        "app/(dashboard)/tasks/page": "action-browser"
+      },
+      "filename": "app/(dashboard)/tasks/actions.ts",
+      "exportedName": "createTask"
+    },
+    "40f34f04868b592d1de77577d7cb54dbe74ffd7ec2": {
+      "workers": {
+        "app/(dashboard)/tasks/page": {
+          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Fapp%2Ffrontend%2Fapp%2F(dashboard)%2Fnotifications%2Factions.ts%22%2C%5B%7B%22id%22%3A%2240fddc7ac69dbbe304dfb2a053f84f25a6f5339385%22%2C%22exportedName%22%3A%22fetchRecentActivity%22%2C%22filename%22%3A%22app%2F(dashboard)%2Fnotifications%2Factions.ts%22%7D%5D%5D%2C%5B%22%2Fapp%2Ffrontend%2Fapp%2F(dashboard)%2Ftasks%2Factions.ts%22%2C%5B%7B%22id%22%3A%2240bf87532a97395713aa9f44fb4665890876aca6cb%22%2C%22exportedName%22%3A%22createTask%22%2C%22filename%22%3A%22app%2F(dashboard)%2Ftasks%2Factions.ts%22%7D%2C%7B%22id%22%3A%2240f34f04868b592d1de77577d7cb54dbe74ffd7ec2%22%2C%22exportedName%22%3A%22fetchTaskById%22%2C%22filename%22%3A%22app%2F(dashboard)%2Ftasks%2Factions.ts%22%7D%2C%7B%22id%22%3A%22709ffd791e8c362bcd196cf371558e65b94a9a6e37%22%2C%22exportedName%22%3A%22fetchTasks%22%2C%22filename%22%3A%22app%2F(dashboard)%2Ftasks%2Factions.ts%22%7D%5D%5D%5D&__client_imported__=true!",
+          "async": false
+        }
+      },
+      "layer": {
+        "app/(dashboard)/tasks/page": "action-browser"
+      },
+      "filename": "app/(dashboard)/tasks/actions.ts",
+      "exportedName": "fetchTaskById"
+    },
+    "709ffd791e8c362bcd196cf371558e65b94a9a6e37": {
+      "workers": {
+        "app/(dashboard)/tasks/page": {
+          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Fapp%2Ffrontend%2Fapp%2F(dashboard)%2Fnotifications%2Factions.ts%22%2C%5B%7B%22id%22%3A%2240fddc7ac69dbbe304dfb2a053f84f25a6f5339385%22%2C%22exportedName%22%3A%22fetchRecentActivity%22%2C%22filename%22%3A%22app%2F(dashboard)%2Fnotifications%2Factions.ts%22%7D%5D%5D%2C%5B%22%2Fapp%2Ffrontend%2Fapp%2F(dashboard)%2Ftasks%2Factions.ts%22%2C%5B%7B%22id%22%3A%2240bf87532a97395713aa9f44fb4665890876aca6cb%22%2C%22exportedName%22%3A%22createTask%22%2C%22filename%22%3A%22app%2F(dashboard)%2Ftasks%2Factions.ts%22%7D%2C%7B%22id%22%3A%2240f34f04868b592d1de77577d7cb54dbe74ffd7ec2%22%2C%22exportedName%22%3A%22fetchTaskById%22%2C%22filename%22%3A%22app%2F(dashboard)%2Ftasks%2Factions.ts%22%7D%2C%7B%22id%22%3A%22709ffd791e8c362bcd196cf371558e65b94a9a6e37%22%2C%22exportedName%22%3A%22fetchTasks%22%2C%22filename%22%3A%22app%2F(dashboard)%2Ftasks%2Factions.ts%22%7D%5D%5D%5D&__client_imported__=true!",
+          "async": false
+        }
+      },
+      "layer": {
+        "app/(dashboard)/tasks/page": "action-browser"
+      },
+      "filename": "app/(dashboard)/tasks/actions.ts",
+      "exportedName": "fetchTasks"
+    },
+    "4031c4599bd9c8757736a18f2e5530f9b32ca7ee74": {
+      "workers": {
+        "app/(dashboard)/special-projects/page": {
+          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Fapp%2Ffrontend%2Fapp%2F(dashboard)%2Fnotifications%2Factions.ts%22%2C%5B%7B%22id%22%3A%2240fddc7ac69dbbe304dfb2a053f84f25a6f5339385%22%2C%22exportedName%22%3A%22fetchRecentActivity%22%2C%22filename%22%3A%22app%2F(dashboard)%2Fnotifications%2Factions.ts%22%7D%5D%5D%2C%5B%22%2Fapp%2Ffrontend%2Fapp%2F(dashboard)%2Fspecial-projects%2Factions.ts%22%2C%5B%7B%22id%22%3A%224031c4599bd9c8757736a18f2e5530f9b32ca7ee74%22%2C%22exportedName%22%3A%22deleteSpecialProject%22%2C%22filename%22%3A%22app%2F(dashboard)%2Fspecial-projects%2Factions.ts%22%7D%2C%7B%22id%22%3A%224047c42ba108a41503e2213799b85414424717685d%22%2C%22exportedName%22%3A%22createSpecialProject%22%2C%22filename%22%3A%22app%2F(dashboard)%2Fspecial-projects%2Factions.ts%22%7D%2C%7B%22id%22%3A%226030f250375c24d5cf25a56ec9f9cdba0a8b7146f2%22%2C%22exportedName%22%3A%22updateSpecialProject%22%2C%22filename%22%3A%22app%2F(dashboard)%2Fspecial-projects%2Factions.ts%22%7D%5D%5D%5D&__client_imported__=true!",
+          "async": false
+        }
+      },
+      "layer": {
+        "app/(dashboard)/special-projects/page": "action-browser"
+      },
+      "filename": "app/(dashboard)/special-projects/actions.ts",
+      "exportedName": "deleteSpecialProject"
+    },
+    "4047c42ba108a41503e2213799b85414424717685d": {
+      "workers": {
+        "app/(dashboard)/special-projects/page": {
+          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Fapp%2Ffrontend%2Fapp%2F(dashboard)%2Fnotifications%2Factions.ts%22%2C%5B%7B%22id%22%3A%2240fddc7ac69dbbe304dfb2a053f84f25a6f5339385%22%2C%22exportedName%22%3A%22fetchRecentActivity%22%2C%22filename%22%3A%22app%2F(dashboard)%2Fnotifications%2Factions.ts%22%7D%5D%5D%2C%5B%22%2Fapp%2Ffrontend%2Fapp%2F(dashboard)%2Fspecial-projects%2Factions.ts%22%2C%5B%7B%22id%22%3A%224031c4599bd9c8757736a18f2e5530f9b32ca7ee74%22%2C%22exportedName%22%3A%22deleteSpecialProject%22%2C%22filename%22%3A%22app%2F(dashboard)%2Fspecial-projects%2Factions.ts%22%7D%2C%7B%22id%22%3A%224047c42ba108a41503e2213799b85414424717685d%22%2C%22exportedName%22%3A%22createSpecialProject%22%2C%22filename%22%3A%22app%2F(dashboard)%2Fspecial-projects%2Factions.ts%22%7D%2C%7B%22id%22%3A%226030f250375c24d5cf25a56ec9f9cdba0a8b7146f2%22%2C%22exportedName%22%3A%22updateSpecialProject%22%2C%22filename%22%3A%22app%2F(dashboard)%2Fspecial-projects%2Factions.ts%22%7D%5D%5D%5D&__client_imported__=true!",
+          "async": false
+        }
+      },
+      "layer": {
+        "app/(dashboard)/special-projects/page": "action-browser"
+      },
+      "filename": "app/(dashboard)/special-projects/actions.ts",
+      "exportedName": "createSpecialProject"
+    },
+    "6030f250375c24d5cf25a56ec9f9cdba0a8b7146f2": {
+      "workers": {
+        "app/(dashboard)/special-projects/page": {
+          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Fapp%2Ffrontend%2Fapp%2F(dashboard)%2Fnotifications%2Factions.ts%22%2C%5B%7B%22id%22%3A%2240fddc7ac69dbbe304dfb2a053f84f25a6f5339385%22%2C%22exportedName%22%3A%22fetchRecentActivity%22%2C%22filename%22%3A%22app%2F(dashboard)%2Fnotifications%2Factions.ts%22%7D%5D%5D%2C%5B%22%2Fapp%2Ffrontend%2Fapp%2F(dashboard)%2Fspecial-projects%2Factions.ts%22%2C%5B%7B%22id%22%3A%224031c4599bd9c8757736a18f2e5530f9b32ca7ee74%22%2C%22exportedName%22%3A%22deleteSpecialProject%22%2C%22filename%22%3A%22app%2F(dashboard)%2Fspecial-projects%2Factions.ts%22%7D%2C%7B%22id%22%3A%224047c42ba108a41503e2213799b85414424717685d%22%2C%22exportedName%22%3A%22createSpecialProject%22%2C%22filename%22%3A%22app%2F(dashboard)%2Fspecial-projects%2Factions.ts%22%7D%2C%7B%22id%22%3A%226030f250375c24d5cf25a56ec9f9cdba0a8b7146f2%22%2C%22exportedName%22%3A%22updateSpecialProject%22%2C%22filename%22%3A%22app%2F(dashboard)%2Fspecial-projects%2Factions.ts%22%7D%5D%5D%5D&__client_imported__=true!",
+          "async": false
+        }
+      },
+      "layer": {
+        "app/(dashboard)/special-projects/page": "action-browser"
+      },
+      "filename": "app/(dashboard)/special-projects/actions.ts",
+      "exportedName": "updateSpecialProject"
+    },
+    "00285921deac210f6bf7ba7b102f86a66b751bf6e8": {
+      "workers": {
+        "app/(dashboard)/social-copy/page": {
+          "moduleId": "(rsc)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Fapp%2Ffrontend%2Fapp%2F(dashboard)%2Fsocial-copy%2Factions.ts%22%2C%5B%7B%22id%22%3A%2200285921deac210f6bf7ba7b102f86a66b751bf6e8%22%2C%22exportedName%22%3A%22fetchAllSocialTasks%22%2C%22filename%22%3A%22app%2F(dashboard)%2Fsocial-copy%2Factions.ts%22%7D%2C%7B%22id%22%3A%2240248e86a107b6a0e8838b61c3eccfbd9df512a2f4%22%2C%22exportedName%22%3A%22submitSocialTask%22%2C%22filename%22%3A%22app%2F(dashboard)%2Fsocial-copy%2Factions.ts%22%7D%2C%7B%22id%22%3A%22405e0ac361789865fc2c872d7a610d96af588b4673%22%2C%22exportedName%22%3A%22deleteSocialTask%22%2C%22filename%22%3A%22app%2F(dashboard)%2Fsocial-copy%2Factions.ts%22%7D%2C%7B%22id%22%3A%2240bf71fc206f1f18f263ceae77dd7d51b243fd43b3%22%2C%22exportedName%22%3A%22createSocialTask%22%2C%22filename%22%3A%22app%2F(dashboard)%2Fsocial-copy%2Factions.ts%22%7D%2C%7B%22id%22%3A%22701929ffcd293c5cf8198856a294d5d34cd39419a5%22%2C%22exportedName%22%3A%22updateSocialTask%22%2C%22filename%22%3A%22app%2F(dashboard)%2Fsocial-copy%2Factions.ts%22%7D%5D%5D%5D&__client_imported__=!",
+          "async": false
+        }
+      },
+      "layer": {
+        "app/(dashboard)/social-copy/page": "rsc"
+      },
+      "filename": "app/(dashboard)/social-copy/actions.ts",
+      "exportedName": "fetchAllSocialTasks"
+    },
+    "40248e86a107b6a0e8838b61c3eccfbd9df512a2f4": {
+      "workers": {
+        "app/(dashboard)/social-copy/page": {
+          "moduleId": "(rsc)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Fapp%2Ffrontend%2Fapp%2F(dashboard)%2Fsocial-copy%2Factions.ts%22%2C%5B%7B%22id%22%3A%2200285921deac210f6bf7ba7b102f86a66b751bf6e8%22%2C%22exportedName%22%3A%22fetchAllSocialTasks%22%2C%22filename%22%3A%22app%2F(dashboard)%2Fsocial-copy%2Factions.ts%22%7D%2C%7B%22id%22%3A%2240248e86a107b6a0e8838b61c3eccfbd9df512a2f4%22%2C%22exportedName%22%3A%22submitSocialTask%22%2C%22filename%22%3A%22app%2F(dashboard)%2Fsocial-copy%2Factions.ts%22%7D%2C%7B%22id%22%3A%22405e0ac361789865fc2c872d7a610d96af588b4673%22%2C%22exportedName%22%3A%22deleteSocialTask%22%2C%22filename%22%3A%22app%2F(dashboard)%2Fsocial-copy%2Factions.ts%22%7D%2C%7B%22id%22%3A%2240bf71fc206f1f18f263ceae77dd7d51b243fd43b3%22%2C%22exportedName%22%3A%22createSocialTask%22%2C%22filename%22%3A%22app%2F(dashboard)%2Fsocial-copy%2Factions.ts%22%7D%2C%7B%22id%22%3A%22701929ffcd293c5cf8198856a294d5d34cd39419a5%22%2C%22exportedName%22%3A%22updateSocialTask%22%2C%22filename%22%3A%22app%2F(dashboard)%2Fsocial-copy%2Factions.ts%22%7D%5D%5D%5D&__client_imported__=!",
+          "async": false
+        }
+      },
+      "layer": {
+        "app/(dashboard)/social-copy/page": "rsc"
+      },
+      "filename": "app/(dashboard)/social-copy/actions.ts",
+      "exportedName": "submitSocialTask"
+    },
+    "405e0ac361789865fc2c872d7a610d96af588b4673": {
+      "workers": {
+        "app/(dashboard)/social-copy/page": {
+          "moduleId": "(rsc)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Fapp%2Ffrontend%2Fapp%2F(dashboard)%2Fsocial-copy%2Factions.ts%22%2C%5B%7B%22id%22%3A%2200285921deac210f6bf7ba7b102f86a66b751bf6e8%22%2C%22exportedName%22%3A%22fetchAllSocialTasks%22%2C%22filename%22%3A%22app%2F(dashboard)%2Fsocial-copy%2Factions.ts%22%7D%2C%7B%22id%22%3A%2240248e86a107b6a0e8838b61c3eccfbd9df512a2f4%22%2C%22exportedName%22%3A%22submitSocialTask%22%2C%22filename%22%3A%22app%2F(dashboard)%2Fsocial-copy%2Factions.ts%22%7D%2C%7B%22id%22%3A%22405e0ac361789865fc2c872d7a610d96af588b4673%22%2C%22exportedName%22%3A%22deleteSocialTask%22%2C%22filename%22%3A%22app%2F(dashboard)%2Fsocial-copy%2Factions.ts%22%7D%2C%7B%22id%22%3A%2240bf71fc206f1f18f263ceae77dd7d51b243fd43b3%22%2C%22exportedName%22%3A%22createSocialTask%22%2C%22filename%22%3A%22app%2F(dashboard)%2Fsocial-copy%2Factions.ts%22%7D%2C%7B%22id%22%3A%22701929ffcd293c5cf8198856a294d5d34cd39419a5%22%2C%22exportedName%22%3A%22updateSocialTask%22%2C%22filename%22%3A%22app%2F(dashboard)%2Fsocial-copy%2Factions.ts%22%7D%5D%5D%5D&__client_imported__=!",
+          "async": false
+        }
+      },
+      "layer": {
+        "app/(dashboard)/social-copy/page": "rsc"
+      },
+      "filename": "app/(dashboard)/social-copy/actions.ts",
+      "exportedName": "deleteSocialTask"
+    },
+    "40bf71fc206f1f18f263ceae77dd7d51b243fd43b3": {
+      "workers": {
+        "app/(dashboard)/social-copy/page": {
+          "moduleId": "(rsc)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Fapp%2Ffrontend%2Fapp%2F(dashboard)%2Fsocial-copy%2Factions.ts%22%2C%5B%7B%22id%22%3A%2200285921deac210f6bf7ba7b102f86a66b751bf6e8%22%2C%22exportedName%22%3A%22fetchAllSocialTasks%22%2C%22filename%22%3A%22app%2F(dashboard)%2Fsocial-copy%2Factions.ts%22%7D%2C%7B%22id%22%3A%2240248e86a107b6a0e8838b61c3eccfbd9df512a2f4%22%2C%22exportedName%22%3A%22submitSocialTask%22%2C%22filename%22%3A%22app%2F(dashboard)%2Fsocial-copy%2Factions.ts%22%7D%2C%7B%22id%22%3A%22405e0ac361789865fc2c872d7a610d96af588b4673%22%2C%22exportedName%22%3A%22deleteSocialTask%22%2C%22filename%22%3A%22app%2F(dashboard)%2Fsocial-copy%2Factions.ts%22%7D%2C%7B%22id%22%3A%2240bf71fc206f1f18f263ceae77dd7d51b243fd43b3%22%2C%22exportedName%22%3A%22createSocialTask%22%2C%22filename%22%3A%22app%2F(dashboard)%2Fsocial-copy%2Factions.ts%22%7D%2C%7B%22id%22%3A%22701929ffcd293c5cf8198856a294d5d34cd39419a5%22%2C%22exportedName%22%3A%22updateSocialTask%22%2C%22filename%22%3A%22app%2F(dashboard)%2Fsocial-copy%2Factions.ts%22%7D%5D%5D%5D&__client_imported__=!",
+          "async": false
+        }
+      },
+      "layer": {
+        "app/(dashboard)/social-copy/page": "rsc"
+      },
+      "filename": "app/(dashboard)/social-copy/actions.ts",
+      "exportedName": "createSocialTask"
+    },
+    "701929ffcd293c5cf8198856a294d5d34cd39419a5": {
+      "workers": {
+        "app/(dashboard)/social-copy/page": {
+          "moduleId": "(rsc)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Fapp%2Ffrontend%2Fapp%2F(dashboard)%2Fsocial-copy%2Factions.ts%22%2C%5B%7B%22id%22%3A%2200285921deac210f6bf7ba7b102f86a66b751bf6e8%22%2C%22exportedName%22%3A%22fetchAllSocialTasks%22%2C%22filename%22%3A%22app%2F(dashboard)%2Fsocial-copy%2Factions.ts%22%7D%2C%7B%22id%22%3A%2240248e86a107b6a0e8838b61c3eccfbd9df512a2f4%22%2C%22exportedName%22%3A%22submitSocialTask%22%2C%22filename%22%3A%22app%2F(dashboard)%2Fsocial-copy%2Factions.ts%22%7D%2C%7B%22id%22%3A%22405e0ac361789865fc2c872d7a610d96af588b4673%22%2C%22exportedName%22%3A%22deleteSocialTask%22%2C%22filename%22%3A%22app%2F(dashboard)%2Fsocial-copy%2Factions.ts%22%7D%2C%7B%22id%22%3A%2240bf71fc206f1f18f263ceae77dd7d51b243fd43b3%22%2C%22exportedName%22%3A%22createSocialTask%22%2C%22filename%22%3A%22app%2F(dashboard)%2Fsocial-copy%2Factions.ts%22%7D%2C%7B%22id%22%3A%22701929ffcd293c5cf8198856a294d5d34cd39419a5%22%2C%22exportedName%22%3A%22updateSocialTask%22%2C%22filename%22%3A%22app%2F(dashboard)%2Fsocial-copy%2Factions.ts%22%7D%5D%5D%5D&__client_imported__=!",
+          "async": false
+        }
+      },
+      "layer": {
+        "app/(dashboard)/social-copy/page": "rsc"
+      },
+      "filename": "app/(dashboard)/social-copy/actions.ts",
+      "exportedName": "updateSocialTask"
+    }
+  },
   "edge": {},
   "encryptionKey": "s3dzmaZY0Ab4cpq1EdsQaPEuERguhJwCEE/eNRzmsXs="
 }

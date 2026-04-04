@@ -69,13 +69,15 @@ export default function TasksPage() {
   }, [loadTasks])
 
   const handleDragStart = (e: React.DragEvent, taskId: string) => {
+    const element = e.currentTarget as HTMLElement
+    element.style.opacity = '0.4'
     e.dataTransfer.setData('taskId', taskId)
     e.dataTransfer.effectAllowed = 'move'
-    setTimeout(() => { (e.currentTarget as HTMLElement).style.opacity = '0.4' }, 0)
   }
 
   const handleDragEnd = (e: React.DragEvent) => {
-    ;(e.currentTarget as HTMLElement).style.opacity = '1'
+    const element = e.currentTarget as HTMLElement
+    if (element) element.style.opacity = '1'
   }
 
   const handleDrop = async (e: React.DragEvent, newStage: string) => {
