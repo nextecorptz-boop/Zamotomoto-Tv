@@ -127,6 +127,10 @@ Build a fully working, immersive, cinematic dark web application for ZAMOTOMOTO 
 - `NotificationBell` + `useNotifications` — SVG bell in header, reads `activity_log` via server action, realtime INSERT subscription, unread badge, mark-all-read
 - Realtime integrated into `SpecialProjectsClient` + `SocialCopyClient` via `router.refresh()`
 
+### Phase 0.5 — Drag Fix + System Verification ✅ (2026-04-02)
+- Fixed drag-and-drop null reference: removed `setTimeout` in `handleDragStart`, now captures `e.currentTarget` synchronously before any async/dataTransfer calls
+- Full regression: 100% pass — all pages load, kanban drag works, notifications load real data, zero console errors
+
 ### Known Issues / Pending
 - Phase 0 RLS fix: `tasks` table has recursive SELECT policy — `fix_tasks_rls.sql` ready for manual execution in Supabase Studio. Once applied, remove service-role bypass in `tasks/actions.ts`
 - `activity_log` RLS: browser client SELECT returns 500; fixed via server action (`notifications/actions.ts`)
