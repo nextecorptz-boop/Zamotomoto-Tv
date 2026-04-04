@@ -1,5 +1,19 @@
 {
-  "node": {},
+  "node": {
+    "40fddc7ac69dbbe304dfb2a053f84f25a6f5339385": {
+      "workers": {
+        "app/(dashboard)/settings/page": {
+          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Fapp%2Ffrontend%2Fapp%2F(dashboard)%2Fnotifications%2Factions.ts%22%2C%5B%7B%22id%22%3A%2240fddc7ac69dbbe304dfb2a053f84f25a6f5339385%22%2C%22exportedName%22%3A%22fetchRecentActivity%22%2C%22filename%22%3A%22app%2F(dashboard)%2Fnotifications%2Factions.ts%22%7D%5D%5D%5D&__client_imported__=true!",
+          "async": false
+        }
+      },
+      "layer": {
+        "app/(dashboard)/settings/page": "action-browser"
+      },
+      "filename": "app/(dashboard)/notifications/actions.ts",
+      "exportedName": "fetchRecentActivity"
+    }
+  },
   "edge": {},
   "encryptionKey": "s3dzmaZY0Ab4cpq1EdsQaPEuERguhJwCEE/eNRzmsXs="
 }
