@@ -220,3 +220,40 @@ export interface AccountingSummary {
   pending_count: number
   total_assets: number
 }
+
+// ── Payroll Module ────────────────────────────────────────────────
+export type PayrollStatus = 'pending' | 'approved' | 'paid' | 'rejected'
+
+export interface PayrollEntry {
+  id: string
+  pr_ref: string
+  employee_id: string | null
+  employee_name: string
+  department: string
+  role_title: string | null
+  gross_amount: number
+  deductions: number
+  net_amount: number
+  status: PayrollStatus
+  payment_month: string
+  payment_date: string | null
+  reject_reason: string | null
+  notes: string | null
+  created_by: string
+  approved_by: string | null
+  created_at: string
+  updated_at: string
+  // Joined:
+  employee?: { full_name: string | null } | null
+  creator?: { full_name: string | null }
+  approver?: { full_name: string | null }
+}
+
+export interface PayrollSummary {
+  total_gross: number
+  total_deductions: number
+  total_net: number
+  pending_count: number
+  paid_count: number
+  by_department: Record<string, number>
+}
