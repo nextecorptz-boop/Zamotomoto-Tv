@@ -144,13 +144,29 @@ Build a fully working, immersive, cinematic dark web application for ZAMOTOMOTO 
 - File upload: client-side browser Supabase upload to `accounting-docs` private bucket + `recordAccountingDocument` server action for metadata
 - Testing: 100% pass (10/10 with empty DB state)
 
+### Payroll Module ✅ (2026-04-04)
+- New table: `payroll_entries` + 5 RLS policies (admin_all, accountant_insert, accountant_select, accountant_update, accountant_delete) + trigger
+- SQL migration: `/app/frontend/supabase/migrations/20260402_payroll_module.sql` (5 policies, idempotent)
+- Server actions: `getPayrollEntries`, `getMyPayrollEntries`, `createPayrollEntry`, `approvePayrollEntry`, `markPayrollPaid`, `getPayrollSummary`, `deletePayrollEntry`
+- Admin view (`/accounting/payroll`): 3 summary cards (gross/deductions/net) + dept breakdown + PayrollTable with filters + inline PayrollReviewModal (approve/reject/mark-paid)
+- Accountant workspace (`/accounting/workspace/payroll`): sticky form (left) + records table with delete capability (right)
+- Components: PayrollSummaryCard, PayrollTable, PayrollForm, AdminPayrollClient, AccountantPayrollWorkspaceClient
+- Sidebar: Admin section has "Payroll" → /accounting/payroll; Accountant nav has "Payroll" → /accounting/workspace/payroll
+- Route guards: workers → /, accountant on /accounting/payroll → /accounting/workspace/payroll, admin on workspace → /accounting/payroll
+- Infrastructure fix: `allowedDevOrigins` added to `next.config.ts` for preview URL cross-origin JS chunk access
+- Testing: 85% pass (admin side fully verified; accountant side blocked until SQL migration run)
+
 ### Known Issues / Pending
 - Phase 0 RLS fix: `tasks` table has recursive SELECT policy — `fix_tasks_rls.sql` ready for manual execution in Supabase Studio. Once applied, remove service-role bypass in `tasks/actions.ts`
 - `activity_log` RLS: browser client SELECT returns 500; fixed via server action (`notifications/actions.ts`)
+- Payroll DB tables do not exist until user manually runs `20260402_payroll_module.sql` in Supabase Studio
 
 ---
 
 ## Prioritized Backlog
+
+### P0 — Done
+- [x] Payroll Module (all components, pages, layouts, sidebar, SQL migration with 5 RLS policies)
 
 ### P2 — Phase 3 Remaining (Upcoming)
 - [ ] File attachments for social tasks (chunked upload to Supabase Storage)
