@@ -25,6 +25,7 @@ const navItems = [
 
 const adminNavItems = [
   { href: '/accounting', label: 'Accounting', icon: '∑' },
+  { href: '/accounting/payroll', label: 'Payroll', icon: '$' },
   { href: '/admin/settings', label: 'Admin Panel', icon: '⬡' },
 ]
 
@@ -32,6 +33,7 @@ const adminNavItems = [
 const accountantNavItems = [
   { href: '/', label: 'Dashboard', icon: '■' },
   { href: '/accounting/workspace', label: 'Accounting', icon: '∑' },
+  { href: '/accounting/workspace/payroll', label: 'Payroll', icon: '$' },
 ]
 
 export default function Sidebar({ profile }: SidebarProps) {

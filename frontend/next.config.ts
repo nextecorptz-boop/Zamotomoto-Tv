@@ -1,6 +1,10 @@
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
+  allowedDevOrigins: [
+    'media-ops-desk.preview.emergentagent.com',
+    'media-ops-desk.cluster-5.preview.emergentcf.cloud',
+  ],
   experimental: {
     serverActions: {
       allowedOrigins: [

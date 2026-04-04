@@ -65,10 +65,28 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
   type __Unused = __Check
 }
 
+// Validate ../../app/(dashboard)/accounting/payroll/page.tsx
+{
+  type __IsExpected<Specific extends AppPageConfig<"/accounting/payroll">> = Specific
+  const handler = {} as typeof import("../../app/(dashboard)/accounting/payroll/page.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
 // Validate ../../app/(dashboard)/accounting/workspace/page.tsx
 {
   type __IsExpected<Specific extends AppPageConfig<"/accounting/workspace">> = Specific
   const handler = {} as typeof import("../../app/(dashboard)/accounting/workspace/page.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../app/(dashboard)/accounting/workspace/payroll/page.tsx
+{
+  type __IsExpected<Specific extends AppPageConfig<"/accounting/workspace/payroll">> = Specific
+  const handler = {} as typeof import("../../app/(dashboard)/accounting/workspace/payroll/page.js")
   type __Check = __IsExpected<typeof handler>
   // @ts-ignore
   type __Unused = __Check
@@ -217,6 +235,24 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
 {
   type __IsExpected<Specific extends LayoutConfig<"/accounting">> = Specific
   const handler = {} as typeof import("../../app/(dashboard)/accounting/layout.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../app/(dashboard)/accounting/payroll/layout.tsx
+{
+  type __IsExpected<Specific extends LayoutConfig<"/accounting/payroll">> = Specific
+  const handler = {} as typeof import("../../app/(dashboard)/accounting/payroll/layout.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../app/(dashboard)/accounting/workspace/payroll/layout.tsx
+{
+  type __IsExpected<Specific extends LayoutConfig<"/accounting/workspace/payroll">> = Specific
+  const handler = {} as typeof import("../../app/(dashboard)/accounting/workspace/payroll/layout.js")
   type __Check = __IsExpected<typeof handler>
   // @ts-ignore
   type __Unused = __Check
