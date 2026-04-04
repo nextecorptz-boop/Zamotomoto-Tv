@@ -131,6 +131,19 @@ Build a fully working, immersive, cinematic dark web application for ZAMOTOMOTO 
 - Fixed drag-and-drop null reference: removed `setTimeout` in `handleDragStart`, now captures `e.currentTarget` synchronously before any async/dataTransfer calls
 - Full regression: 100% pass — all pages load, kanban drag works, notifications load real data, zero console errors
 
+### Accounting Module ✅ (2026-04-02)
+- New tables: `accounting_categories`, `accounting_entries`, `accounting_documents` + RLS
+- New role: `accountant` (added to `Role` type + profiles constraint + ROLE_LABELS)
+- Server actions: `getAccountingEntries`, `getAccountingSummary`, `createAccountingEntry`, `recordAccountingDocument`, `reviewAccountingEntry`, `getAccountingDocuments`, `getSignedDocumentUrl`, `getAccountingCategories`
+- Admin view (`/accounting`): 4 summary cards + EntryTable with filters + EntryDetailModal with approve/reject
+- Accountant workspace (`/accounting/workspace`): EntryForm (left, sticky) + EntryTable (right)
+- Components: SummaryCard, EntryTable, EntryDetailModal, EntryForm, DocumentUploader, DocumentList, AdminAccountingClient, AccountantWorkspaceClient
+- Sidebar: Accounting nav item (∑) in Admin section for super_admin/admin; minimal nav for accountant role
+- Route guards: workers → /, accountant on /accounting → /accounting/workspace, admin on /accounting/workspace → /accounting
+- SQL migration: `/app/frontend/supabase/migrations/20260402_accounting_module.sql` (needs manual execution in Supabase Studio)
+- File upload: client-side browser Supabase upload to `accounting-docs` private bucket + `recordAccountingDocument` server action for metadata
+- Testing: 100% pass (10/10 with empty DB state)
+
 ### Known Issues / Pending
 - Phase 0 RLS fix: `tasks` table has recursive SELECT policy — `fix_tasks_rls.sql` ready for manual execution in Supabase Studio. Once applied, remove service-role bypass in `tasks/actions.ts`
 - `activity_log` RLS: browser client SELECT returns 500; fixed via server action (`notifications/actions.ts`)
