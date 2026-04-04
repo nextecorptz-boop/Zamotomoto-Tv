@@ -1,4 +1,4 @@
-export type Role = 'super_admin' | 'admin' | 'worker_standard' | 'worker_isolated'
+export type Role = 'super_admin' | 'admin' | 'worker_standard' | 'worker_isolated' | 'accountant'
 export type Stage = 'script' | 'voice' | 'editing' | 'publishing'
 export type TaskStatus = 'pending' | 'in_progress' | 'review' | 'approved' | 'rejected'
 export type Priority = 'low' | 'normal' | 'high' | 'urgent'
@@ -166,4 +166,57 @@ export interface Department {
   color_hex: string
   display_order: number
   created_at: string
+}
+
+// ── Accounting Module ────────────────────────────────────────────
+export type AccountingEntryStatus = 'pending' | 'approved' | 'rejected'
+export type AccountingEntryType = 'debit' | 'credit'
+export type AccountingCategoryType = 'expense' | 'asset' | 'payroll' | 'subscription' | 'per_diem' | 'operational' | 'revenue'
+
+export interface AccountingCategory {
+  id: string
+  name: string
+  type: AccountingCategoryType
+  description: string | null
+  created_at: string
+}
+
+export interface AccountingEntry {
+  id: string
+  reference_code: string
+  title: string
+  description: string | null
+  amount: number
+  currency: string
+  category_id: string | null
+  entry_type: AccountingEntryType
+  status: AccountingEntryStatus
+  submitted_by: string
+  reviewed_by: string | null
+  review_note: string | null
+  entry_date: string
+  created_at: string
+  updated_at: string
+  // Joined:
+  category?: AccountingCategory | null
+  submitter?: { full_name: string | null }
+  reviewer?: { full_name: string | null }
+}
+
+export interface AccountingDocument {
+  id: string
+  entry_id: string
+  file_name: string
+  storage_key: string
+  mime_type: string
+  file_size_bytes: number | null
+  uploaded_by: string
+  created_at: string
+}
+
+export interface AccountingSummary {
+  total_expenses: number
+  total_credits: number
+  pending_count: number
+  total_assets: number
 }

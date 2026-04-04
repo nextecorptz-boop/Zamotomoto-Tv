@@ -24,7 +24,14 @@ const navItems = [
 ]
 
 const adminNavItems = [
+  { href: '/accounting', label: 'Accounting', icon: '∑' },
   { href: '/admin/settings', label: 'Admin Panel', icon: '⬡' },
+]
+
+// Minimal nav for accountant role
+const accountantNavItems = [
+  { href: '/', label: 'Dashboard', icon: '■' },
+  { href: '/accounting/workspace', label: 'Accounting', icon: '∑' },
 ]
 
 export default function Sidebar({ profile }: SidebarProps) {
@@ -88,90 +95,83 @@ export default function Sidebar({ profile }: SidebarProps) {
 
       {/* Navigation */}
       <nav style={{ flex: 1, padding: '0.5rem 0' }}>
-        {navItems.map(item => (
-          <Link
-            key={item.href}
-            href={item.href}
-            data-testid={`nav-${item.label.toLowerCase().replace(/\s+/g, '-')}`}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.75rem',
-              padding: '0.65rem 1rem',
-              textDecoration: 'none',
-              fontFamily: "'IBM Plex Mono', monospace",
-              fontSize: '0.75rem',
-              letterSpacing: '0.05em',
-              transition: 'all 120ms',
-              color: isActive(item.href) ? '#FFFFFF' : '#888888',
-              background: isActive(item.href) ? 'rgba(204,31,31,0.1)' : 'transparent',
-              borderLeft: isActive(item.href) ? '3px solid #CC1F1F' : '3px solid transparent',
-            }}
-            onMouseEnter={e => {
-              if (!isActive(item.href)) {
-                const el = e.currentTarget as HTMLElement
-                el.style.background = 'rgba(255,255,255,0.03)'
-                el.style.color = '#FFFFFF'
-              }
-            }}
-            onMouseLeave={e => {
-              if (!isActive(item.href)) {
-                const el = e.currentTarget as HTMLElement
-                el.style.background = 'transparent'
-                el.style.color = '#888888'
-              }
-            }}
-          >
-            <span style={{ fontSize: '0.8rem', opacity: 0.7, fontFamily: 'monospace' }}>{item.icon}</span>
-            <span>{item.label}</span>
-          </Link>
-        ))}
-
-        {/* Admin-only section */}
-        {(profile?.role === 'super_admin') && (
+        {/* Accountant: show minimal nav only */}
+        {profile?.role === 'accountant' ? (
+          accountantNavItems.map(item => (
+            <Link
+              key={item.href}
+              href={item.href}
+              data-testid={`nav-${item.label.toLowerCase().replace(/\s+/g, '-')}`}
+              style={{
+                display: 'flex', alignItems: 'center', gap: '0.75rem',
+                padding: '0.65rem 1rem', textDecoration: 'none',
+                fontFamily: "'IBM Plex Mono', monospace", fontSize: '0.75rem', letterSpacing: '0.05em',
+                transition: 'all 120ms',
+                color: isActive(item.href) ? '#FFFFFF' : '#888888',
+                background: isActive(item.href) ? 'rgba(204,31,31,0.1)' : 'transparent',
+                borderLeft: isActive(item.href) ? '3px solid #CC1F1F' : '3px solid transparent',
+              }}
+              onMouseEnter={e => { if (!isActive(item.href)) { const el = e.currentTarget as HTMLElement; el.style.background = 'rgba(255,255,255,0.03)'; el.style.color = '#FFFFFF' } }}
+              onMouseLeave={e => { if (!isActive(item.href)) { const el = e.currentTarget as HTMLElement; el.style.background = 'transparent'; el.style.color = '#888888' } }}
+            >
+              <span style={{ fontSize: '0.8rem', opacity: 0.7, fontFamily: 'monospace' }}>{item.icon}</span>
+              <span>{item.label}</span>
+            </Link>
+          ))
+        ) : (
           <>
-            <div style={{ padding: '0.6rem 1rem 0.2rem', fontFamily: "'IBM Plex Mono', monospace", fontSize: '0.55rem', color: '#CC1F1F', letterSpacing: '0.25em', textTransform: 'uppercase', borderTop: '1px solid #1A1A1A', marginTop: '0.25rem' }}>
-              Admin
-            </div>
-            {adminNavItems.map(item => (
+            {navItems.map(item => (
               <Link
                 key={item.href}
                 href={item.href}
                 data-testid={`nav-${item.label.toLowerCase().replace(/\s+/g, '-')}`}
                 style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.75rem',
-                  padding: '0.65rem 1rem',
-                  textDecoration: 'none',
-                  fontFamily: "'IBM Plex Mono', monospace",
-                  fontSize: '0.75rem',
-                  letterSpacing: '0.05em',
+                  display: 'flex', alignItems: 'center', gap: '0.75rem',
+                  padding: '0.65rem 1rem', textDecoration: 'none',
+                  fontFamily: "'IBM Plex Mono', monospace", fontSize: '0.75rem', letterSpacing: '0.05em',
                   transition: 'all 120ms',
-                  color: isActive(item.href) ? '#FF2B2B' : '#CC1F1F',
-                  background: isActive(item.href) ? 'rgba(204,31,31,0.15)' : 'transparent',
+                  color: isActive(item.href) ? '#FFFFFF' : '#888888',
+                  background: isActive(item.href) ? 'rgba(204,31,31,0.1)' : 'transparent',
                   borderLeft: isActive(item.href) ? '3px solid #CC1F1F' : '3px solid transparent',
-                  opacity: 0.85,
                 }}
-                onMouseEnter={e => {
-                  if (!isActive(item.href)) {
-                    const el = e.currentTarget as HTMLElement
-                    el.style.background = 'rgba(204,31,31,0.08)'
-                    el.style.opacity = '1'
-                  }
-                }}
-                onMouseLeave={e => {
-                  if (!isActive(item.href)) {
-                    const el = e.currentTarget as HTMLElement
-                    el.style.background = 'transparent'
-                    el.style.opacity = '0.85'
-                  }
-                }}
+                onMouseEnter={e => { if (!isActive(item.href)) { const el = e.currentTarget as HTMLElement; el.style.background = 'rgba(255,255,255,0.03)'; el.style.color = '#FFFFFF' } }}
+                onMouseLeave={e => { if (!isActive(item.href)) { const el = e.currentTarget as HTMLElement; el.style.background = 'transparent'; el.style.color = '#888888' } }}
               >
                 <span style={{ fontSize: '0.8rem', opacity: 0.7, fontFamily: 'monospace' }}>{item.icon}</span>
                 <span>{item.label}</span>
               </Link>
             ))}
+
+            {/* Admin + Accounting section for super_admin and admin */}
+            {(profile?.role === 'super_admin' || profile?.role === 'admin') && (
+              <>
+                <div style={{ padding: '0.6rem 1rem 0.2rem', fontFamily: "'IBM Plex Mono', monospace", fontSize: '0.55rem', color: '#CC1F1F', letterSpacing: '0.25em', textTransform: 'uppercase', borderTop: '1px solid #1A1A1A', marginTop: '0.25rem' }}>
+                  Admin
+                </div>
+                {adminNavItems.map(item => (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    data-testid={`nav-${item.label.toLowerCase().replace(/\s+/g, '-')}`}
+                    style={{
+                      display: 'flex', alignItems: 'center', gap: '0.75rem',
+                      padding: '0.65rem 1rem', textDecoration: 'none',
+                      fontFamily: "'IBM Plex Mono', monospace", fontSize: '0.75rem', letterSpacing: '0.05em',
+                      transition: 'all 120ms',
+                      color: isActive(item.href) ? '#FF2B2B' : '#CC1F1F',
+                      background: isActive(item.href) ? 'rgba(204,31,31,0.15)' : 'transparent',
+                      borderLeft: isActive(item.href) ? '3px solid #CC1F1F' : '3px solid transparent',
+                      opacity: 0.85,
+                    }}
+                    onMouseEnter={e => { if (!isActive(item.href)) { const el = e.currentTarget as HTMLElement; el.style.background = 'rgba(204,31,31,0.08)'; el.style.opacity = '1' } }}
+                    onMouseLeave={e => { if (!isActive(item.href)) { const el = e.currentTarget as HTMLElement; el.style.background = 'transparent'; el.style.opacity = '0.85' } }}
+                  >
+                    <span style={{ fontSize: '0.8rem', opacity: 0.7, fontFamily: 'monospace' }}>{item.icon}</span>
+                    <span>{item.label}</span>
+                  </Link>
+                ))}
+              </>
+            )}
           </>
         )}
       </nav>

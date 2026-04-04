@@ -29,6 +29,7 @@ export const ROLE_LABELS: Record<string, string> = {
   admin: 'Admin',
   worker_standard: 'Staff',
   worker_isolated: 'Social Team',
+  accountant: 'Accountant',
 }
 
 export const DEPT_LABELS: Record<string, string> = {
