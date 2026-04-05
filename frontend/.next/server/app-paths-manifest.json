@@ -1,6 +1,3 @@
 {
-  "/(auth)/login/page": "app/(auth)/login/page.js",
-  "/(dashboard)/page": "app/(dashboard)/page.js",
-  "/(dashboard)/accounting/payroll/page": "app/(dashboard)/accounting/payroll/page.js",
-  "/(dashboard)/accounting/workspace/payroll/page": "app/(dashboard)/accounting/workspace/payroll/page.js"
+  "/(auth)/login/page": "app/(auth)/login/page.js"
 }
