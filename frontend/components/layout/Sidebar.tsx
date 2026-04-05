@@ -34,6 +34,7 @@ const accountantNavItems = [
   { href: '/', label: 'Dashboard', icon: '■' },
   { href: '/accounting/workspace', label: 'Accounting', icon: '∑' },
   { href: '/accounting/workspace/payroll', label: 'Payroll', icon: '$' },
+  { href: '/accounting/workspace/salary-records', label: 'Salary Records', icon: '◈' },
 ]
 
 export default function Sidebar({ profile }: SidebarProps) {

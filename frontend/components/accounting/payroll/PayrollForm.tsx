@@ -2,8 +2,20 @@
 
 import { useState, FormEvent } from 'react'
 import { useRouter } from 'next/navigation'
-import { createPayrollEntry } from '@/app/(dashboard)/accounting/payroll/actions'
-import type { CreatePayrollData } from '@/app/(dashboard)/accounting/payroll/actions'
+
+// NOTE: This form is part of the legacy payroll system.
+// New payroll entries use the payroll batch workflow (/accounting/workspace/payroll).
+
+interface CreatePayrollData {
+  employee_name: string
+  department: string
+  role_title?: string
+  gross_amount: number
+  deductions?: number
+  payment_month: string
+  notes?: string
+  employee_id?: string
+}
 
 interface PayrollFormProps {
   onSuccess?: () => void
@@ -59,25 +71,8 @@ export function PayrollForm({ onSuccess }: PayrollFormProps) {
 
     setLoading(true)
     try {
-      const result = await createPayrollEntry({
-        employee_name: employeeName,
-        department,
-        role_title:    roleTitle || undefined,
-        gross_amount:  gross,
-        deductions:    ded,
-        payment_month: paymentMonth + '-01',
-        notes:         notes || undefined,
-      } as CreatePayrollData)
-
-      if (!result.success) { setError('error' in result ? result.error : 'Submission failed'); return }
-
-      // Reset
-      setEmployeeName(''); setRoleTitle(''); setGrossAmount('')
-      setDeductions(''); setNotes('')
-      setPaymentMonth(new Date().toISOString().slice(0, 7))
-
-      router.refresh()
-      onSuccess?.()
+      // Legacy entry creation is disabled. Show deprecation notice.
+      setError('Legacy payroll entry creation is disabled. Use the new payroll batch workflow at /accounting/workspace/payroll')
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Submission failed')
     } finally {

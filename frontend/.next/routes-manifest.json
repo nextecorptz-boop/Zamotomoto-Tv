@@ -1,1 +1,202 @@
-{"version":3,"caseSensitive":false,"basePath":"","rewrites":{"beforeFiles":[],"afterFiles":[],"fallback":[]},"redirects":[{"source":"/:path+/","destination":"/:path+","permanent":true,"internal":true,"regex":"^(?:\\/((?:[^\\/]+?)(?:\\/(?:[^\\/]+?))*))\\/$"}],"headers":[]}
+{
+  "version": 3,
+  "pages404": true,
+  "caseSensitive": false,
+  "basePath": "",
+  "redirects": [
+    {
+      "source": "/:path+/",
+      "destination": "/:path+",
+      "internal": true,
+      "statusCode": 308,
+      "regex": "^(?:/((?:[^/]+?)(?:/(?:[^/]+?))*))/$"
+    }
+  ],
+  "headers": [],
+  "rewrites": {
+    "beforeFiles": [],
+    "afterFiles": [],
+    "fallback": []
+  },
+  "dynamicRoutes": [
+    {
+      "page": "/accounting/payroll/[month_id]",
+      "regex": "^/accounting/payroll/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPmonth_id": "nxtPmonth_id"
+      },
+      "namedRegex": "^/accounting/payroll/(?<nxtPmonth_id>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/accounting/workspace/payroll/[month_id]",
+      "regex": "^/accounting/workspace/payroll/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPmonth_id": "nxtPmonth_id"
+      },
+      "namedRegex": "^/accounting/workspace/payroll/(?<nxtPmonth_id>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/accounting/workspace/payroll/[month_id]/corrections",
+      "regex": "^/accounting/workspace/payroll/([^/]+?)/corrections(?:/)?$",
+      "routeKeys": {
+        "nxtPmonth_id": "nxtPmonth_id"
+      },
+      "namedRegex": "^/accounting/workspace/payroll/(?<nxtPmonth_id>[^/]+?)/corrections(?:/)?$"
+    },
+    {
+      "page": "/departments/[slug]",
+      "regex": "^/departments/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPslug": "nxtPslug"
+      },
+      "namedRegex": "^/departments/(?<nxtPslug>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/tasks/[id]",
+      "regex": "^/tasks/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/tasks/(?<nxtPid>[^/]+?)(?:/)?$"
+    }
+  ],
+  "staticRoutes": [
+    {
+      "page": "/",
+      "regex": "^/(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/(?:/)?$"
+    },
+    {
+      "page": "/_not-found",
+      "regex": "^/_not\\-found(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/_not\\-found(?:/)?$"
+    },
+    {
+      "page": "/accounting",
+      "regex": "^/accounting(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/accounting(?:/)?$"
+    },
+    {
+      "page": "/accounting/payroll",
+      "regex": "^/accounting/payroll(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/accounting/payroll(?:/)?$"
+    },
+    {
+      "page": "/accounting/payroll/history",
+      "regex": "^/accounting/payroll/history(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/accounting/payroll/history(?:/)?$"
+    },
+    {
+      "page": "/accounting/workspace",
+      "regex": "^/accounting/workspace(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/accounting/workspace(?:/)?$"
+    },
+    {
+      "page": "/accounting/workspace/payroll",
+      "regex": "^/accounting/workspace/payroll(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/accounting/workspace/payroll(?:/)?$"
+    },
+    {
+      "page": "/accounting/workspace/salary-records",
+      "regex": "^/accounting/workspace/salary\\-records(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/accounting/workspace/salary\\-records(?:/)?$"
+    },
+    {
+      "page": "/admin/settings",
+      "regex": "^/admin/settings(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/settings(?:/)?$"
+    },
+    {
+      "page": "/analytics",
+      "regex": "^/analytics(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/analytics(?:/)?$"
+    },
+    {
+      "page": "/auth/callback",
+      "regex": "^/auth/callback(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/auth/callback(?:/)?$"
+    },
+    {
+      "page": "/departments",
+      "regex": "^/departments(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/departments(?:/)?$"
+    },
+    {
+      "page": "/files",
+      "regex": "^/files(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/files(?:/)?$"
+    },
+    {
+      "page": "/login",
+      "regex": "^/login(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/login(?:/)?$"
+    },
+    {
+      "page": "/settings",
+      "regex": "^/settings(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/settings(?:/)?$"
+    },
+    {
+      "page": "/social-copy",
+      "regex": "^/social\\-copy(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/social\\-copy(?:/)?$"
+    },
+    {
+      "page": "/special-projects",
+      "regex": "^/special\\-projects(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/special\\-projects(?:/)?$"
+    },
+    {
+      "page": "/tasks",
+      "regex": "^/tasks(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/tasks(?:/)?$"
+    },
+    {
+      "page": "/tasks/new",
+      "regex": "^/tasks/new(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/tasks/new(?:/)?$"
+    },
+    {
+      "page": "/team",
+      "regex": "^/team(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/team(?:/)?$"
+    }
+  ],
+  "dataRoutes": [],
+  "rsc": {
+    "header": "rsc",
+    "varyHeader": "rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch",
+    "prefetchHeader": "next-router-prefetch",
+    "didPostponeHeader": "x-nextjs-postponed",
+    "contentTypeHeader": "text/x-component",
+    "suffix": ".rsc",
+    "prefetchSuffix": ".prefetch.rsc",
+    "prefetchSegmentHeader": "next-router-segment-prefetch",
+    "prefetchSegmentSuffix": ".segment.rsc",
+    "prefetchSegmentDirSuffix": ".segments"
+  },
+  "rewriteHeaders": {
+    "pathHeader": "x-nextjs-rewritten-path",
+    "queryHeader": "x-nextjs-rewritten-query"
+  }
+}

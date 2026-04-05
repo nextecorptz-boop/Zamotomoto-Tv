@@ -1,10 +1,8 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
-import { getMyPayrollEntries } from '../../payroll/actions'
+import { getPayrollMonthList } from './payroll-actions'
 import AccountantPayrollWorkspaceClient from '@/components/accounting/payroll/AccountantPayrollWorkspaceClient'
 
-// Accountant payroll workspace — accountant role only.
-// Admins are redirected to the admin payroll dashboard.
 export default async function AccountantPayrollWorkspacePage() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
@@ -21,7 +19,7 @@ export default async function AccountantPayrollWorkspacePage() {
   if (role === 'super_admin' || role === 'admin') redirect('/accounting/payroll')
   if (role !== 'accountant') redirect('/')
 
-  const entries = await getMyPayrollEntries()
+  const months = await getPayrollMonthList()
 
-  return <AccountantPayrollWorkspaceClient entries={entries} />
+  return <AccountantPayrollWorkspaceClient months={months} />
 }

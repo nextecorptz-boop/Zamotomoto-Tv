@@ -249,11 +249,24 @@ export interface PayrollEntry {
   approver?: { full_name: string | null }
 }
 
-export interface PayrollSummary {
+// Phase A update: status-gated totals — rejected entries NEVER in financial totals
+export interface PayrollSummaryResult {
+  // FINANCIAL TOTALS — approved + paid only
   total_gross: number
   total_deductions: number
   total_net: number
+  // STATUS-SPLIT TOTALS — for dashboard cards
+  approved_total: number     // approved only: committed, not yet paid
+  paid_total: number         // paid only: finalized
+  // COUNTS
   pending_count: number
   paid_count: number
+  // AUDIT ONLY — never render in financial total cards
+  rejected_total: number
+  rejected_count: number
+  // DEPARTMENT BREAKDOWN — approved + paid net only
   by_department: Record<string, number>
 }
+
+// Legacy type alias for backward compatibility during transition
+export type PayrollSummary = PayrollSummaryResult
