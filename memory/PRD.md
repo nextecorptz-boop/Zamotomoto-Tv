@@ -144,7 +144,37 @@ Build a fully working, immersive, cinematic dark web application for ZAMOTOMOTO 
 - File upload: client-side browser Supabase upload to `accounting-docs` private bucket + `recordAccountingDocument` server action for metadata
 - Testing: 100% pass (10/10 with empty DB state)
 
-### Payroll Module ✅ (2026-04-04)
+### Payroll Phase 1 Deployment ✅ (2026-04-04)
+**18 files created/updated (all build green, TypeScript 0 errors):**
+
+Phase A (Status-gated totals):
+- `actions.ts` replaced — `getPayrollSummary()` now returns `PayrollSummaryResult` with `approved_total`, `paid_total`, `rejected_total` separate; rejected NEVER included in financial totals
+- `AdminPayrollClient.tsx` replaced — 4 status-gated summary cards + REJECTED AUDIT ONLY red card; 3-tab nav (Overview / Salary Records / Legacy)
+
+Phase B (Salary Records):
+- `salary-actions.ts` created — `getSalaryRecords()`, `getSalaryCompletionStatus()`, `setSalaryRecord()`, `getEmployeeSalaryHistory()`
+- `SalaryRecordsClient.tsx` created — inline salary edit per employee, completion status gate
+
+Phase D (Accountant Batch Workflow):
+- `workspace/payroll/payroll-actions.ts` created — `openPayrollMonth()` (gated on salary completion), `buildPayrollBatch()`, `addAdjustment()`, `removeAdjustment()`, `submitBatch()`, `resubmitLineItem()`, `getPayrollMonth()`, `getPayrollMonthList()`
+- `AccountantPayrollWorkspaceClient.tsx` replaced — month list with open-month modal (year/month selector, salary gate error)
+- `PayrollBatchPreparationClient.tsx` created — line items table, inline adj form, submit button
+- `CorrectionsQueueClient.tsx` created — per-rejected-item correction form + resubmit
+- Pages: `/accounting/workspace/payroll/[month_id]`, `/accounting/workspace/payroll/[month_id]/corrections`, `/accounting/workspace/salary-records`
+
+Phase E (Admin Review):
+- `admin-payroll-actions.ts` created — `approveLineItems()`, `rejectLineItems()`, `excludeLineItem()`, `markBatchPaid()`, `closePayrollMonth()`, `getActiveBatchForAdmin()`, `getPayrollHistory()`
+- `AdminPayrollReviewClient.tsx` created — checkbox bulk approve/reject, individual exclude, mark paid, close month
+- `PayrollHistoryClient.tsx` created — history table with paid/closed months
+- Pages: `/accounting/payroll/[month_id]`, `/accounting/payroll/history`
+
+Testing: 80% pass (admin fully verified, accountant blocked by missing Supabase Auth user)
+
+⚠️ ACTION REQUIRED from user:
+1. Create accountant@zamototomotv.com in Supabase Studio > Authentication > Users
+2. Create test employees with roles worker_standard or worker_isolated to test salary records
+
+
 - New table: `payroll_entries` + 5 RLS policies (admin_all, accountant_insert, accountant_select, accountant_update, accountant_delete) + trigger
 - SQL migration: `/app/frontend/supabase/migrations/20260402_payroll_module.sql` (5 policies, idempotent)
 - Server actions: `getPayrollEntries`, `getMyPayrollEntries`, `createPayrollEntry`, `approvePayrollEntry`, `markPayrollPaid`, `getPayrollSummary`, `deletePayrollEntry`
