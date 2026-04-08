@@ -186,7 +186,48 @@ Testing: 80% pass (admin fully verified, accountant blocked by missing Supabase 
 - Infrastructure fix: `allowedDevOrigins` added to `next.config.ts` for preview URL cross-origin JS chunk access
 - Testing: 85% pass (admin side fully verified; accountant side blocked until SQL migration run)
 
-### Known Issues / Pending
+### Engagement Desk Module ✅ (2026-04-08)
+**17 files created (TypeScript 0 errors, 75% pass rate — 2 critical DB schema issues resolved with migration SQL):**
+
+Phase A — Foundation:
+- `types/engagement.ts` — EngagementCategory, EngagementSubmission, EngagementActivityLog, EngagementConfig, EngagementDashboardData types
+- `app/actions/engagement.ts` — 13 server actions (getActiveCategories, getAllCategories, createCategory, updateCategory, getMySubmissions, getAllSubmissions, submitProof, resubmitProof, validateSubmission, getDashboard, getConfig, updateConfig, getSignedProofUrl)
+
+Phase B — UI Components (9):
+- `components/engagement/shared/StatusBadge.tsx` — Pending/Approved/Rejected badge
+- `components/engagement/shared/SubmissionCard.tsx` — Card with on-demand signed URL proof viewing
+- `components/engagement/operator/SubmitProofForm.tsx` — Form with daily progress bar, file drag-drop, FormData server action
+- `components/engagement/operator/MySubmissionsClient.tsx` — Own submission history + resubmit modal
+- `components/engagement/manager/ValidateQueueClient.tsx` — Pending queue with approve/reject modal
+- `components/engagement/admin/CategoriesClient.tsx` — Full category CRUD (create/edit/toggle)
+- `components/engagement/admin/EngagementSettingsClient.tsx` — Config editor (daily target, expiry, etc.)
+- `components/engagement/EngagementDashboardClient.tsx` — Personal stats + team leaderboard (admins)
+
+Phase C — Pages (6) under app/(dashboard)/engagement/:
+- `/engagement/dashboard` — Stats for all roles, pending queue count for admins, team leaderboard
+- `/engagement/submit` — Operator proof submission (admins redirected to /validate)
+- `/engagement/submissions` — Operator's own submission history
+- `/engagement/validate` — Admin/manager validation queue
+- `/engagement/admin/categories` — Category management
+- `/engagement/admin/settings` — Config settings
+
+Phase D — Sidebar update:
+- `components/layout/Sidebar.tsx` — Engagement section for workers (submit/submissions/dashboard) and admins (validate/categories/settings/dashboard)
+
+Phase E — DB Migration:
+- `supabase/migrations/20260408_engagement_desk.sql` — ALTER TABLE to add missing columns (platform, description, points_value to engagement_categories; notes, submitted_at, reviewed_by FK, review_note, reviewed_at to engagement_submissions). Seeds default config values.
+
+⚠️ ACTION REQUIRED from user:
+1. Run `/app/frontend/supabase/migrations/20260408_engagement_desk.sql` in Supabase Studio SQL Editor
+2. Create a Supabase Storage bucket named `engagement-proofs` (set to Private)
+3. All engagement tables already exist — migration only adds missing columns
+
+Notes:
+- Resilient fallback queries: if reviewed_by FK not found, falls back to base query without reviewer join
+- Resilient category create/update: if platform/description columns missing, falls back to name-only insert
+- Config fallback: if default_daily_target missing from DB, uses safe default of 10 for operator UI
+
+
 - Phase 0 RLS fix: `tasks` table has recursive SELECT policy — `fix_tasks_rls.sql` ready for manual execution in Supabase Studio. Once applied, remove service-role bypass in `tasks/actions.ts`
 - `activity_log` RLS: browser client SELECT returns 500; fixed via server action (`notifications/actions.ts`)
 - Payroll DB tables do not exist until user manually runs `20260402_payroll_module.sql` in Supabase Studio

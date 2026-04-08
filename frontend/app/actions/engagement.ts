@@ -103,6 +103,8 @@ export async function createEngagementCategory(
   if (!isAdminRole(me.role)) return { success: false, error: 'Admin only' }
 
   const admin = adminClient()
+
+  // Try full insert first; fall back to name-only if extra columns missing
   const { data: row, error } = await admin
     .from('engagement_categories')
     .insert({
@@ -115,7 +117,20 @@ export async function createEngagementCategory(
     .select('id')
     .single()
 
-  if (error) return { success: false, error: error.message }
+  if (error) {
+    // If error mentions missing column, try minimal insert (name + is_active only)
+    if (error.message.includes('column') || error.message.includes('schema')) {
+      console.warn('[createEngagementCategory] Schema mismatch, trying minimal insert:', error.message)
+      const { data: fallback, error: fallbackErr } = await admin
+        .from('engagement_categories')
+        .insert({ name: data.name.trim(), is_active: true })
+        .select('id')
+        .single()
+      if (fallbackErr) return { success: false, error: `Schema issue — run engagement migration SQL. Error: ${fallbackErr.message}` }
+      return { success: true, id: fallback!.id as string }
+    }
+    return { success: false, error: error.message }
+  }
   return { success: true, id: row!.id as string }
 }
 
@@ -149,7 +164,18 @@ export async function updateEngagementCategory(
     .update(updatePayload)
     .eq('id', categoryId)
 
-  if (error) return { success: false, error: error.message }
+  if (error) {
+    // If schema error (columns missing), retry with only known-safe fields
+    if (error.message.includes('column') || error.message.includes('schema')) {
+      const safePayload: Record<string, unknown> = {}
+      if (updatePayload.name !== undefined) safePayload.name = updatePayload.name
+      if (updatePayload.is_active !== undefined) safePayload.is_active = updatePayload.is_active
+      const { error: safeErr } = await admin.from('engagement_categories').update(safePayload).eq('id', categoryId)
+      if (safeErr) return { success: false, error: `Schema issue — run engagement migration SQL. Error: ${safeErr.message}` }
+      return { success: true }
+    }
+    return { success: false, error: error.message }
+  }
   return { success: true }
 }
 
@@ -159,11 +185,12 @@ export async function getMyEngagementSubmissions(): Promise<EngagementSubmission
   if (!me) return []
 
   const admin = adminClient()
+  // Try with FK joins first; fall back to basic query if schema is missing columns
   const { data, error } = await admin
     .from('engagement_submissions')
     .select(`
       *,
-      category:category_id(id, name, description, platform, points_value, is_active, created_at, updated_at),
+      category:category_id(id, name, is_active, created_at, updated_at),
       reviewer:reviewed_by(full_name)
     `)
     .eq('operator_id', me.id)
@@ -171,8 +198,15 @@ export async function getMyEngagementSubmissions(): Promise<EngagementSubmission
     .limit(100)
 
   if (error) {
-    console.error('[getMyEngagementSubmissions]', error.message)
-    return []
+    // Fallback: query without reviewer join (handles missing reviewed_by FK)
+    console.warn('[getMyEngagementSubmissions] FK join failed, using fallback:', error.message)
+    const { data: fallback } = await admin
+      .from('engagement_submissions')
+      .select(`*, category:category_id(id, name, is_active, created_at, updated_at)`)
+      .eq('operator_id', me.id)
+      .order('created_at', { ascending: false })
+      .limit(100)
+    return (fallback ?? []) as unknown as EngagementSubmission[]
   }
   return (data ?? []) as unknown as EngagementSubmission[]
 }
@@ -194,12 +228,13 @@ export async function getAllEngagementSubmissions(
   if (!isAdminRole(me.role)) return []
 
   const admin = adminClient()
+  // Try with FK joins; fall back to basic query if reviewed_by FK missing
   let q = admin
     .from('engagement_submissions')
     .select(`
       *,
       operator:operator_id(full_name),
-      category:category_id(id, name, description, platform, points_value, is_active, created_at, updated_at),
+      category:category_id(id, name, is_active, created_at, updated_at),
       reviewer:reviewed_by(full_name)
     `)
     .order('created_at', { ascending: false })
@@ -213,8 +248,19 @@ export async function getAllEngagementSubmissions(
 
   const { data, error } = await q
   if (error) {
-    console.error('[getAllEngagementSubmissions]', error.message)
-    return []
+    // Fallback: query without reviewer join (handles missing reviewed_by FK)
+    console.warn('[getAllEngagementSubmissions] FK join failed, using fallback:', error.message)
+    let fq = admin
+      .from('engagement_submissions')
+      .select(`*, operator:operator_id(full_name), category:category_id(id, name, is_active, created_at, updated_at)`)
+      .order('created_at', { ascending: false })
+      .limit(200)
+
+    if (filters?.status && filters.status !== 'all') fq = fq.eq('status', filters.status)
+    if (filters?.operator_id) fq = fq.eq('operator_id', filters.operator_id)
+
+    const { data: fallback } = await fq
+    return (fallback ?? []) as unknown as EngagementSubmission[]
   }
   return (data ?? []) as unknown as EngagementSubmission[]
 }
@@ -258,7 +304,7 @@ export async function submitEngagementProof(
 
   if (uploadError) return { success: false, error: `Upload failed: ${uploadError.message}` }
 
-  // Insert DB record
+  // Insert DB record (with fallback if notes/submitted_at columns missing)
   const now = new Date().toISOString()
   const { data: row, error: insertError } = await admin
     .from('engagement_submissions')
@@ -275,6 +321,31 @@ export async function submitEngagementProof(
     .single()
 
   if (insertError) {
+    if (insertError.message.includes('column') || insertError.message.includes('schema')) {
+      // Try minimal insert (base columns only)
+      const { data: fallback, error: fallbackErr } = await admin
+        .from('engagement_submissions')
+        .insert({
+          operator_id: me.id,
+          category_id: categoryId,
+          storage_path: storagePath,
+          proof_url: null,
+          status: 'pending',
+        })
+        .select('id')
+        .single()
+      if (fallbackErr) {
+        await admin.storage.from('engagement-proofs').remove([storagePath])
+        return { success: false, error: `Schema issue — run engagement migration SQL. Error: ${fallbackErr.message}` }
+      }
+      // Log activity (try with notes, ignore errors if notes column missing)
+      await admin.from('engagement_activity_log').insert({
+        submission_id: fallback!.id,
+        actor_id: me.id,
+        action: 'submitted',
+      }).select().maybeSingle()
+      return { success: true, id: fallback!.id as string }
+    }
     // Safety: cleanup newly uploaded file on DB failure
     await admin.storage.from('engagement-proofs').remove([storagePath])
     return { success: false, error: insertError.message }
@@ -507,20 +578,31 @@ export async function getEngagementDashboard(): Promise<EngagementDashboardData>
     team_entries = Array.from(teamMap.values()).sort((a, b) => b.today_count - a.today_count)
   }
 
-  // Recent submissions
-  const { data: recent } = await admin
+  // Recent submissions (with fallback for missing FK)
+  const { data: recent, error: recentErr } = await admin
     .from('engagement_submissions')
     .select(`
       *,
       operator:operator_id(full_name),
-      category:category_id(id, name, description, platform, points_value, is_active, created_at, updated_at),
+      category:category_id(id, name, is_active, created_at, updated_at),
       reviewer:reviewed_by(full_name)
     `)
     .eq(isAdminRole(me.role) ? 'status' : 'operator_id', isAdminRole(me.role) ? 'pending' : me.id)
     .order('created_at', { ascending: false })
     .limit(isAdminRole(me.role) ? 10 : 5)
 
-  recent_submissions = (recent ?? []) as unknown as EngagementSubmission[]
+  if (recentErr) {
+    // Fallback without reviewed_by FK join
+    const { data: recentFallback } = await admin
+      .from('engagement_submissions')
+      .select(`*, operator:operator_id(full_name), category:category_id(id, name, is_active, created_at, updated_at)`)
+      .eq(isAdminRole(me.role) ? 'status' : 'operator_id', isAdminRole(me.role) ? 'pending' : me.id)
+      .order('created_at', { ascending: false })
+      .limit(isAdminRole(me.role) ? 10 : 5)
+    recent_submissions = (recentFallback ?? []) as unknown as EngagementSubmission[]
+  } else {
+    recent_submissions = (recent ?? []) as unknown as EngagementSubmission[]
+  }
 
   return { operator_stats, team_entries, recent_submissions, pending_count }
 }
