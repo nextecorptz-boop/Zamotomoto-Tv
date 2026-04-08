@@ -31,11 +31,6 @@
       "static/chunks/main-app.js",
       "static/chunks/app/(dashboard)/engagement/dashboard/page.js"
     ],
-    "/(dashboard)/engagement/validate/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/(dashboard)/engagement/validate/page.js"
-    ],
     "/(dashboard)/engagement/admin/categories/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
@@ -45,6 +40,11 @@
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/(dashboard)/engagement/admin/settings/page.js"
+    ],
+    "/(dashboard)/engagement/validate/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(dashboard)/engagement/validate/page.js"
     ],
     "/(dashboard)/engagement/submissions/page": [
       "static/chunks/webpack.js",

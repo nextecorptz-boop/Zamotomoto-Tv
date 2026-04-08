@@ -1,0 +1,58 @@
+{
+  "summary": "Engagement Desk module frontend testing (iteration 8). Previous platform/reviewed_by schema issues are now FIXED. Most flows work correctly. One critical issue remains: category creation fails due to a Supabase CHECK constraint 'check_category_names' that only allows predefined names (ATTACK, DEFEND, EDUCATE).",
+  "backend_issues": {
+    "critical": [
+      {
+        "endpoint": "Supabase: engagement_categories INSERT",
+        "issue": "CHECK constraint 'check_category_names' on engagement_categories table rejects any category name not in the predefined list (ATTACK, DEFEND, EDUCATE). Error: 'new row for relation engagement_categories violates check constraint check_category_names'",
+        "priority": "HIGH"
+      }
+    ],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [
+      {
+        "flow": "Create new engagement category",
+        "issue": "Fails with Supabase CHECK constraint. DB has 'check_category_names' constraint blocking any new names. The + NEW CATEGORY flow, modal, form all work correctly — only DB rejects the insert.",
+        "affected_selectors": ["text=CREATE"]
+      }
+    ],
+    "design_issues": []
+  },
+  "test_results": {
+    "login": "PASS — admin@zamoto.com / 12345678 works",
+    "sidebar_engagement_section": "PASS — Engagement, Validate Queue, Categories, Eng. Settings all visible",
+    "engagement_dashboard": "PASS — loads with 5 stats cards (0 values), daily target 0/50, NO TEAM SUBMISSIONS TODAY",
+    "categories_page": "PASS — loads with ATTACK, DEFEND, EDUCATE categories, all ACTIVE, EDIT and DISABLE buttons present",
+    "create_category_TEST_CATEGORY": "FAIL — Supabase CHECK constraint check_category_names rejects name 'TEST CATEGORY'",
+    "toggle_attack_inactive": "PASS — DISABLE clicked, count changed from 3 ACTIVE to 2 ACTIVE",
+    "settings_page": "PASS — loads with Daily Submission Target=50, Submission Expiry=24, Max File Size=10, Resubmit Limit=0",
+    "settings_save": "PASS — daily target updated to 55, input shows 55 after save (toast may have dismissed too quickly to capture)",
+    "validate_queue": "PASS — loads with 0 PENDING REVIEW, no DB errors",
+    "submissions_page": "PASS — loads with MY SUBMISSIONS empty state (NO SUBMISSIONS YET)",
+    "submit_redirect": "PASS — admin navigating to /engagement/submit redirects to /engagement/validate"
+  },
+  "rca_of_issue": {
+    "root_cause": "The engagement_categories table has a CHECK constraint named 'check_category_names' that limits allowed category names to a hardcoded list (ATTACK, DEFEND, EDUCATE). The UI allows any name input but the DB blocks insertion.",
+    "reproduction": "1. Go to /engagement/admin/categories. 2. Click + NEW CATEGORY. 3. Enter any name not in {ATTACK, DEFEND, EDUCATE}. 4. Click CREATE. 5. Error: 'new row for relation engagement_categories violates check constraint check_category_names'",
+    "mitigation": "In Supabase SQL Editor, drop the check constraint: ALTER TABLE engagement_categories DROP CONSTRAINT check_category_names; — This will allow any category name to be inserted."
+  },
+  "test_report_links": ["/app/test_reports/iteration_8.json"],
+  "action_items": [
+    "CRITICAL: Drop or update the 'check_category_names' CHECK constraint on engagement_categories table to allow new category names. Run: ALTER TABLE engagement_categories DROP CONSTRAINT check_category_names;"
+  ],
+  "critical_code_review_comments": [
+    "engagement_categories table has CHECK constraint 'check_category_names' that prevents new categories from being added beyond ATTACK/DEFEND/EDUCATE — needs to be dropped in Supabase"
+  ],
+  "updated_files": [],
+  "success_rate": {
+    "backend": "N/A (frontend-only test)",
+    "frontend": "91% (10/11 test cases passed, 1 DB schema issue with check constraint)"
+  },
+  "seed_data_creation": "None (ATTACK category was toggled to INACTIVE during testing — may need re-enabling)",
+  "retest_needed": true,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Platform column and reviewed_by FK issues from iteration 7 are fully resolved. Only remaining issue: CHECK constraint 'check_category_names' on engagement_categories table. Once dropped in Supabase, create category flow should work. All other flows (dashboard, settings, validate, submissions, submit redirect, disable toggle) are working correctly. Note: ATTACK category was disabled during test — may be INACTIVE when retesting."
+}

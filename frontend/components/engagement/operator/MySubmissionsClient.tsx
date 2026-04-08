@@ -12,7 +12,6 @@ interface Props {
 export function MySubmissionsClient({ submissions }: Props) {
   const router = useRouter()
   const [resubmitTarget, setResubmitTarget] = useState<EngagementSubmission | null>(null)
-  const [notes, setNotes] = useState('')
   const [fileName, setFileName] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState(false)
@@ -29,7 +28,6 @@ export function MySubmissionsClient({ submissions }: Props) {
     if (!file) { setError('Select a new proof file'); return }
 
     const fd = new FormData()
-    fd.append('notes', notes)
     fd.append('proof_file', file)
 
     startTransition(async () => {
@@ -39,7 +37,6 @@ export function MySubmissionsClient({ submissions }: Props) {
       setTimeout(() => {
         setResubmitTarget(null)
         setSuccess(false)
-        setNotes('')
         setFileName(null)
         if (fileRef.current) fileRef.current.value = ''
         router.refresh()
@@ -56,17 +53,7 @@ export function MySubmissionsClient({ submissions }: Props) {
             key={s}
             onClick={() => setStatusFilter(s)}
             data-testid={`filter-${s}`}
-            style={{
-              background: statusFilter === s ? '#CC1F1F' : 'transparent',
-              border: `1px solid ${statusFilter === s ? '#CC1F1F' : '#2A2A2A'}`,
-              color: statusFilter === s ? '#FFFFFF' : '#888888',
-              fontFamily: "'IBM Plex Mono', monospace",
-              fontSize: '0.62rem',
-              letterSpacing: '0.12em',
-              textTransform: 'uppercase',
-              padding: '0.3rem 0.7rem',
-              cursor: 'pointer',
-            }}
+            style={{ background: statusFilter === s ? '#CC1F1F' : 'transparent', border: `1px solid ${statusFilter === s ? '#CC1F1F' : '#2A2A2A'}`, color: statusFilter === s ? '#FFFFFF' : '#888888', fontFamily: "'IBM Plex Mono', monospace", fontSize: '0.62rem', letterSpacing: '0.12em', textTransform: 'uppercase', padding: '0.3rem 0.7rem', cursor: 'pointer' }}
           >
             {s} {s !== 'all' && `(${submissions.filter(x => x.status === s).length})`}
           </button>
@@ -77,16 +64,7 @@ export function MySubmissionsClient({ submissions }: Props) {
       </div>
 
       {filtered.length === 0 ? (
-        <div style={{
-          background: '#111111',
-          border: '1px solid #1A1A1A',
-          padding: '3rem',
-          textAlign: 'center',
-          fontFamily: "'IBM Plex Mono', monospace",
-          fontSize: '0.68rem',
-          color: '#444444',
-          letterSpacing: '0.1em',
-        }}>
+        <div style={{ background: '#111111', border: '1px solid #1A1A1A', padding: '3rem', textAlign: 'center', fontFamily: "'IBM Plex Mono', monospace", fontSize: '0.68rem', color: '#444444', letterSpacing: '0.1em' }}>
           NO SUBMISSIONS {statusFilter !== 'all' ? `WITH STATUS "${statusFilter.toUpperCase()}"` : 'YET'}
         </div>
       ) : (
@@ -97,19 +75,9 @@ export function MySubmissionsClient({ submissions }: Props) {
             actions={
               sub.status === 'rejected' ? (
                 <button
-                  onClick={() => { setResubmitTarget(sub); setNotes(sub.notes ?? ''); setFileName(null); setError(null) }}
+                  onClick={() => { setResubmitTarget(sub); setFileName(null); setError(null) }}
                   data-testid={`resubmit-btn-${sub.id}`}
-                  style={{
-                    background: 'rgba(245,158,11,0.1)',
-                    border: '1px solid #F59E0B',
-                    color: '#F59E0B',
-                    fontFamily: "'IBM Plex Mono', monospace",
-                    fontSize: '0.6rem',
-                    letterSpacing: '0.1em',
-                    textTransform: 'uppercase',
-                    padding: '0.3rem 0.65rem',
-                    cursor: 'pointer',
-                  }}
+                  style={{ background: 'rgba(245,158,11,0.1)', border: '1px solid #F59E0B', color: '#F59E0B', fontFamily: "'IBM Plex Mono', monospace", fontSize: '0.6rem', letterSpacing: '0.1em', textTransform: 'uppercase', padding: '0.3rem 0.65rem', cursor: 'pointer' }}
                 >
                   RESUBMIT
                 </button>
@@ -122,25 +90,15 @@ export function MySubmissionsClient({ submissions }: Props) {
       {/* Resubmit modal */}
       {resubmitTarget && (
         <div
-          style={{
-            position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.85)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            zIndex: 9999, padding: '1rem',
-          }}
+          style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.85)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 9999, padding: '1rem' }}
           onClick={e => { if (e.target === e.currentTarget) setResubmitTarget(null) }}
         >
-          <div style={{
-            background: '#111111',
-            border: '1px solid #2A2A2A',
-            padding: '1.75rem',
-            width: '100%',
-            maxWidth: '480px',
-          }}>
-            <h2 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: '1.4rem', color: '#F59E0B', letterSpacing: '0.1em', margin: '0 0 1.25rem' }}>
+          <div style={{ background: '#111111', border: '1px solid #2A2A2A', padding: '1.75rem', width: '100%', maxWidth: '440px' }}>
+            <h2 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: '1.4rem', color: '#F59E0B', letterSpacing: '0.1em', margin: '0 0 0.5rem' }}>
               RESUBMIT PROOF
             </h2>
-            <p style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '0.65rem', color: '#888888', marginBottom: '1rem' }}>
-              Category: {resubmitTarget.category?.name}
+            <p style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '0.65rem', color: '#888888', marginBottom: '1.25rem' }}>
+              Category: {resubmitTarget.category?.name} — upload a new proof file
             </p>
 
             {success && (
@@ -154,40 +112,21 @@ export function MySubmissionsClient({ submissions }: Props) {
               </div>
             )}
 
-            {/* Notes */}
-            <div style={{ marginBottom: '0.75rem' }}>
-              <label style={{ display: 'block', fontFamily: "'IBM Plex Mono', monospace", fontSize: '0.6rem', color: '#888888', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: '0.3rem' }}>
-                Updated Notes
-              </label>
-              <textarea
-                value={notes}
-                onChange={e => setNotes(e.target.value)}
-                rows={2}
-                style={{ width: '100%', background: '#0E0E0E', border: '1px solid #2A2A2A', color: '#FFFFFF', fontFamily: "'IBM Plex Mono', monospace", fontSize: '0.7rem', padding: '0.5rem 0.75rem', resize: 'none', outline: 'none', boxSizing: 'border-box' }}
-              />
+            <div
+              onClick={() => fileRef.current?.click()}
+              style={{ border: `1px dashed ${fileName ? '#22C55E' : '#2A2A2A'}`, padding: '1rem', background: '#0E0E0E', cursor: 'pointer', textAlign: 'center', marginBottom: '1rem' }}
+            >
+              <span style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '0.65rem', color: fileName ? '#22C55E' : '#555555' }}>
+                {fileName ?? 'Click to select new proof file'}
+              </span>
             </div>
-
-            {/* File */}
-            <div style={{ marginBottom: '1rem' }}>
-              <label style={{ display: 'block', fontFamily: "'IBM Plex Mono', monospace", fontSize: '0.6rem', color: '#888888', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: '0.3rem' }}>
-                New Proof File *
-              </label>
-              <div
-                onClick={() => fileRef.current?.click()}
-                style={{ border: `1px dashed ${fileName ? '#22C55E' : '#2A2A2A'}`, padding: '0.85rem', background: '#0E0E0E', cursor: 'pointer', textAlign: 'center' }}
-              >
-                <span style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '0.65rem', color: fileName ? '#22C55E' : '#555555' }}>
-                  {fileName ?? 'Click to select file'}
-                </span>
-              </div>
-              <input
-                ref={fileRef}
-                type="file"
-                accept="image/jpeg,image/png,image/webp,image/gif,video/mp4"
-                onChange={e => { const f = e.target.files?.[0]; if (f) setFileName(f.name) }}
-                style={{ display: 'none' }}
-              />
-            </div>
+            <input
+              ref={fileRef}
+              type="file"
+              accept="image/jpeg,image/png,image/webp,image/gif,video/mp4"
+              onChange={e => { const f = e.target.files?.[0]; if (f) setFileName(f.name) }}
+              style={{ display: 'none' }}
+            />
 
             <div style={{ display: 'flex', gap: '0.75rem' }}>
               <button
@@ -200,7 +139,7 @@ export function MySubmissionsClient({ submissions }: Props) {
               </button>
               <button
                 onClick={() => setResubmitTarget(null)}
-                style={{ background: 'transparent', border: '1px solid #2A2A2A', color: '#888888', fontFamily: "'IBM Plex Mono', monospace", fontSize: '0.65rem', letterSpacing: '0.1em', padding: '0.5rem 1rem', cursor: 'pointer' }}
+                style={{ background: 'transparent', border: '1px solid #2A2A2A', color: '#888888', fontFamily: "'IBM Plex Mono', monospace", fontSize: '0.65rem', padding: '0.5rem 1rem', cursor: 'pointer' }}
               >
                 CANCEL
               </button>
