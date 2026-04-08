@@ -1,0 +1,72 @@
+{
+  "summary": "Engagement Desk module frontend testing. Most pages load correctly. Two critical Supabase schema issues found: missing 'platform' column in engagement_categories table AND missing FK relationship for 'reviewed_by' in engagement_submissions. These cause category creation to fail and submissions/validate pages to show errors.",
+  "backend_issues": {
+    "critical": [
+      {
+        "endpoint": "Supabase: engagement_categories.platform column",
+        "issue": "Could not find the 'platform' column of 'engagement_categories' in the schema cache. Category creation fails when platform is selected. The engagement migration SQL was never created/run.",
+        "priority": "CRITICAL"
+      },
+      {
+        "endpoint": "Supabase: engagement_submissions.reviewed_by FK",
+        "issue": "Could not find a relationship between 'engagement_submissions' and 'reviewed_by' in the schema cache. Affects validate queue, submissions page, and dashboard team submissions list.",
+        "priority": "CRITICAL"
+      }
+    ],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [
+      {
+        "flow": "Create engagement category with platform",
+        "issue": "Fails with Supabase error: 'platform' column not in schema. Categories without platform (None) would still fail the insert due to schema mismatch.",
+        "affected_selectors": ["text=CREATE CATEGORY"]
+      },
+      {
+        "flow": "Validate Queue / My Submissions / Dashboard team submissions",
+        "issue": "Supabase query fails because engagement_submissions.reviewed_by FK relationship not in schema cache. Pages show empty state gracefully but data won't load.",
+        "affected_selectors": []
+      }
+    ],
+    "design_issues": []
+  },
+  "test_results": {
+    "login": "PASS — admin@zamoto.com / 12345678 works",
+    "sidebar_engagement_section": "PASS — Engagement, Validate Queue, Categories, Eng. Settings all visible",
+    "engagement_dashboard": "PASS — loads with 5 stats cards (0 values), daily target progress bar (0/50), validation queue section",
+    "validate_queue": "PASS — loads, shows 0 PENDING REVIEW, queue clear message. Error in console about reviewed_by FK",
+    "categories_page": "PASS — loads with 3 existing categories (ATTACK, DEFEND, EDUCATE), + NEW CATEGORY button works, modal opens",
+    "settings_page": "PASS — loads with Daily Submission Target (50), Submission Expiry (24h), Max File Size (10MB), Resubmit Limit (0) fields visible",
+    "submissions_page": "PASS — loads, shows MY SUBMISSIONS with empty state. Error in console about reviewed_by FK",
+    "submit_redirect": "PASS — /engagement/submit redirects admin to /engagement/validate correctly",
+    "create_category": "FAIL — Supabase error: 'platform' column not found in engagement_categories schema",
+    "dashboard_empty_state": "PASS — gracefully shows 0 stats when no submissions exist"
+  },
+  "rca_of_issue": {
+    "root_cause": "The engagement module requires new Supabase DB tables with specific columns that don't exist. No migration SQL file exists for the engagement tables. The existing tables (engagement_categories, engagement_submissions) appear to be missing columns: 'platform' in engagement_categories, and the 'reviewed_by' FK relationship in engagement_submissions pointing to profiles/users table.",
+    "reproduction": "1. Go to /engagement/admin/categories. 2. Click + NEW CATEGORY. 3. Fill name, select INSTAGRAM platform, click CREATE CATEGORY. 4. Error: 'Could not find the platform column of engagement_categories in the schema cache'",
+    "mitigation": "Create and run a Supabase migration SQL to add missing columns: ALTER TABLE engagement_categories ADD COLUMN IF NOT EXISTS platform TEXT; ALTER TABLE engagement_submissions ADD COLUMN IF NOT EXISTS reviewed_by UUID REFERENCES auth.users(id); Then reload Supabase schema cache (or use supabase db reset)."
+  },
+  "test_report_links": ["/app/test_reports/iteration_7.json"],
+  "action_items": [
+    "CRITICAL: Create engagement Supabase migration SQL file. Need to add 'platform' TEXT column to engagement_categories table.",
+    "CRITICAL: Add reviewed_by UUID FK to engagement_submissions referencing auth.users or profiles table.",
+    "Run migration in Supabase Studio SQL Editor and reload schema cache.",
+    "Check if ALL engagement tables (engagement_categories, engagement_submissions, engagement_config, engagement_activity_log) have proper schema matching what the app expects."
+  ],
+  "critical_code_review_comments": [
+    "No Supabase migration SQL file exists for engagement tables — /app/frontend/supabase/migrations/ only has payroll and accounting files",
+    "The app code references platform column and reviewed_by FK which don't exist in the DB schema, causing runtime failures",
+    "The 'ATTACK/DEFEND/EDUCATE' categories exist in DB but without platform column, confirming partial migration was run without all columns"
+  ],
+  "updated_files": [],
+  "success_rate": {
+    "backend": "N/A (frontend-only test)",
+    "frontend": "75% (9/12 test cases passed, 2 critical DB schema issues)"
+  },
+  "seed_data_creation": "None",
+  "retest_needed": true,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Run engagement migration SQL, then retest: category creation with platform field, submissions query with reviewed_by relationship. All pages load correctly — only DB schema issues prevent category creation and data loading in submissions/validate pages."
+}

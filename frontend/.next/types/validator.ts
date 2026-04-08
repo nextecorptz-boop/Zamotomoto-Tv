@@ -173,6 +173,60 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
   type __Unused = __Check
 }
 
+// Validate ../../app/(dashboard)/engagement/admin/categories/page.tsx
+{
+  type __IsExpected<Specific extends AppPageConfig<"/engagement/admin/categories">> = Specific
+  const handler = {} as typeof import("../../app/(dashboard)/engagement/admin/categories/page.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../app/(dashboard)/engagement/admin/settings/page.tsx
+{
+  type __IsExpected<Specific extends AppPageConfig<"/engagement/admin/settings">> = Specific
+  const handler = {} as typeof import("../../app/(dashboard)/engagement/admin/settings/page.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../app/(dashboard)/engagement/dashboard/page.tsx
+{
+  type __IsExpected<Specific extends AppPageConfig<"/engagement/dashboard">> = Specific
+  const handler = {} as typeof import("../../app/(dashboard)/engagement/dashboard/page.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../app/(dashboard)/engagement/submissions/page.tsx
+{
+  type __IsExpected<Specific extends AppPageConfig<"/engagement/submissions">> = Specific
+  const handler = {} as typeof import("../../app/(dashboard)/engagement/submissions/page.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../app/(dashboard)/engagement/submit/page.tsx
+{
+  type __IsExpected<Specific extends AppPageConfig<"/engagement/submit">> = Specific
+  const handler = {} as typeof import("../../app/(dashboard)/engagement/submit/page.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../app/(dashboard)/engagement/validate/page.tsx
+{
+  type __IsExpected<Specific extends AppPageConfig<"/engagement/validate">> = Specific
+  const handler = {} as typeof import("../../app/(dashboard)/engagement/validate/page.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
 // Validate ../../app/(dashboard)/files/page.tsx
 {
   type __IsExpected<Specific extends AppPageConfig<"/files">> = Specific
