@@ -1,8 +1,7 @@
 {
-  "/(dashboard)/engagement/validate/page": "app/(dashboard)/engagement/validate/page.js",
   "/(auth)/login/page": "app/(auth)/login/page.js",
   "/(dashboard)/page": "app/(dashboard)/page.js",
-  "/(dashboard)/admin/settings/page": "app/(dashboard)/admin/settings/page.js",
-  "/(dashboard)/departments/page": "app/(dashboard)/departments/page.js",
-  "/(dashboard)/team/page": "app/(dashboard)/team/page.js"
+  "/(dashboard)/engagement/dashboard/page": "app/(dashboard)/engagement/dashboard/page.js",
+  "/(dashboard)/engagement/submit/page": "app/(dashboard)/engagement/submit/page.js",
+  "/(dashboard)/engagement/submissions/page": "app/(dashboard)/engagement/submissions/page.js"
 }
