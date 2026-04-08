@@ -1,4 +1,5 @@
 'use client'
+import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
@@ -10,6 +11,7 @@ interface SidebarProps {
   profile: Profile | null
 }
 
+// Full nav for workers
 const navItems = [
   { href: '/', label: 'Dashboard', icon: '■' },
   { href: '/tasks', label: 'Tasks', icon: '▤' },
@@ -22,7 +24,7 @@ const navItems = [
   { href: '/settings', label: 'Settings', icon: '⚙' },
 ]
 
-// Simplified primary nav for admin/super_admin: hide task-management clutter
+// Simplified primary nav for admin/super_admin
 const adminPrimaryNav = [
   { href: '/', label: 'Dashboard', icon: '■' },
   { href: '/analytics', label: 'Analytics', icon: '◈' },
@@ -31,23 +33,23 @@ const adminPrimaryNav = [
   { href: '/settings', label: 'Settings', icon: '⚙' },
 ]
 
+// Engagement children for admin collapsible (Validate Queue, Categories, Eng. Settings)
+const engagementAdminChildren = [
+  { href: '/engagement/validate', label: 'Validate Queue', icon: '◈' },
+  { href: '/engagement/admin/categories', label: 'Categories', icon: '◆' },
+  { href: '/engagement/admin/settings', label: 'Eng. Settings', icon: '⚙' },
+]
+
+// Engagement flat items for workers
 const engagementWorkerItems = [
   { href: '/engagement/dashboard', label: 'Engagement', icon: '◉' },
   { href: '/engagement/submit', label: 'Submit Proof', icon: '+' },
   { href: '/engagement/submissions', label: 'My Submissions', icon: '◫' },
 ]
 
-const engagementAdminItems = [
-  { href: '/engagement/dashboard', label: 'Engagement', icon: '◉' },
-  { href: '/engagement/validate', label: 'Validate Queue', icon: '◈' },
-  { href: '/engagement/admin/categories', label: 'Categories', icon: '◆' },
-  { href: '/engagement/admin/settings', label: 'Eng. Settings', icon: '⚙' },
-]
-
+// Admin section: Accounting only (Payroll and Admin Panel hidden per spec)
 const adminNavItems = [
   { href: '/accounting', label: 'Accounting', icon: '∑' },
-  { href: '/accounting/payroll', label: 'Payroll', icon: '$' },
-  { href: '/admin/settings', label: 'Admin Panel', icon: '⬡' },
 ]
 
 // Minimal nav for accountant role
@@ -61,6 +63,7 @@ const accountantNavItems = [
 export default function Sidebar({ profile }: SidebarProps) {
   const pathname = usePathname()
   const router = useRouter()
+  const [engagementOpen, setEngagementOpen] = useState(true)
 
   const handleLogout = async () => {
     const supabase = createClient()
@@ -73,6 +76,40 @@ export default function Sidebar({ profile }: SidebarProps) {
     if (href === '/') return pathname === '/'
     return pathname.startsWith(href)
   }
+
+  const isEngagementActive = pathname.startsWith('/engagement')
+  const isAdmin = profile?.role === 'super_admin' || profile?.role === 'admin'
+
+  const navLinkStyle = (active: boolean): React.CSSProperties => ({
+    display: 'flex',
+    alignItems: 'center',
+    gap: '0.75rem',
+    padding: '0.65rem 1rem',
+    textDecoration: 'none',
+    fontFamily: "'IBM Plex Mono', monospace",
+    fontSize: '0.75rem',
+    letterSpacing: '0.05em',
+    transition: 'all 120ms',
+    color: active ? '#FFFFFF' : '#888888',
+    background: active ? 'rgba(204,31,31,0.1)' : 'transparent',
+    borderLeft: active ? '3px solid #CC1F1F' : '3px solid transparent',
+  })
+
+  const adminLinkStyle = (active: boolean): React.CSSProperties => ({
+    display: 'flex',
+    alignItems: 'center',
+    gap: '0.75rem',
+    padding: '0.65rem 1rem',
+    textDecoration: 'none',
+    fontFamily: "'IBM Plex Mono', monospace",
+    fontSize: '0.75rem',
+    letterSpacing: '0.05em',
+    transition: 'all 120ms',
+    color: active ? '#FF2B2B' : '#CC1F1F',
+    background: active ? 'rgba(204,31,31,0.15)' : 'transparent',
+    borderLeft: active ? '3px solid #CC1F1F' : '3px solid transparent',
+    opacity: 0.85,
+  })
 
   return (
     <aside
@@ -105,7 +142,6 @@ export default function Sidebar({ profile }: SidebarProps) {
             </div>
           </div>
         </div>
-        {/* Live indicator */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginTop: '0.6rem' }}>
           <div
             className="live-dot"
@@ -119,22 +155,15 @@ export default function Sidebar({ profile }: SidebarProps) {
 
       {/* Navigation */}
       <nav style={{ flex: 1, padding: '0.5rem 0' }}>
-        {/* Accountant: show minimal nav only */}
+
+        {/* Accountant: minimal nav only */}
         {profile?.role === 'accountant' ? (
           accountantNavItems.map(item => (
             <Link
               key={item.href}
               href={item.href}
               data-testid={`nav-${item.label.toLowerCase().replace(/\s+/g, '-')}`}
-              style={{
-                display: 'flex', alignItems: 'center', gap: '0.75rem',
-                padding: '0.65rem 1rem', textDecoration: 'none',
-                fontFamily: "'IBM Plex Mono', monospace", fontSize: '0.75rem', letterSpacing: '0.05em',
-                transition: 'all 120ms',
-                color: isActive(item.href) ? '#FFFFFF' : '#888888',
-                background: isActive(item.href) ? 'rgba(204,31,31,0.1)' : 'transparent',
-                borderLeft: isActive(item.href) ? '3px solid #CC1F1F' : '3px solid transparent',
-              }}
+              style={navLinkStyle(isActive(item.href))}
               onMouseEnter={e => { if (!isActive(item.href)) { const el = e.currentTarget as HTMLElement; el.style.background = 'rgba(255,255,255,0.03)'; el.style.color = '#FFFFFF' } }}
               onMouseLeave={e => { if (!isActive(item.href)) { const el = e.currentTarget as HTMLElement; el.style.background = 'transparent'; el.style.color = '#888888' } }}
             >
@@ -144,20 +173,13 @@ export default function Sidebar({ profile }: SidebarProps) {
           ))
         ) : (
           <>
-            {(profile?.role === 'super_admin' || profile?.role === 'admin' ? adminPrimaryNav : navItems).map(item => (
+            {/* Primary nav: simplified for admin, full for workers */}
+            {(isAdmin ? adminPrimaryNav : navItems).map(item => (
               <Link
                 key={item.href}
                 href={item.href}
                 data-testid={`nav-${item.label.toLowerCase().replace(/\s+/g, '-')}`}
-                style={{
-                  display: 'flex', alignItems: 'center', gap: '0.75rem',
-                  padding: '0.65rem 1rem', textDecoration: 'none',
-                  fontFamily: "'IBM Plex Mono', monospace", fontSize: '0.75rem', letterSpacing: '0.05em',
-                  transition: 'all 120ms',
-                  color: isActive(item.href) ? '#FFFFFF' : '#888888',
-                  background: isActive(item.href) ? 'rgba(204,31,31,0.1)' : 'transparent',
-                  borderLeft: isActive(item.href) ? '3px solid #CC1F1F' : '3px solid transparent',
-                }}
+                style={navLinkStyle(isActive(item.href))}
                 onMouseEnter={e => { if (!isActive(item.href)) { const el = e.currentTarget as HTMLElement; el.style.background = 'rgba(255,255,255,0.03)'; el.style.color = '#FFFFFF' } }}
                 onMouseLeave={e => { if (!isActive(item.href)) { const el = e.currentTarget as HTMLElement; el.style.background = 'transparent'; el.style.color = '#888888' } }}
               >
@@ -166,39 +188,91 @@ export default function Sidebar({ profile }: SidebarProps) {
               </Link>
             ))}
 
-            {/* Engagement Desk section */}
-            <>
-              <div style={{ padding: '0.6rem 1rem 0.2rem', fontFamily: "'IBM Plex Mono', monospace", fontSize: '0.55rem', color: '#888888', letterSpacing: '0.25em', textTransform: 'uppercase', borderTop: '1px solid #1A1A1A', marginTop: '0.25rem' }}>
-                Engagement
-              </div>
-              {((profile?.role === 'super_admin' || profile?.role === 'admin')
-                ? engagementAdminItems
-                : engagementWorkerItems
-              ).map(item => (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    data-testid={`nav-${item.label.toLowerCase().replace(/\s+/g, '-')}`}
+            {/* Engagement section */}
+            <div style={{ borderTop: '1px solid #1A1A1A', marginTop: '0.25rem' }}>
+              {isAdmin ? (
+                /* Collapsible for admin/super_admin */
+                <>
+                  <button
+                    data-testid="engagement-toggle"
+                    onClick={() => setEngagementOpen(o => !o)}
                     style={{
-                      display: 'flex', alignItems: 'center', gap: '0.75rem',
-                      padding: '0.65rem 1rem', textDecoration: 'none',
-                      fontFamily: "'IBM Plex Mono', monospace", fontSize: '0.75rem', letterSpacing: '0.05em',
-                      transition: 'all 120ms',
-                      color: isActive(item.href) ? '#FFFFFF' : '#888888',
-                      background: isActive(item.href) ? 'rgba(204,31,31,0.1)' : 'transparent',
-                      borderLeft: isActive(item.href) ? '3px solid #CC1F1F' : '3px solid transparent',
+                      width: '100%',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      padding: '0.6rem 1rem 0.4rem',
+                      background: 'none',
+                      border: 'none',
+                      cursor: 'pointer',
                     }}
-                    onMouseEnter={e => { if (!isActive(item.href)) { const el = e.currentTarget as HTMLElement; el.style.background = 'rgba(255,255,255,0.03)'; el.style.color = '#FFFFFF' } }}
-                    onMouseLeave={e => { if (!isActive(item.href)) { const el = e.currentTarget as HTMLElement; el.style.background = 'transparent'; el.style.color = '#888888' } }}
                   >
-                    <span style={{ fontSize: '0.8rem', opacity: 0.7, fontFamily: 'monospace' }}>{item.icon}</span>
-                    <span>{item.label}</span>
-                  </Link>
-                ))}
-              </>
+                    <span
+                      style={{
+                        fontFamily: "'IBM Plex Mono', monospace",
+                        fontSize: '0.55rem',
+                        color: isEngagementActive ? '#FFFFFF' : '#888888',
+                        letterSpacing: '0.25em',
+                        textTransform: 'uppercase',
+                        transition: 'color 120ms',
+                      }}
+                    >
+                      Engagement
+                    </span>
+                    <span
+                      style={{
+                        fontFamily: 'monospace',
+                        fontSize: '0.65rem',
+                        color: '#666666',
+                        display: 'inline-block',
+                        transform: engagementOpen ? 'rotate(0deg)' : 'rotate(-90deg)',
+                        transition: 'transform 150ms ease',
+                        lineHeight: 1,
+                      }}
+                    >
+                      ▾
+                    </span>
+                  </button>
 
-            {/* Admin + Accounting section for super_admin and admin */}
-            {(profile?.role === 'super_admin' || profile?.role === 'admin') && (
+                  {engagementOpen && engagementAdminChildren.map(item => (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      data-testid={`nav-${item.label.toLowerCase().replace(/\s+/g, '-')}`}
+                      style={{ ...navLinkStyle(isActive(item.href)), paddingLeft: '1.75rem' }}
+                      onMouseEnter={e => { if (!isActive(item.href)) { const el = e.currentTarget as HTMLElement; el.style.background = 'rgba(255,255,255,0.03)'; el.style.color = '#FFFFFF' } }}
+                      onMouseLeave={e => { if (!isActive(item.href)) { const el = e.currentTarget as HTMLElement; el.style.background = 'transparent'; el.style.color = '#888888' } }}
+                    >
+                      <span style={{ fontSize: '0.8rem', opacity: 0.7, fontFamily: 'monospace' }}>{item.icon}</span>
+                      <span>{item.label}</span>
+                    </Link>
+                  ))}
+                </>
+              ) : (
+                /* Flat for workers */
+                <>
+                  <div style={{ padding: '0.6rem 1rem 0.2rem', fontFamily: "'IBM Plex Mono', monospace", fontSize: '0.55rem', color: '#888888', letterSpacing: '0.25em', textTransform: 'uppercase' }}>
+                    Engagement
+                  </div>
+                  {engagementWorkerItems.map(item => (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      data-testid={`nav-${item.label.toLowerCase().replace(/\s+/g, '-')}`}
+                      style={navLinkStyle(isActive(item.href))}
+                      onMouseEnter={e => { if (!isActive(item.href)) { const el = e.currentTarget as HTMLElement; el.style.background = 'rgba(255,255,255,0.03)'; el.style.color = '#FFFFFF' } }}
+                      onMouseLeave={e => { if (!isActive(item.href)) { const el = e.currentTarget as HTMLElement; el.style.background = 'transparent'; el.style.color = '#888888' } }}
+                    >
+                      <span style={{ fontSize: '0.8rem', opacity: 0.7, fontFamily: 'monospace' }}>{item.icon}</span>
+                      <span>{item.label}</span>
+                    </Link>
+                  ))}
+                </>
+              )}
+            </div>
+
+            {/* Admin section: Accounting only for super_admin/admin */}
+            {isAdmin && (
               <>
                 <div style={{ padding: '0.6rem 1rem 0.2rem', fontFamily: "'IBM Plex Mono', monospace", fontSize: '0.55rem', color: '#CC1F1F', letterSpacing: '0.25em', textTransform: 'uppercase', borderTop: '1px solid #1A1A1A', marginTop: '0.25rem' }}>
                   Admin
@@ -208,16 +282,7 @@ export default function Sidebar({ profile }: SidebarProps) {
                     key={item.href}
                     href={item.href}
                     data-testid={`nav-${item.label.toLowerCase().replace(/\s+/g, '-')}`}
-                    style={{
-                      display: 'flex', alignItems: 'center', gap: '0.75rem',
-                      padding: '0.65rem 1rem', textDecoration: 'none',
-                      fontFamily: "'IBM Plex Mono', monospace", fontSize: '0.75rem', letterSpacing: '0.05em',
-                      transition: 'all 120ms',
-                      color: isActive(item.href) ? '#FF2B2B' : '#CC1F1F',
-                      background: isActive(item.href) ? 'rgba(204,31,31,0.15)' : 'transparent',
-                      borderLeft: isActive(item.href) ? '3px solid #CC1F1F' : '3px solid transparent',
-                      opacity: 0.85,
-                    }}
+                    style={adminLinkStyle(isActive(item.href))}
                     onMouseEnter={e => { if (!isActive(item.href)) { const el = e.currentTarget as HTMLElement; el.style.background = 'rgba(204,31,31,0.08)'; el.style.opacity = '1' } }}
                     onMouseLeave={e => { if (!isActive(item.href)) { const el = e.currentTarget as HTMLElement; el.style.background = 'transparent'; el.style.opacity = '0.85' } }}
                   >
