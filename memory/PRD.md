@@ -217,15 +217,34 @@ Phase D — Sidebar update:
 Phase E — DB Migration:
 - `supabase/migrations/20260408_engagement_desk.sql` — ALTER TABLE to add missing columns (platform, description, points_value to engagement_categories; notes, submitted_at, reviewed_by FK, review_note, reviewed_at to engagement_submissions). Seeds default config values.
 
-⚠️ ACTION REQUIRED from user:
-1. Run `/app/frontend/supabase/migrations/20260408_engagement_desk.sql` in Supabase Studio SQL Editor
-2. Create a Supabase Storage bucket named `engagement-proofs` (set to Private)
-3. All engagement tables already exist — migration only adds missing columns
+### Engagement Desk — Final Corrected Implementation (2026-04-08)
+**91% pass rate (10/11 tests). Schema drift fully eliminated. One live DB constraint finding.**
 
-Notes:
-- Resilient fallback queries: if reviewed_by FK not found, falls back to base query without reviewer join
-- Resilient category create/update: if platform/description columns missing, falls back to name-only insert
-- Config fallback: if default_daily_target missing from DB, uses safe default of 10 for operator UI
+Corrected schema compliance:
+- Uses ONLY: engagement_categories(id, name, is_active), engagement_submissions(id, operator_id, category_id, status, proof_url, storage_path, expires_at), engagement_activity_log(id, submission_id, actor_id, action), engagement_config(id, config_key, config_value)
+- Removed all invented columns: platform, description, points_value, notes, submitted_at, reviewed_by, review_note, reviewed_at, updated_by, updated_at
+- Unauthorized migration file deleted
+- EngagementSettingsClient uses config upsert with onConflict: 'config_key' (no extra columns)
+- Validate action updates status only (no review_note column write)
+- Submit action inserts operator_id, category_id, storage_path, proof_url, status only
+
+Status of all tests:
+✅ Login, sidebar engagement section
+✅ Dashboard (stats, daily target progress, validate queue count)  
+✅ Categories page (ATTACK/DEFEND/EDUCATE visible, toggle works)
+✅ Settings page (daily_target=50 confirmed, save/upsert works)
+✅ Validate queue page (empty state)
+✅ Submissions page (empty state)
+✅ Submit → redirects admin to validate
+⚠️ Create new category — blocked by live DB CHECK constraint 'check_category_names' (only ATTACK/DEFEND/EDUCATE allowed)
+
+Known live DB constraint:
+- `engagement_categories` has `check_category_names` CHECK constraint limiting inserts to {ATTACK, DEFEND, EDUCATE}
+- UI shows the DB error gracefully when blocked
+- User must decide: drop this constraint in Supabase Studio if new categories should be addable
+  → Command: ALTER TABLE engagement_categories DROP CONSTRAINT check_category_names;
+
+Note: ATTACK category was disabled during automated testing — re-enable via /engagement/admin/categories if needed.
 
 
 - Phase 0 RLS fix: `tasks` table has recursive SELECT policy — `fix_tasks_rls.sql` ready for manual execution in Supabase Studio. Once applied, remove service-role bypass in `tasks/actions.ts`
