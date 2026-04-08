@@ -17,7 +17,7 @@ const DEPARTMENTS = [
   { value: 'voice', label: 'Voice' },
   { value: 'editing', label: 'Editing' },
   { value: 'publishing', label: 'Publishing' },
-  { value: 'social_copy', label: 'Social Copy' },
+  { value: 'social_copy', label: 'Engagement' },
 ]
 
 const inputStyle: React.CSSProperties = {

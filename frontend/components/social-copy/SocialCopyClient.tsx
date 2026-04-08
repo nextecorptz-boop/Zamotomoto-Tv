@@ -111,10 +111,10 @@ export function SocialCopyClient({ initialTasks, profiles, currentUserId, curren
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '0.75rem' }}>
         <div>
           <div style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '0.6rem', color: '#888888', letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: '0.25rem' }}>
-            {isIsolated ? 'Social Copy Team' : 'Admin View — All Social Tasks'}
+            {isIsolated ? 'Engagement' : 'Admin View — All Engagement Tasks'}
           </div>
-          <h2 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: '2rem', letterSpacing: '0.08em', color: '#FFFFFF', margin: 0 }}>Social Copy</h2>
-          <p style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '0.7rem', color: '#888888', marginTop: '0.2rem' }}>Social media content creation & scheduling</p>
+          <h2 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: '2rem', letterSpacing: '0.08em', color: '#FFFFFF', margin: 0 }}>Engagement</h2>
+          <p style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '0.7rem', color: '#888888', marginTop: '0.2rem' }}>Social media engagement tasks</p>
         </div>
         <button
           data-testid="create-sc-btn"

@@ -7,7 +7,7 @@ const DEPTS = [
   { id: 'voice', label: 'Voice', color: '#F59E0B' },
   { id: 'editing', label: 'Editing', color: '#22C55E' },
   { id: 'publishing', label: 'Publishing', color: '#8B5CF6' },
-  { id: 'social_copy', label: 'Social Copy', color: '#06B6D4' },
+  { id: 'social_copy', label: 'Engagement', color: '#06B6D4' },
 ]
 
 interface Props {

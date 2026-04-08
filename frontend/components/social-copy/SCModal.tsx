@@ -97,7 +97,7 @@ export function SCModal({ task, profiles, currentUserId, currentRole, onClose, o
         <div style={{ padding: '1.25rem 1.5rem', borderBottom: '1px solid #2A2A2A', display: 'flex', justifyContent: 'space-between', alignItems: 'center', position: 'sticky', top: 0, background: '#111111' }}>
           <div>
             <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: '1.3rem', letterSpacing: '0.1em', color: '#FFFFFF' }}>
-              {isEdit ? `EDIT ${task!.sc_ref}` : 'NEW SOCIAL TASK'}
+              {isEdit ? `EDIT ${task!.sc_ref}` : 'NEW ENGAGEMENT TASK'}
             </div>
             <div style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '0.62rem', color: '#888888', marginTop: '0.1rem' }}>
               sc_ref auto-generated · type: caption

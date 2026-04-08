@@ -107,7 +107,7 @@ export function PayrollForm({ onSuccess }: PayrollFormProps) {
             style={inputStyle}
           >
             {DEPARTMENTS.map(d => (
-              <option key={d} value={d}>{d.toUpperCase()}</option>
+              <option key={d} value={d}>{d === 'social_copy' ? 'ENGAGEMENT' : d.toUpperCase()}</option>
             ))}
           </select>
         </div>

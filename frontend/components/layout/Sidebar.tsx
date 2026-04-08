@@ -144,7 +144,7 @@ export default function Sidebar({ profile }: SidebarProps) {
           ))
         ) : (
           <>
-            {navItems.map(item => (
+            {(profile?.role === 'super_admin' || profile?.role === 'admin' ? adminPrimaryNav : navItems).map(item => (
               <Link
                 key={item.href}
                 href={item.href}

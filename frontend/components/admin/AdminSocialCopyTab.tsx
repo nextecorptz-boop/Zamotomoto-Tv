@@ -51,7 +51,7 @@ export function AdminSocialCopyTab({ tasks }: Props) {
             Read-Only Monitor
           </div>
           <div style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '0.8rem', color: '#FFFFFF' }}>
-            {tasks.length} total social tasks
+            {tasks.length} total engagement tasks
           </div>
         </div>
         <div style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '0.62rem', color: '#888888', background: '#1A1A1A', border: '1px solid #2A2A2A', padding: '0.35rem 0.75rem' }}>

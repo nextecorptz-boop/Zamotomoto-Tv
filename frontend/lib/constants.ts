@@ -37,5 +37,5 @@ export const DEPT_LABELS: Record<string, string> = {
   voice: 'Voice',
   editing: 'Editing',
   publishing: 'Publishing',
-  social_copy: 'Social Copy',
+  social_copy: 'Engagement',
 }

@@ -3,34 +3,30 @@ import { useState } from 'react'
 import { RoleManagementTab } from './RoleManagementTab'
 import { DepartmentSettingsTab } from './DepartmentSettingsTab'
 import { SystemStatusTab } from './SystemStatusTab'
-import { ActivityLogsTab } from './ActivityLogsTab'
 import { AdminSocialCopyTab } from './AdminSocialCopyTab'
 import type { Profile } from '@/types'
-import type { ActivityLogEntry, SystemStats } from '@/app/(dashboard)/admin/settings/actions'
+import type { SystemStats } from '@/app/(dashboard)/admin/settings/actions'
 import type { SocialTaskRow } from '@/app/(dashboard)/social-copy/actions'
 
 export type ProfileWithEmail = Profile & { email: string }
 
-type Tab = 'roles' | 'departments' | 'status' | 'activity' | 'social'
+type Tab = 'roles' | 'departments' | 'status' | 'social'
 
 const TABS: { id: Tab; label: string }[] = [
   { id: 'roles', label: 'Role Management' },
   { id: 'departments', label: 'Departments' },
   { id: 'status', label: 'System Status' },
-  { id: 'activity', label: 'Activity Logs' },
-  { id: 'social', label: 'Social Copy' },
+  { id: 'social', label: 'Engagement' },
 ]
 
 interface Props {
   profiles: ProfileWithEmail[]
   currentUserId: string
-  initialLogs: ActivityLogEntry[]
-  logsTotal: number
   stats: SystemStats
   socialTasks: SocialTaskRow[]
 }
 
-export function AdminSettingsClient({ profiles: initialProfiles, currentUserId, initialLogs, logsTotal, stats, socialTasks }: Props) {
+export function AdminSettingsClient({ profiles: initialProfiles, currentUserId, stats, socialTasks }: Props) {
   const [activeTab, setActiveTab] = useState<Tab>('roles')
   const [profiles, setProfiles] = useState<ProfileWithEmail[]>(initialProfiles)
 
@@ -99,9 +95,6 @@ export function AdminSettingsClient({ profiles: initialProfiles, currentUserId, 
         )}
         {activeTab === 'status' && (
           <SystemStatusTab stats={stats} profiles={profiles} />
-        )}
-        {activeTab === 'activity' && (
-          <ActivityLogsTab initialLogs={initialLogs} initialTotal={logsTotal} />
         )}
         {activeTab === 'social' && (
           <AdminSocialCopyTab tasks={socialTasks} />

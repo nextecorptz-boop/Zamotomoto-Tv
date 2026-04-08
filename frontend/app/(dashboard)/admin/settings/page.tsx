@@ -3,7 +3,7 @@ import { createClient as createAdminClient } from '@supabase/supabase-js'
 import { redirect } from 'next/navigation'
 import { AdminSettingsClient } from '@/components/admin/AdminSettingsClient'
 import type { Profile } from '@/types'
-import { fetchActivityLogs, fetchSystemStats } from './actions'
+import { fetchSystemStats } from './actions'
 import { fetchAllSocialTasks } from '@/app/(dashboard)/social-copy/actions'
 
 export const dynamic = 'force-dynamic'
@@ -34,9 +34,8 @@ export default async function AdminSettingsPage() {
     if (u.email) emailMap[u.id] = u.email
   }
 
-  // Initial activity logs and stats
-  const [{ logs: initialLogs, total: logsTotal }, stats, socialTasks] = await Promise.all([
-    fetchActivityLogs(1, 20),
+  // Stats and social tasks
+  const [stats, socialTasks] = await Promise.all([
     fetchSystemStats(),
     fetchAllSocialTasks(),
   ])
@@ -50,8 +49,6 @@ export default async function AdminSettingsPage() {
     <AdminSettingsClient
       profiles={membersWithEmail}
       currentUserId={user.id}
-      initialLogs={initialLogs}
-      logsTotal={logsTotal}
       stats={stats}
       socialTasks={socialTasks}
     />

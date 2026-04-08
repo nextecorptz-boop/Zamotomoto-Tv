@@ -17,7 +17,8 @@ const PAGE_TITLES: Record<string, string> = {
   '/analytics': 'Analytics',
   '/departments': 'Departments',
   '/special-projects': 'Special Projects',
-  '/social-copy': 'Social Copy',
+  '/social-copy': 'Engagement',
+  '/engagement': 'Engagement',
   '/team': 'Team',
   '/settings': 'Settings',
 }
