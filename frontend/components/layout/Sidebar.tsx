@@ -18,8 +18,16 @@ const navItems = [
   { href: '/analytics', label: 'Analytics', icon: '◈' },
   { href: '/departments', label: 'Departments', icon: '◉' },
   { href: '/special-projects', label: 'Special Projects', icon: '◆' },
-  { href: '/social-copy', label: 'Social Copy', icon: '◎' },
   { href: '/team', label: 'Team', icon: '◐' },
+  { href: '/settings', label: 'Settings', icon: '⚙' },
+]
+
+// Simplified primary nav for admin/super_admin: hide task-management clutter
+const adminPrimaryNav = [
+  { href: '/', label: 'Dashboard', icon: '■' },
+  { href: '/analytics', label: 'Analytics', icon: '◈' },
+  { href: '/team', label: 'Team', icon: '◐' },
+  { href: '/departments', label: 'Departments', icon: '◉' },
   { href: '/settings', label: 'Settings', icon: '⚙' },
 ]
 
