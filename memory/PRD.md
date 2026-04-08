@@ -217,7 +217,16 @@ Phase D — Sidebar update:
 Phase E — DB Migration:
 - `supabase/migrations/20260408_engagement_desk.sql` — ALTER TABLE to add missing columns (platform, description, points_value to engagement_categories; notes, submitted_at, reviewed_by FK, review_note, reviewed_at to engagement_submissions). Seeds default config values.
 
-### Engagement Desk — Final Corrected Implementation (2026-04-08)
+### Terminology & Navigation Cleanup ✅ (2026-04-08)
+**11/11 tests passed. Zero regressions.**
+
+- Replaced ALL user-facing "Social Copy" with "Engagement" across 10 files: `constants.ts`, `Header.tsx`, `Sidebar.tsx`, `DepartmentSettingsTab.tsx`, `RoleEditorModal.tsx`, `InviteModal.tsx`, `SocialCopyClient.tsx`, `SCModal.tsx`, `AdminSocialCopyTab.tsx`, `PayrollForm.tsx`
+- Admin Control Panel reduced to 4 tabs: Role Management, Departments, System Status, Engagement (Activity Logs tab removed)
+- Admin/super_admin sidebar now uses simplified `adminPrimaryNav`: Dashboard, Analytics, Team, Departments, Settings + Engagement section + Admin section. Tasks, New Task, Media Library, Special Projects hidden from admin view
+- Route `/social-copy` kept unchanged for stability; all visible labels show "Engagement"
+- NO schema/migration changes. NO DB tables altered.
+
+
 **91% pass rate (10/11 tests). Schema drift fully eliminated. One live DB constraint finding.**
 
 Corrected schema compliance:
