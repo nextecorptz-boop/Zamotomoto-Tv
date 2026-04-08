@@ -267,6 +267,13 @@ Note: ATTACK category was disabled during automated testing — re-enable via /e
 ### P0 — Done
 - [x] Payroll Module (all components, pages, layouts, sidebar, SQL migration with 5 RLS policies)
 
+### Phase 1 UI Identity Cleanup ✅ (2026-04-08)
+- Engagement sidebar section converted to collapsible parent (chevron, default expanded) — children: Validate Queue / Categories / Eng. Settings, indented 1.75rem
+- Admin sidebar Admin section now shows Accounting only — Payroll and Admin Panel links removed for admin/super_admin
+- `adminNavItems` reduced to `[{ href: '/accounting', label: 'Accounting', icon: '∑' }]`
+- Routes `/accounting/payroll` and `/admin/settings` still exist — only the sidebar nav links are hidden
+- 12/12 tests passed
+
 ### P2 — Phase 3 Remaining (Upcoming)
 - [ ] File attachments for social tasks (chunked upload to Supabase Storage)
 - [ ] Scheduling/auto-publish for social tasks (publish_at field)
