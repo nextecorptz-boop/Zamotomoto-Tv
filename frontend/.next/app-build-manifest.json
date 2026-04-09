@@ -26,70 +26,15 @@
       "static/chunks/main-app.js",
       "static/chunks/app/(dashboard)/page.js"
     ],
-    "/(dashboard)/accounting/layout": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/(dashboard)/accounting/layout.js"
-    ],
-    "/(dashboard)/accounting/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/(dashboard)/accounting/page.js"
-    ],
-    "/(dashboard)/engagement/admin/settings/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/(dashboard)/engagement/admin/settings/page.js"
-    ],
-    "/(dashboard)/engagement/admin/categories/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/(dashboard)/engagement/admin/categories/page.js"
-    ],
     "/(dashboard)/engagement/validate/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/(dashboard)/engagement/validate/page.js"
     ],
-    "/(dashboard)/settings/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/(dashboard)/settings/page.js"
-    ],
-    "/(dashboard)/departments/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/(dashboard)/departments/page.js"
-    ],
-    "/(dashboard)/team/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/(dashboard)/team/page.js"
-    ],
-    "/(dashboard)/analytics/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/(dashboard)/analytics/page.js"
-    ],
-    "/(dashboard)/tasks/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/(dashboard)/tasks/page.js"
-    ],
     "/(dashboard)/engagement/submissions/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/(dashboard)/engagement/submissions/page.js"
-    ],
-    "/(dashboard)/engagement/submit/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/(dashboard)/engagement/submit/page.js"
-    ],
-    "/_not-found/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/_not-found/page.js"
     ]
   }
 }

@@ -19,7 +19,7 @@ export default async function EngagementValidatePage() {
   // Only admins can validate
   if (role !== 'super_admin' && role !== 'admin') redirect('/engagement/dashboard')
 
-  const submissions = await getAllEngagementSubmissions({ status: 'pending' })
+  const submissions = await getAllEngagementSubmissions({ status: 'PENDING' })
 
   return (
     <div style={{ padding: '1.5rem', minHeight: '100vh', background: '#0A0A0A' }}>

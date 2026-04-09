@@ -6,13 +6,13 @@ interface Props {
 }
 
 const STATUS_CONFIG: Record<EngagementSubmissionStatus, { label: string; color: string; bg: string }> = {
-  pending:  { label: 'PENDING',  color: '#F59E0B', bg: 'rgba(245,158,11,0.1)' },
-  approved: { label: 'APPROVED', color: '#22C55E', bg: 'rgba(34,197,94,0.1)' },
-  rejected: { label: 'REJECTED', color: '#CC1F1F', bg: 'rgba(204,31,31,0.1)' },
+  PENDING:  { label: 'PENDING',  color: '#F59E0B', bg: 'rgba(245,158,11,0.1)' },
+  APPROVED: { label: 'APPROVED', color: '#22C55E', bg: 'rgba(34,197,94,0.1)' },
+  REJECTED: { label: 'REJECTED', color: '#CC1F1F', bg: 'rgba(204,31,31,0.1)' },
 }
 
 export function StatusBadge({ status, size = 'sm' }: Props) {
-  const config = STATUS_CONFIG[status] ?? STATUS_CONFIG.pending
+  const config = STATUS_CONFIG[status] ?? STATUS_CONFIG.PENDING
   const fontSize = size === 'md' ? '0.7rem' : '0.6rem'
 
   return (

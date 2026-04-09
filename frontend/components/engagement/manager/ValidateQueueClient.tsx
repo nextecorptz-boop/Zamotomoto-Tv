@@ -36,7 +36,7 @@ export function ValidateQueueClient({ submissions }: Props) {
   const handleApprove = () => {
     if (!selected) return
     startTransition(async () => {
-      const result = await validateEngagementSubmission(selected.id, 'approved')
+      const result = await validateEngagementSubmission(selected.id, 'APPROVED')
       if (!result.success) {
         showToast('error' in result ? result.error : 'Approval failed')
         return
@@ -64,7 +64,7 @@ export function ValidateQueueClient({ submissions }: Props) {
     }
     setRejectReasonError('')
     startTransition(async () => {
-      const result = await validateEngagementSubmission(selected.id, 'rejected', rejectReason.trim())
+      const result = await validateEngagementSubmission(selected.id, 'REJECTED', rejectReason.trim())
       if (!result.success) {
         showToast('error' in result ? result.error : 'Rejection failed')
         return

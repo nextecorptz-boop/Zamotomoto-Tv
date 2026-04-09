@@ -1,0 +1,34 @@
+{
+  "summary": "Iteration 12 — Engagement Status Casing Fix Verification. All uppercase status fixes confirmed working. Found and fixed one additional bug: validateEngagementSubmission action was missing rejection_reason in UPDATE payload, causing check_rejection_reason_required DB constraint violation (23514). After fix, full approve/reject/validate-queue flow verified end-to-end.",
+  "backend_issues": {
+    "critical": [
+      {
+        "endpoint": "validateEngagementSubmission (server action) — engagement.ts ~line 356",
+        "issue": "UPDATE payload for REJECTED status missing rejection_reason field. DB has check constraint 'check_rejection_reason_required' requiring rejection_reason IS NOT NULL when status=REJECTED. Error: code 23514. FIXED in this iteration by adding updatePayload.rejection_reason = rejectReason?.trim() ?? null",
+        "priority": "CRITICAL — FIXED"
+      }
+    ],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": ["/app/frontend/app/actions/engagement.ts"],
+  "action_items": [
+    "Verify resubmit flow with actual operator account (admin cannot submit proofs, so resubmit flow could not be fully tested — needs an operator-role user). The resubmitEngagementProof code checks status === 'REJECTED' (uppercase) which is now correct.",
+    "The empty-reason client-side error message display in ValidateQueueClient (setRejectReasonError) works, but the error selector '[class*=error]' didn't detect it — likely uses a non-error CSS class (e.g. text-red). This is cosmetic only; server-side validation also blocks empty reasons."
+  ],
+  "critical_code_review_comments": [
+    "engagement.ts: validateEngagementSubmission was missing rejection_reason in UPDATE payload — FIXED",
+    "engagement.ts had misleading comment 'no reject_reason column in schema' when column clearly exists with check constraint — FIXED (comment removed)"
+  ],
+  "updated_files": ["/app/frontend/app/actions/engagement.ts"],
+  "success_rate": {"backend": "100%", "frontend": "95%"},
+  "seed_data_creation": "Inserted and cleaned up 3 test engagement submissions (storage_path: test/test-proof*.jpg) for verifying approve/reject flows",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "All engagement status casing issues from iteration_11 are resolved. Additional fix applied: rejection_reason now included in UPDATE payload. Full approve/reject/validate-queue E2E tested and working. Resubmit flow (operator perspective) and proof file upload still untested due to no operator account. Admin role cannot access own submissions on /engagement/submissions (shows 0 because admin has no operator_id submissions). Filter buttons on MySubmissionsClient confirmed uppercase (ALL/PENDING/APPROVED/REJECTED).",
+  "rca_of_issue": "DB schema has check constraint 'check_rejection_reason_required': when status='REJECTED', rejection_reason must be non-null. Code comment wrongly stated 'no reject_reason column in schema' leading to the field being omitted from the UPDATE payload. Fix: add updatePayload.rejection_reason = rejectReason?.trim() ?? null inside the REJECTED branch."
+}

@@ -1,6 +1,6 @@
 // ── Engagement Desk Types — built against live verified schema only ───────────
 
-export type EngagementSubmissionStatus = 'pending' | 'approved' | 'rejected'
+export type EngagementSubmissionStatus = 'PENDING' | 'APPROVED' | 'REJECTED'
 
 // engagement_categories: id, name, is_active, created_at
 export interface EngagementCategory {
@@ -10,7 +10,7 @@ export interface EngagementCategory {
   created_at: string
 }
 
-// engagement_submissions: id, operator_id, category_id, status, proof_url, storage_path, expires_at, created_at
+// engagement_submissions: actual live schema columns
 export interface EngagementSubmission {
   id: string
   operator_id: string
@@ -20,6 +20,14 @@ export interface EngagementSubmission {
   storage_path: string | null
   expires_at: string | null
   created_at: string
+  // Optional columns present in live DB
+  submission_date?: string | null
+  file_size_bytes?: number | null
+  mime_type?: string | null
+  approved_by?: string | null
+  approved_at?: string | null
+  rejected_by?: string | null
+  rejected_at?: string | null
   // Joined (FK via Supabase PostgREST)
   operator?: { full_name: string | null } | null
   category?: EngagementCategory | null

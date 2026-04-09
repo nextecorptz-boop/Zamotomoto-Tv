@@ -48,11 +48,11 @@ export function MySubmissionsClient({ submissions }: Props) {
     <div data-testid="my-submissions-client">
       {/* Filter bar */}
       <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.25rem', flexWrap: 'wrap' }}>
-        {['all', 'pending', 'approved', 'rejected'].map(s => (
+        {['all', 'PENDING', 'APPROVED', 'REJECTED'].map(s => (
           <button
             key={s}
             onClick={() => setStatusFilter(s)}
-            data-testid={`filter-${s}`}
+            data-testid={`filter-${s.toLowerCase()}`}
             style={{ background: statusFilter === s ? '#CC1F1F' : 'transparent', border: `1px solid ${statusFilter === s ? '#CC1F1F' : '#2A2A2A'}`, color: statusFilter === s ? '#FFFFFF' : '#888888', fontFamily: "'IBM Plex Mono', monospace", fontSize: '0.62rem', letterSpacing: '0.12em', textTransform: 'uppercase', padding: '0.3rem 0.7rem', cursor: 'pointer' }}
           >
             {s} {s !== 'all' && `(${submissions.filter(x => x.status === s).length})`}
@@ -73,7 +73,7 @@ export function MySubmissionsClient({ submissions }: Props) {
             key={sub.id}
             submission={sub}
             actions={
-              sub.status === 'rejected' ? (
+              sub.status === 'REJECTED' ? (
                 <button
                   onClick={() => { setResubmitTarget(sub); setFileName(null); setError(null) }}
                   data-testid={`resubmit-btn-${sub.id}`}

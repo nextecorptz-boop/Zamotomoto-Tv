@@ -226,9 +226,10 @@ export async function submitEngagementProof(
 
   if (uploadError) return { success: false, error: `Upload failed: ${uploadError.message}` }
 
-  // Insert DB record — only live schema columns
+  // Insert DB record — all required NOT NULL columns included
   // expires_at is NOT NULL — set to now() + 7 days as required
   const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString()
+  const submissionDate = new Date().toISOString().split('T')[0]
 
   const { data: row, error: insertError } = await admin
     .from('engagement_submissions')
@@ -236,9 +237,12 @@ export async function submitEngagementProof(
       operator_id: me.id,
       category_id: categoryId,
       storage_path: storagePath,
-      proof_url: null,
-      status: 'pending',
+      proof_url: storagePath,           // legacy compatibility — storage_path is canonical
+      status: 'PENDING',
       expires_at: expiresAt,
+      submission_date: submissionDate,
+      file_size_bytes: file.size,
+      mime_type: file.type,
     })
     .select('id')
     .single()
@@ -278,7 +282,7 @@ export async function resubmitEngagementProof(
 
   if (fetchErr || !existing) return { success: false, error: 'Submission not found' }
   if (existing.operator_id !== me.id) return { success: false, error: 'Not your submission' }
-  if (existing.status !== 'rejected') return { success: false, error: 'Only rejected submissions can be resubmitted' }
+  if (existing.status !== 'REJECTED') return { success: false, error: 'Only rejected submissions can be resubmitted' }
 
   const file = formData.get('proof_file') as File | null
   if (!file || file.size === 0) return { success: false, error: 'New proof file is required' }
@@ -302,7 +306,8 @@ export async function resubmitEngagementProof(
     .from('engagement_submissions')
     .update({
       storage_path: newStoragePath,
-      status: 'pending',
+      proof_url: newStoragePath,        // keep proof_url in sync (legacy compat)
+      status: 'PENDING',
       expires_at: refreshedExpiresAt,
     })
     .eq('id', submissionId)
@@ -332,33 +337,44 @@ export async function resubmitEngagementProof(
 // ─── 9. Validate submission (admin approve/reject) ────────────────────────────
 export async function validateEngagementSubmission(
   submissionId: string,
-  decision: 'approved' | 'rejected',
+  decision: 'APPROVED' | 'REJECTED',
   rejectReason?: string
 ): Promise<{ success: true } | { success: false; error: string }> {
   const me = await getCurrentUser()
   if (!me) return { success: false, error: 'Not authenticated' }
   if (!isAdminRole(me.role)) return { success: false, error: 'Admin or manager only' }
 
-  // Enforce reason required for rejections (UI should validate, double-check server-side)
-  if (decision === 'rejected' && (!rejectReason || !rejectReason.trim())) {
+  // Enforce reason required for rejections server-side
+  if (decision === 'REJECTED' && (!rejectReason || !rejectReason.trim())) {
     return { success: false, error: 'Rejection reason is required' }
   }
 
   const admin = adminClient()
+  const now = new Date().toISOString()
 
-  // Update status only — no invented columns
+  // Build update payload — include approval/rejection metadata columns
+  const updatePayload: Record<string, unknown> = { status: decision }
+  if (decision === 'APPROVED') {
+    updatePayload.approved_by = me.id
+    updatePayload.approved_at = now
+  } else {
+    updatePayload.rejected_by = me.id
+    updatePayload.rejected_at = now
+    updatePayload.rejection_reason = rejectReason?.trim() ?? null
+  }
+
   const { error } = await admin
     .from('engagement_submissions')
-    .update({ status: decision })
+    .update(updatePayload)
     .eq('id', submissionId)
-    .eq('status', 'pending')
+    .eq('status', 'PENDING')
 
   if (error) return { success: false, error: error.message }
 
-  // Log decision — encode reason into action field for rejected proofs (no reject_reason column in schema)
-  const actionValue = decision === 'rejected' && rejectReason?.trim()
+  // Log decision — encode reason into action field for rejected proofs
+  const actionValue = decision === 'REJECTED' && rejectReason?.trim()
     ? `rejected:${rejectReason.trim()}`
-    : decision
+    : decision.toLowerCase()
 
   await admin.from('engagement_activity_log').insert({
     submission_id: submissionId,
@@ -415,9 +431,9 @@ export async function getEngagementDashboard(): Promise<EngagementDashboardData>
   const todayRows = todayRes.data ?? []
   operator_stats = {
     today_submitted: todayRows.length,
-    today_approved: todayRows.filter(r => r.status === 'approved').length,
-    today_pending: todayRows.filter(r => r.status === 'pending').length,
-    today_rejected: todayRows.filter(r => r.status === 'rejected').length,
+    today_approved: todayRows.filter(r => r.status === 'APPROVED').length,
+    today_pending: todayRows.filter(r => r.status === 'PENDING').length,
+    today_rejected: todayRows.filter(r => r.status === 'REJECTED').length,
     daily_target,
     total_this_month: monthRes.count ?? 0,
   }
@@ -427,7 +443,7 @@ export async function getEngagementDashboard(): Promise<EngagementDashboardData>
     const { count } = await admin
       .from('engagement_submissions')
       .select('id', { count: 'exact', head: true })
-      .eq('status', 'pending')
+      .eq('status', 'PENDING')
     pending_count = count ?? 0
 
     // Team leaderboard for today
@@ -446,7 +462,7 @@ export async function getEngagementDashboard(): Promise<EngagementDashboardData>
       }
       const entry = teamMap.get(id)!
       entry.today_count++
-      if (row.status === 'approved') entry.approved_count++
+      if (row.status === 'APPROVED') entry.approved_count++
     }
 
     // Month totals per operator
@@ -470,7 +486,7 @@ export async function getEngagementDashboard(): Promise<EngagementDashboardData>
         operator:operator_id(full_name),
         category:category_id(id, name, is_active, created_at)
       `)
-      .eq('status', 'pending')
+      .eq('status', 'PENDING')
       .order('created_at', { ascending: false })
       .limit(10)
     recent_submissions = (recent ?? []) as unknown as EngagementSubmission[]
