@@ -227,6 +227,9 @@ export async function submitEngagementProof(
   if (uploadError) return { success: false, error: `Upload failed: ${uploadError.message}` }
 
   // Insert DB record — only live schema columns
+  // expires_at is NOT NULL — set to now() + 7 days as required
+  const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString()
+
   const { data: row, error: insertError } = await admin
     .from('engagement_submissions')
     .insert({
@@ -235,6 +238,7 @@ export async function submitEngagementProof(
       storage_path: storagePath,
       proof_url: null,
       status: 'pending',
+      expires_at: expiresAt,
     })
     .select('id')
     .single()
@@ -291,12 +295,15 @@ export async function resubmitEngagementProof(
 
   if (uploadError) return { success: false, error: `Upload failed: ${uploadError.message}` }
 
-  // Step 3+4: Update DB — only confirmed columns
+  // Step 3+4: Update DB — refresh storage_path, status, and expires_at (spec: expires_at reset on resubmit)
+  const refreshedExpiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString()
+
   const { error: updateError } = await admin
     .from('engagement_submissions')
     .update({
       storage_path: newStoragePath,
       status: 'pending',
+      expires_at: refreshedExpiresAt,
     })
     .eq('id', submissionId)
 
@@ -325,11 +332,17 @@ export async function resubmitEngagementProof(
 // ─── 9. Validate submission (admin approve/reject) ────────────────────────────
 export async function validateEngagementSubmission(
   submissionId: string,
-  decision: 'approved' | 'rejected'
+  decision: 'approved' | 'rejected',
+  rejectReason?: string
 ): Promise<{ success: true } | { success: false; error: string }> {
   const me = await getCurrentUser()
   if (!me) return { success: false, error: 'Not authenticated' }
   if (!isAdminRole(me.role)) return { success: false, error: 'Admin or manager only' }
+
+  // Enforce reason required for rejections (UI should validate, double-check server-side)
+  if (decision === 'rejected' && (!rejectReason || !rejectReason.trim())) {
+    return { success: false, error: 'Rejection reason is required' }
+  }
 
   const admin = adminClient()
 
@@ -342,11 +355,15 @@ export async function validateEngagementSubmission(
 
   if (error) return { success: false, error: error.message }
 
-  // Log decision in activity log
+  // Log decision — encode reason into action field for rejected proofs (no reject_reason column in schema)
+  const actionValue = decision === 'rejected' && rejectReason?.trim()
+    ? `rejected:${rejectReason.trim()}`
+    : decision
+
   await admin.from('engagement_activity_log').insert({
     submission_id: submissionId,
     actor_id: me.id,
-    action: decision,
+    action: actionValue,
   }).select().maybeSingle()
 
   return { success: true }

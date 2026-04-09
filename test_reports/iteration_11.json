@@ -1,0 +1,68 @@
+{
+  "summary": "Iteration 11 — Engagement Workflow Testing. Tested the engagement submission/validation/rejection workflow. Found critical pre-existing bugs that make the entire workflow non-functional despite the expires_at fix from this iteration. The validate queue consistently shows 0 results even when PENDING records exist in DB due to case mismatch. UI code review confirms reject-reason two-phase UI was implemented correctly in ValidateQueueClient.",
+  "backend_issues": {
+    "critical": [
+      {
+        "endpoint": "submitEngagementProof (server action)",
+        "issue": "Inserts status: 'pending' (lowercase) but DB check constraint requires uppercase 'PENDING'. Also missing required NOT NULL fields: submission_date, file_size_bytes, mime_type, and proof_url is set to null but DB requires non-null. Submission will always fail with constraint violations.",
+        "priority": "CRITICAL"
+      },
+      {
+        "endpoint": "getAllEngagementSubmissions / validate page",
+        "issue": "Queries .eq('status', 'pending') (lowercase) but DB stores uppercase 'PENDING'. PostgreSQL text comparison is case-sensitive so validate queue always returns 0 results even when PENDING submissions exist. Confirmed via direct Supabase REST API test.",
+        "priority": "CRITICAL"
+      },
+      {
+        "endpoint": "validateEngagementSubmission (server action)",
+        "issue": "Updates status to 'approved'/'rejected' (lowercase) but DB check constraint requires uppercase. Also queries .eq('status', 'pending') which won't match uppercase 'PENDING' records. Both approve and reject operations will fail.",
+        "priority": "CRITICAL"
+      },
+      {
+        "endpoint": "resubmitEngagementProof (server action)",
+        "issue": "Updates status to 'pending' (lowercase) — same case mismatch as above.",
+        "priority": "CRITICAL"
+      }
+    ],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [
+      {
+        "flow": "Validate Queue → shows 0 results",
+        "issue": "Admin validate queue at /engagement/validate shows 0 pending even when PENDING records exist in DB because the query uses lowercase 'pending' vs DB uppercase 'PENDING'",
+        "affected_selectors": ["[data-testid='validate-queue-client']"]
+      }
+    ],
+    "design_issues": []
+  },
+  "test_report_links": [],
+  "action_items": [
+    "FIX CRITICAL: Update all status values in engagement.ts to uppercase: 'pending' → 'PENDING', 'approved' → 'APPROVED', 'rejected' → 'REJECTED'",
+    "FIX CRITICAL: submitEngagementProof INSERT is missing required NOT NULL fields: submission_date (use today's date), file_size_bytes (use file.size), mime_type (use file.type). Also proof_url must not be null (use storage_path URL or placeholder).",
+    "FIX: validateEngagementSubmission UPDATE to approved must include approved_by and approved_at fields (DB check constraint requires these when status=APPROVED)",
+    "FIX: validateEngagementSubmission UPDATE to rejected must include rejected_by and rejected_at fields (similar constraint likely applies)",
+    "NOTE: The expires_at fix from this iteration is correctly implemented — just insufficient alone to fix the workflow",
+    "NOTE: ValidateQueueClient two-phase reject UI (showRejectInput, handleRejectClick, handleRejectConfirm) is correctly implemented in code but cannot be UI-tested because queue never shows any submissions"
+  ],
+  "critical_code_review_comments": [
+    "app/actions/engagement.ts line 240: status: 'pending' → must be 'PENDING' (DB constraint)",
+    "app/actions/engagement.ts line 235-242: INSERT missing required fields: submission_date, file_size_bytes, mime_type, proof_url (non-null)",
+    "app/actions/engagement.ts line 354: .eq('status', 'pending') → must be .eq('status', 'PENDING')",
+    "app/actions/engagement.ts line 473: .eq('status', 'pending') → must be .eq('status', 'PENDING')",
+    "app/actions/engagement.ts line 430: .eq('status', 'pending') → must be .eq('status', 'PENDING')",
+    "app/actions/engagement.ts line 305: status: 'pending' → must be 'PENDING' (resubmit action)",
+    "app/actions/engagement.ts line 353: decision values 'approved'/'rejected' → must be 'APPROVED'/'REJECTED'",
+    "app/actions/engagement.ts line 353: When approving, must also set approved_by and approved_at; when rejecting, set rejected_by and rejected_at"
+  ],
+  "updated_files": [],
+  "success_rate": {
+    "backend": "0% — entire engagement submission/validation workflow fails due to case mismatch",
+    "frontend": "30% — validate queue UI loads correctly (empty state), categories page works, admin redirect works; but queue integration completely broken"
+  },
+  "seed_data_creation": "Created and deleted a test submission (id: 46e092fe-6a80-47d2-ab68-ce2e58532394) using Supabase service role key for testing purposes. Data cleaned up.",
+  "retest_needed": true,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Iteration 11 testing done. Critical case mismatch found: action code uses lowercase status values (pending/approved/rejected) but DB check constraint requires uppercase (PENDING/APPROVED/REJECTED). Also INSERT is missing required NOT NULL columns. After fixes, test: (1) submit proof as worker/staff user, (2) verify submission appears in validate queue, (3) test approve flow (check approved_by/approved_at are set), (4) test reject flow (two-phase UI: reason panel appears, empty reason blocked, reason filled then confirmed). No worker credentials in test_credentials.md - may need to use Supabase service role to insert test data or create worker account.",
+  "rca_of_issue": "Root cause: DB schema uses uppercase status values (check constraint: PENDING/APPROVED/REJECTED) but action code uses lowercase string literals. This prevents: (1) INSERT of new submissions (check constraint 23514), (2) querying pending submissions (case-sensitive match returns empty), (3) updating to approved/rejected status. Additionally, the INSERT is missing 4 required NOT NULL columns (submission_date, file_size_bytes, mime_type, proof_url). The expires_at fix in this iteration was correct but incomplete — several more constraints must be satisfied for a successful INSERT."
+}
