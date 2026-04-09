@@ -2,6 +2,7 @@
 import { useState, useRef, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import { submitEngagementProof } from '@/app/actions/engagement'
+import type { EngagementActionError } from '@/app/actions/engagement'
 import type { EngagementCategory } from '@/types/engagement'
 
 interface Props {
@@ -17,6 +18,7 @@ export function SubmitProofForm({ categories, dailyTarget, todaySubmitted }: Pro
   const [selectedCategory, setSelectedCategory] = useState('')
   const [fileName, setFileName] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const [errorType, setErrorType] = useState<EngagementActionError['errorType'] | null>(null)
   const [success, setSuccess] = useState(false)
   const [dragOver, setDragOver] = useState(false)
 
@@ -49,6 +51,7 @@ export function SubmitProofForm({ categories, dailyTarget, todaySubmitted }: Pro
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setError(null)
+    setErrorType(null)
     if (!selectedCategory) { setError('Select a category'); return }
     const file = fileRef.current?.files?.[0]
     if (!file) { setError('Attach a proof file'); return }
@@ -60,7 +63,9 @@ export function SubmitProofForm({ categories, dailyTarget, todaySubmitted }: Pro
     startTransition(async () => {
       const result = await submitEngagementProof(fd)
       if (!result.success) {
-        setError('error' in result ? result.error : 'Submit failed')
+        const err = result as EngagementActionError
+        setErrorType(err.errorType)
+        setError(err.error)
         return
       }
       setSuccess(true)
@@ -101,7 +106,12 @@ export function SubmitProofForm({ categories, dailyTarget, todaySubmitted }: Pro
         </div>
       )}
       {error && (
-        <div style={{ background: 'rgba(204,31,31,0.1)', border: '1px solid #CC1F1F', color: '#CC1F1F', fontFamily: "'IBM Plex Mono', monospace", fontSize: '0.68rem', padding: '0.65rem 1rem', marginBottom: '1rem' }}>
+        <div style={{
+          background: errorType === 'permission_error' ? 'rgba(239,68,68,0.12)' : errorType === 'upload_error' ? 'rgba(245,158,11,0.1)' : 'rgba(204,31,31,0.1)',
+          border: `1px solid ${errorType === 'permission_error' ? '#EF4444' : errorType === 'upload_error' ? '#F59E0B' : '#CC1F1F'}`,
+          color: errorType === 'permission_error' ? '#EF4444' : errorType === 'upload_error' ? '#F59E0B' : '#CC1F1F',
+          fontFamily: "'IBM Plex Mono', monospace", fontSize: '0.68rem', padding: '0.65rem 1rem', marginBottom: '1rem',
+        }}>
           {error}
         </div>
       )}

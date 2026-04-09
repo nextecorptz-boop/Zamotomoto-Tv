@@ -3,7 +3,11 @@ import { useState, useTransition, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { SubmissionCard } from '../shared/SubmissionCard'
 import { resubmitEngagementProof } from '@/app/actions/engagement'
+import type { EngagementActionError } from '@/app/actions/engagement'
 import type { EngagementSubmission } from '@/types/engagement'
+
+const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'video/mp4']
+const MAX_FILE_BYTES = 10 * 1024 * 1024 // 10 MB
 
 interface Props {
   submissions: EngagementSubmission[]
@@ -14,6 +18,7 @@ export function MySubmissionsClient({ submissions }: Props) {
   const [resubmitTarget, setResubmitTarget] = useState<EngagementSubmission | null>(null)
   const [fileName, setFileName] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const [errorType, setErrorType] = useState<EngagementActionError['errorType'] | null>(null)
   const [success, setSuccess] = useState(false)
   const [isPending, startTransition] = useTransition()
   const fileRef = useRef<HTMLInputElement>(null)
@@ -21,23 +26,72 @@ export function MySubmissionsClient({ submissions }: Props) {
 
   const filtered = statusFilter === 'all' ? submissions : submissions.filter(s => s.status === statusFilter)
 
+  const openResubmit = (sub: EngagementSubmission) => {
+    if (isPending) return // block while another action is in flight
+    setResubmitTarget(sub)
+    setFileName(null)
+    setError(null)
+    setErrorType(null)
+    setSuccess(false)
+  }
+
+  const closeResubmit = () => {
+    if (isPending) return // cannot close while action in flight
+    setResubmitTarget(null)
+    setFileName(null)
+    setError(null)
+    setErrorType(null)
+    setSuccess(false)
+    if (fileRef.current) fileRef.current.value = ''
+  }
+
+  const handleFileChange = (file: File) => {
+    if (!ALLOWED_TYPES.includes(file.type)) {
+      setError('Only images (JPG, PNG, WebP, GIF) or MP4 videos accepted')
+      setErrorType('validation_error')
+      setFileName(null)
+      if (fileRef.current) fileRef.current.value = ''
+      return
+    }
+    if (file.size > MAX_FILE_BYTES) {
+      setError('File too large — maximum 10MB allowed')
+      setErrorType('validation_error')
+      setFileName(null)
+      if (fileRef.current) fileRef.current.value = ''
+      return
+    }
+    setError(null)
+    setErrorType(null)
+    setFileName(file.name)
+  }
+
   const handleResubmit = () => {
     if (!resubmitTarget) return
     setError(null)
+    setErrorType(null)
     const file = fileRef.current?.files?.[0]
     if (!file) { setError('Select a new proof file'); return }
+    if (!ALLOWED_TYPES.includes(file.type)) { setError('Invalid file type'); return }
+    if (file.size > MAX_FILE_BYTES) { setError('File too large (max 10MB)'); return }
 
     const fd = new FormData()
     fd.append('proof_file', file)
 
     startTransition(async () => {
       const result = await resubmitEngagementProof(resubmitTarget.id, fd)
-      if (!result.success) { setError('error' in result ? result.error : 'Resubmit failed'); return }
+      if (!result.success) {
+        const err = result as EngagementActionError
+        setErrorType(err.errorType)
+        setError(err.error)
+        return
+      }
       setSuccess(true)
       setTimeout(() => {
         setResubmitTarget(null)
         setSuccess(false)
         setFileName(null)
+        setError(null)
+        setErrorType(null)
         if (fileRef.current) fileRef.current.value = ''
         router.refresh()
       }, 1500)
@@ -65,7 +119,7 @@ export function MySubmissionsClient({ submissions }: Props) {
 
       {filtered.length === 0 ? (
         <div style={{ background: '#111111', border: '1px solid #1A1A1A', padding: '3rem', textAlign: 'center', fontFamily: "'IBM Plex Mono', monospace", fontSize: '0.68rem', color: '#444444', letterSpacing: '0.1em' }}>
-          NO SUBMISSIONS {statusFilter !== 'all' ? `WITH STATUS "${statusFilter.toUpperCase()}"` : 'YET'}
+          NO SUBMISSIONS {statusFilter !== 'all' ? `WITH STATUS "${statusFilter}"` : 'YET'}
         </div>
       ) : (
         filtered.map(sub => (
@@ -74,13 +128,23 @@ export function MySubmissionsClient({ submissions }: Props) {
             submission={sub}
             actions={
               sub.status === 'REJECTED' ? (
-                <button
-                  onClick={() => { setResubmitTarget(sub); setFileName(null); setError(null) }}
-                  data-testid={`resubmit-btn-${sub.id}`}
-                  style={{ background: 'rgba(245,158,11,0.1)', border: '1px solid #F59E0B', color: '#F59E0B', fontFamily: "'IBM Plex Mono', monospace", fontSize: '0.6rem', letterSpacing: '0.1em', textTransform: 'uppercase', padding: '0.3rem 0.65rem', cursor: 'pointer' }}
-                >
-                  RESUBMIT
-                </button>
+                <div>
+                  {/* Rejection reason display */}
+                  {sub.rejection_reason && (
+                    <div style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '0.6rem', color: '#CC1F1F', background: 'rgba(204,31,31,0.06)', border: '1px solid rgba(204,31,31,0.2)', padding: '0.4rem 0.65rem', marginBottom: '0.5rem', lineHeight: 1.5 }}>
+                      <span style={{ opacity: 0.6, letterSpacing: '0.1em', textTransform: 'uppercase', fontSize: '0.55rem' }}>Reason: </span>
+                      {sub.rejection_reason}
+                    </div>
+                  )}
+                  <button
+                    onClick={() => openResubmit(sub)}
+                    disabled={isPending}
+                    data-testid={`resubmit-btn-${sub.id}`}
+                    style={{ background: 'rgba(245,158,11,0.1)', border: '1px solid #F59E0B', color: '#F59E0B', fontFamily: "'IBM Plex Mono', monospace", fontSize: '0.6rem', letterSpacing: '0.1em', textTransform: 'uppercase', padding: '0.3rem 0.65rem', cursor: isPending ? 'not-allowed' : 'pointer', opacity: isPending ? 0.5 : 1 }}
+                  >
+                    RESUBMIT
+                  </button>
+                </div>
               ) : null
             }
           />
@@ -91,7 +155,7 @@ export function MySubmissionsClient({ submissions }: Props) {
       {resubmitTarget && (
         <div
           style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.85)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 9999, padding: '1rem' }}
-          onClick={e => { if (e.target === e.currentTarget) setResubmitTarget(null) }}
+          onClick={e => { if (e.target === e.currentTarget) closeResubmit() }}
         >
           <div style={{ background: '#111111', border: '1px solid #2A2A2A', padding: '1.75rem', width: '100%', maxWidth: '440px' }}>
             <h2 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: '1.4rem', color: '#F59E0B', letterSpacing: '0.1em', margin: '0 0 0.5rem' }}>
@@ -103,18 +167,23 @@ export function MySubmissionsClient({ submissions }: Props) {
 
             {success && (
               <div style={{ background: 'rgba(34,197,94,0.1)', border: '1px solid #22C55E', color: '#22C55E', fontFamily: "'IBM Plex Mono', monospace", fontSize: '0.68rem', padding: '0.6rem 0.85rem', marginBottom: '0.75rem' }}>
-                Resubmitted successfully!
+                Resubmitted successfully — returning to PENDING review
               </div>
             )}
             {error && (
-              <div style={{ background: 'rgba(204,31,31,0.1)', border: '1px solid #CC1F1F', color: '#CC1F1F', fontFamily: "'IBM Plex Mono', monospace", fontSize: '0.65rem', padding: '0.6rem 0.85rem', marginBottom: '0.75rem' }}>
+              <div style={{
+                background: errorType === 'upload_error' ? 'rgba(245,158,11,0.1)' : 'rgba(204,31,31,0.1)',
+                border: `1px solid ${errorType === 'upload_error' ? '#F59E0B' : '#CC1F1F'}`,
+                color: errorType === 'upload_error' ? '#F59E0B' : '#CC1F1F',
+                fontFamily: "'IBM Plex Mono', monospace", fontSize: '0.65rem', padding: '0.6rem 0.85rem', marginBottom: '0.75rem',
+              }}>
                 {error}
               </div>
             )}
 
             <div
-              onClick={() => fileRef.current?.click()}
-              style={{ border: `1px dashed ${fileName ? '#22C55E' : '#2A2A2A'}`, padding: '1rem', background: '#0E0E0E', cursor: 'pointer', textAlign: 'center', marginBottom: '1rem' }}
+              onClick={() => { if (!isPending) fileRef.current?.click() }}
+              style={{ border: `1px dashed ${fileName ? '#22C55E' : '#2A2A2A'}`, padding: '1rem', background: '#0E0E0E', cursor: isPending ? 'not-allowed' : 'pointer', textAlign: 'center', marginBottom: '1rem', opacity: isPending ? 0.5 : 1 }}
             >
               <span style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '0.65rem', color: fileName ? '#22C55E' : '#555555' }}>
                 {fileName ?? 'Click to select new proof file'}
@@ -124,7 +193,7 @@ export function MySubmissionsClient({ submissions }: Props) {
               ref={fileRef}
               type="file"
               accept="image/jpeg,image/png,image/webp,image/gif,video/mp4"
-              onChange={e => { const f = e.target.files?.[0]; if (f) setFileName(f.name) }}
+              onChange={e => { const f = e.target.files?.[0]; if (f) handleFileChange(f) }}
               style={{ display: 'none' }}
             />
 
@@ -138,8 +207,9 @@ export function MySubmissionsClient({ submissions }: Props) {
                 {isPending ? 'SUBMITTING...' : 'CONFIRM RESUBMIT'}
               </button>
               <button
-                onClick={() => setResubmitTarget(null)}
-                style={{ background: 'transparent', border: '1px solid #2A2A2A', color: '#888888', fontFamily: "'IBM Plex Mono', monospace", fontSize: '0.65rem', padding: '0.5rem 1rem', cursor: 'pointer' }}
+                onClick={closeResubmit}
+                disabled={isPending}
+                style={{ background: 'transparent', border: '1px solid #2A2A2A', color: isPending ? '#555' : '#888888', fontFamily: "'IBM Plex Mono', monospace", fontSize: '0.65rem', padding: '0.5rem 1rem', cursor: isPending ? 'not-allowed' : 'pointer', opacity: isPending ? 0.5 : 1 }}
               >
                 CANCEL
               </button>

@@ -3,6 +3,7 @@ import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import { SubmissionCard } from '../shared/SubmissionCard'
 import { validateEngagementSubmission } from '@/app/actions/engagement'
+import type { EngagementActionError } from '@/app/actions/engagement'
 import type { EngagementSubmission } from '@/types/engagement'
 
 interface Props {
@@ -46,7 +47,14 @@ export function ValidateQueueClient({ submissions }: Props) {
     startTransition(async () => {
       const result = await validateEngagementSubmission(selected.id, 'APPROVED')
       if (!result.success) {
-        showToast('error' in result ? result.error : 'Approval failed')
+        const err = result as EngagementActionError
+        if (err.errorType === 'conflict_error') {
+          showToast('Already processed by another admin — refreshing queue')
+          resetModalState()
+          router.refresh()
+        } else {
+          showToast(err.error)
+        }
         return
       }
       setOptimisticDone(prev => new Set([...prev, selected.id]))
@@ -74,7 +82,14 @@ export function ValidateQueueClient({ submissions }: Props) {
     startTransition(async () => {
       const result = await validateEngagementSubmission(selected.id, 'REJECTED', rejectReason.trim())
       if (!result.success) {
-        showToast('error' in result ? result.error : 'Rejection failed')
+        const err = result as EngagementActionError
+        if (err.errorType === 'conflict_error') {
+          showToast('Already processed by another admin — refreshing queue')
+          resetModalState()
+          router.refresh()
+        } else {
+          showToast(err.error)
+        }
         return
       }
       setOptimisticDone(prev => new Set([...prev, selected.id]))
@@ -112,11 +127,12 @@ export function ValidateQueueClient({ submissions }: Props) {
             showOperator
             actions={
               <button
-                onClick={() => { setSelected(sub); setShowRejectInput(false); setRejectReason(''); setRejectReasonError('') }}
+                onClick={() => { if (!isPending) { setSelected(sub); setShowRejectInput(false); setRejectReason(''); setRejectReasonError('') } }}
+                disabled={isPending}
                 data-testid={`validate-btn-${sub.id}`}
-                style={{ background: 'rgba(204,31,31,0.1)', border: '1px solid #CC1F1F', color: '#CC1F1F', fontFamily: "'IBM Plex Mono', monospace", fontSize: '0.6rem', letterSpacing: '0.1em', textTransform: 'uppercase', padding: '0.3rem 0.65rem', cursor: 'pointer' }}
+                style={{ background: 'rgba(204,31,31,0.1)', border: '1px solid #CC1F1F', color: isPending ? '#555555' : '#CC1F1F', fontFamily: "'IBM Plex Mono', monospace", fontSize: '0.6rem', letterSpacing: '0.1em', textTransform: 'uppercase', padding: '0.3rem 0.65rem', cursor: isPending ? 'not-allowed' : 'pointer', opacity: isPending ? 0.5 : 1 }}
               >
-                REVIEW
+                {isPending && selected?.id === sub.id ? 'PROCESSING...' : 'REVIEW'}
               </button>
             }
           />

@@ -28,6 +28,7 @@ export interface EngagementSubmission {
   approved_at?: string | null
   rejected_by?: string | null
   rejected_at?: string | null
+  rejection_reason?: string | null
   // Joined (FK via Supabase PostgREST)
   operator?: { full_name: string | null } | null
   category?: EngagementCategory | null

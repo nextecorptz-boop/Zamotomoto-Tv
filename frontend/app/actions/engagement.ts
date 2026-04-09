@@ -10,6 +10,20 @@ import type {
   EngagementTeamEntry,
 } from '@/types/engagement'
 
+// ─── Shared action error type ────────────────────────────────────────────────
+export type EngagementErrorType =
+  | 'validation_error'
+  | 'permission_error'
+  | 'conflict_error'
+  | 'upload_error'
+  | 'database_error'
+
+export type EngagementActionError = {
+  success: false
+  error: string
+  errorType: EngagementErrorType
+}
+
 // ─── Service-role client (bypasses RLS) ─────────────────────────────────────
 function adminClient() {
   return createServiceClient(
@@ -51,7 +65,7 @@ async function getDailyTarget(): Promise<number> {
     .eq('config_key', 'default_daily_target')
     .maybeSingle()
   const parsed = parseInt(data?.config_value ?? '', 10)
-  return isNaN(parsed) ? 10 : parsed
+  return isNaN(parsed) || parsed < 1 ? 5 : parsed
 }
 
 // ─── 1. Get active categories (for operators) ────────────────────────────────
@@ -138,6 +152,7 @@ export async function getMyEngagementSubmissions(): Promise<EngagementSubmission
     .from('engagement_submissions')
     .select(`
       id, operator_id, category_id, status, proof_url, storage_path, expires_at, created_at,
+      rejection_reason,
       category:category_id(id, name, is_active, created_at)
     `)
     .eq('operator_id', me.id)
@@ -191,19 +206,19 @@ export async function getAllEngagementSubmissions(
 // ─── 7. Submit engagement proof (operator) ───────────────────────────────────
 export async function submitEngagementProof(
   formData: FormData
-): Promise<{ success: true; id: string } | { success: false; error: string }> {
+): Promise<{ success: true; id: string } | EngagementActionError> {
   const me = await getCurrentUser()
-  if (!me) return { success: false, error: 'Not authenticated' }
+  if (!me) return { success: false, error: 'Not authenticated', errorType: 'permission_error' }
   if (!isWorkerRole(me.role) && !isAdminRole(me.role)) {
-    return { success: false, error: 'Workers only may submit proofs' }
+    return { success: false, error: 'Workers only may submit proofs', errorType: 'permission_error' }
   }
 
   const categoryId = formData.get('category_id') as string | null
   const file = formData.get('proof_file') as File | null
 
-  if (!categoryId) return { success: false, error: 'Category is required' }
-  if (!file || file.size === 0) return { success: false, error: 'Proof file is required' }
-  if (file.size > 10 * 1024 * 1024) return { success: false, error: 'File too large (max 10MB)' }
+  if (!categoryId) return { success: false, error: 'Category is required', errorType: 'validation_error' }
+  if (!file || file.size === 0) return { success: false, error: 'Proof file is required', errorType: 'validation_error' }
+  if (file.size > 10 * 1024 * 1024) return { success: false, error: 'File too large (max 10MB)', errorType: 'validation_error' }
 
   const admin = adminClient()
 
@@ -213,7 +228,7 @@ export async function submitEngagementProof(
     .select('id, is_active')
     .eq('id', categoryId)
     .single()
-  if (!cat || !cat.is_active) return { success: false, error: 'Category is inactive or not found' }
+  if (!cat || !cat.is_active) return { success: false, error: 'Category is inactive or not found', errorType: 'validation_error' }
 
   // Upload file to private bucket
   const ext = file.name.split('.').pop() ?? 'jpg'
@@ -224,10 +239,9 @@ export async function submitEngagementProof(
     .from('engagement-proofs')
     .upload(storagePath, fileBuffer, { contentType: file.type, upsert: false })
 
-  if (uploadError) return { success: false, error: `Upload failed: ${uploadError.message}` }
+  if (uploadError) return { success: false, error: `Upload failed: ${uploadError.message}`, errorType: 'upload_error' }
 
   // Insert DB record — all required NOT NULL columns included
-  // expires_at is NOT NULL — set to now() + 7 days as required
   const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString()
   const submissionDate = new Date().toISOString().split('T')[0]
 
@@ -237,7 +251,7 @@ export async function submitEngagementProof(
       operator_id: me.id,
       category_id: categoryId,
       storage_path: storagePath,
-      proof_url: storagePath,           // legacy compatibility — storage_path is canonical
+      proof_url: storagePath,
       status: 'PENDING',
       expires_at: expiresAt,
       submission_date: submissionDate,
@@ -248,12 +262,10 @@ export async function submitEngagementProof(
     .single()
 
   if (insertError) {
-    // Safety: cleanup newly uploaded file on DB failure
     await admin.storage.from('engagement-proofs').remove([storagePath])
-    return { success: false, error: insertError.message }
+    return { success: false, error: insertError.message, errorType: 'database_error' }
   }
 
-  // Log activity
   await admin.from('engagement_activity_log').insert({
     submission_id: row!.id,
     actor_id: me.id,
@@ -267,9 +279,9 @@ export async function submitEngagementProof(
 export async function resubmitEngagementProof(
   submissionId: string,
   formData: FormData
-): Promise<{ success: true } | { success: false; error: string }> {
+): Promise<{ success: true } | EngagementActionError> {
   const me = await getCurrentUser()
-  if (!me) return { success: false, error: 'Not authenticated' }
+  if (!me) return { success: false, error: 'Not authenticated', errorType: 'permission_error' }
 
   const admin = adminClient()
 
@@ -280,13 +292,13 @@ export async function resubmitEngagementProof(
     .eq('id', submissionId)
     .single()
 
-  if (fetchErr || !existing) return { success: false, error: 'Submission not found' }
-  if (existing.operator_id !== me.id) return { success: false, error: 'Not your submission' }
-  if (existing.status !== 'REJECTED') return { success: false, error: 'Only rejected submissions can be resubmitted' }
+  if (fetchErr || !existing) return { success: false, error: 'Submission not found', errorType: 'validation_error' }
+  if (existing.operator_id !== me.id) return { success: false, error: 'Not your submission', errorType: 'permission_error' }
+  if (existing.status !== 'REJECTED') return { success: false, error: 'Only rejected submissions can be resubmitted', errorType: 'conflict_error' }
 
   const file = formData.get('proof_file') as File | null
-  if (!file || file.size === 0) return { success: false, error: 'New proof file is required' }
-  if (file.size > 10 * 1024 * 1024) return { success: false, error: 'File too large (max 10MB)' }
+  if (!file || file.size === 0) return { success: false, error: 'New proof file is required', errorType: 'validation_error' }
+  if (file.size > 10 * 1024 * 1024) return { success: false, error: 'File too large (max 10MB)', errorType: 'validation_error' }
 
   // Step 2: Upload new file
   const ext = file.name.split('.').pop() ?? 'jpg'
@@ -297,34 +309,32 @@ export async function resubmitEngagementProof(
     .from('engagement-proofs')
     .upload(newStoragePath, fileBuffer, { contentType: file.type, upsert: false })
 
-  if (uploadError) return { success: false, error: `Upload failed: ${uploadError.message}` }
+  if (uploadError) return { success: false, error: `Upload failed: ${uploadError.message}`, errorType: 'upload_error' }
 
-  // Step 3+4: Update DB — refresh storage_path, status, and expires_at (spec: expires_at reset on resubmit)
+  // Step 3+4: Update DB — refresh storage_path, status, and expires_at
   const refreshedExpiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString()
 
   const { error: updateError } = await admin
     .from('engagement_submissions')
     .update({
       storage_path: newStoragePath,
-      proof_url: newStoragePath,        // keep proof_url in sync (legacy compat)
+      proof_url: newStoragePath,
       status: 'PENDING',
       expires_at: refreshedExpiresAt,
     })
     .eq('id', submissionId)
 
   if (updateError) {
-    // Safety: cleanup newly uploaded file on DB failure
     await admin.storage.from('engagement-proofs').remove([newStoragePath])
-    return { success: false, error: updateError.message }
+    return { success: false, error: updateError.message, errorType: 'database_error' }
   }
 
-  // Step 5: Delete old file (after DB success)
+  // Step 5: Delete old file after DB success (non-blocking failure allowed)
   const oldPath = existing.storage_path as string | null
   if (oldPath && oldPath !== newStoragePath) {
     await admin.storage.from('engagement-proofs').remove([oldPath])
   }
 
-  // Log activity
   await admin.from('engagement_activity_log').insert({
     submission_id: submissionId,
     actor_id: me.id,
@@ -339,14 +349,16 @@ export async function validateEngagementSubmission(
   submissionId: string,
   decision: 'APPROVED' | 'REJECTED',
   rejectReason?: string
-): Promise<{ success: true } | { success: false; error: string }> {
+): Promise<{ success: true } | EngagementActionError> {
   const me = await getCurrentUser()
-  if (!me) return { success: false, error: 'Not authenticated' }
-  if (!isAdminRole(me.role)) return { success: false, error: 'Admin or manager only' }
+  if (!me) return { success: false, error: 'Not authenticated', errorType: 'permission_error' }
+  if (!isAdminRole(me.role)) {
+    return { success: false, error: 'Admin or manager only', errorType: 'permission_error' }
+  }
 
   // Enforce reason required for rejections server-side
   if (decision === 'REJECTED' && (!rejectReason || !rejectReason.trim())) {
-    return { success: false, error: 'Rejection reason is required' }
+    return { success: false, error: 'Rejection reason is required', errorType: 'validation_error' }
   }
 
   const admin = adminClient()
@@ -363,15 +375,27 @@ export async function validateEngagementSubmission(
     updatePayload.rejection_reason = rejectReason?.trim() ?? null
   }
 
-  const { error } = await admin
+  // Atomic update: only succeeds if row is still PENDING
+  // Using .select('id') lets us check whether any row was actually updated
+  const { data: updated, error } = await admin
     .from('engagement_submissions')
     .update(updatePayload)
     .eq('id', submissionId)
     .eq('status', 'PENDING')
+    .select('id')
 
-  if (error) return { success: false, error: error.message }
+  if (error) return { success: false, error: error.message, errorType: 'database_error' }
 
-  // Log decision — encode reason into action field for rejected proofs
+  // Zero rows updated = submission was already processed by another admin (race condition)
+  if (!updated || updated.length === 0) {
+    return {
+      success: false,
+      error: 'Submission has already been processed by another admin',
+      errorType: 'conflict_error',
+    }
+  }
+
+  // Log decision — encode reason for rejected proofs
   const actionValue = decision === 'REJECTED' && rejectReason?.trim()
     ? `rejected:${rejectReason.trim()}`
     : decision.toLowerCase()

@@ -291,6 +291,17 @@ Blocking issues found and resolved across 4 files:
 
 **Known gap**: Resubmit flow (operator perspective) untested — no operator account. Use Team → Invite to create worker_standard test account.
 
+### Phase 3 Engagement Workflow Hardening ✅ (2026-04-09)
+**TypeScript: 0 errors. Build: clean. Self-tested.**
+
+Files changed: `engagement.ts`, `ValidateQueueClient.tsx`, `SubmitProofForm.tsx`, `MySubmissionsClient.tsx`, `types/engagement.ts`
+
+1. **engagement.ts** — Added `EngagementActionError` type with `errorType` field (validation_error / permission_error / conflict_error / upload_error / database_error). `getDailyTarget` fallback changed 10→5. `validateEngagementSubmission` now uses `.select('id')` on UPDATE and returns `conflict_error` if 0 rows affected (race condition guard). All failure returns include `errorType`.
+2. **ValidateQueueClient.tsx** — REVIEW button `disabled={isPending}` prevents switching targets mid-flight. `conflict_error` handled specifically: "Already processed by another admin — refreshing queue" + `resetModalState()` + `router.refresh()`.
+3. **SubmitProofForm.tsx** — `errorType` state added. Error banner uses amber for upload_error, bright red for permission_error, default red for others.
+4. **MySubmissionsClient.tsx** — `ALLOWED_TYPES` + `MAX_FILE_BYTES` constants. `openResubmit` blocked while `isPending`. `closeResubmit()` blocked while `isPending` (both button + backdrop). File type + size validated in `handleFileChange`. Cancel button `disabled={isPending}`. `rejection_reason` displayed inline above RESUBMIT button.
+5. **types/engagement.ts** — `rejection_reason?: string | null` added.
+
 ### P2 — Next (Upcoming)
 - [ ] File attachments for social tasks (chunked upload to Supabase Storage)
 - [ ] Scheduling/auto-publish for social tasks (publish_at field)
