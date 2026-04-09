@@ -274,7 +274,24 @@ Note: ATTACK category was disabled during automated testing — re-enable via /e
 - Routes `/accounting/payroll` and `/admin/settings` still exist — only the sidebar nav links are hidden
 - 12/12 tests passed
 
-### P2 — Phase 3 Remaining (Upcoming)
+### Phase 2 Engagement Workflow Fixes ✅ (2026-04-08)
+**3 iterations (11, 12). Backend 100%, Frontend 95%.**
+
+Blocking issues found and resolved across 4 files:
+
+1. `submitEngagementProof` INSERT missing `expires_at` (NOT NULL) → added `now() + 7 days`
+2. `submitEngagementProof` INSERT missing `submission_date`, `file_size_bytes`, `mime_type`, `proof_url` (all NOT NULL in live DB)
+3. All status strings lowercase (`pending/approved/rejected`) → corrected to `PENDING/APPROVED/REJECTED` (DB enum constraint)
+4. `validateEngagementSubmission` UPDATE for REJECTED missing `rejection_reason` (DB check constraint `check_rejection_reason_required`) → added
+5. `validateEngagementSubmission` UPDATE for APPROVED/REJECTED now includes `approved_by/approved_at` / `rejected_by/rejected_at`
+6. `resubmitEngagementProof` UPDATE now refreshes `expires_at` and syncs `proof_url`
+7. `ValidateQueueClient`: reject button now opens two-phase modal requiring non-empty reason before confirming
+8. `types/engagement.ts`: `EngagementSubmissionStatus = 'PENDING' | 'APPROVED' | 'REJECTED'`, added optional live columns
+9. `StatusBadge.tsx`: STATUS_CONFIG keys updated to uppercase
+
+**Known gap**: Resubmit flow (operator perspective) untested — no operator account. Use Team → Invite to create worker_standard test account.
+
+### P2 — Next (Upcoming)
 - [ ] File attachments for social tasks (chunked upload to Supabase Storage)
 - [ ] Scheduling/auto-publish for social tasks (publish_at field)
 
