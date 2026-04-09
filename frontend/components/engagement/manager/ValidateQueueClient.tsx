@@ -33,6 +33,14 @@ export function ValidateQueueClient({ submissions }: Props) {
     setRejectReasonError('')
   }
 
+  // Internal close after action success — bypasses isPending guard
+  const resetModalState = () => {
+    setSelected(null)
+    setShowRejectInput(false)
+    setRejectReason('')
+    setRejectReasonError('')
+  }
+
   const handleApprove = () => {
     if (!selected) return
     startTransition(async () => {
@@ -42,8 +50,8 @@ export function ValidateQueueClient({ submissions }: Props) {
         return
       }
       setOptimisticDone(prev => new Set([...prev, selected.id]))
+      resetModalState()
       showToast('Submission APPROVED')
-      closeModal()
       router.refresh()
     })
   }
@@ -70,8 +78,8 @@ export function ValidateQueueClient({ submissions }: Props) {
         return
       }
       setOptimisticDone(prev => new Set([...prev, selected.id]))
+      resetModalState()
       showToast('Submission REJECTED')
-      closeModal()
       router.refresh()
     })
   }

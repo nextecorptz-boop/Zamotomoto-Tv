@@ -30,11 +30,6 @@
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/(dashboard)/engagement/validate/page.js"
-    ],
-    "/(dashboard)/engagement/submissions/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/(dashboard)/engagement/submissions/page.js"
     ]
   }
 }
