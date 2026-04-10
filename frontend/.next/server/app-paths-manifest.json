@@ -1,6 +1,3 @@
 {
-  "/(auth)/login/page": "app/(auth)/login/page.js",
-  "/(dashboard)/engagement/validate/page": "app/(dashboard)/engagement/validate/page.js",
-  "/(dashboard)/engagement/submit/page": "app/(dashboard)/engagement/submit/page.js",
-  "/(dashboard)/engagement/submissions/page": "app/(dashboard)/engagement/submissions/page.js"
+  "/(auth)/login/page": "app/(auth)/login/page.js"
 }
