@@ -291,7 +291,26 @@ Blocking issues found and resolved across 4 files:
 
 **Known gap**: Resubmit flow (operator perspective) untested — no operator account. Use Team → Invite to create worker_standard test account.
 
-### Phase 3 Engagement Workflow Hardening ✅ (2026-04-09)
+### RBAC Multi-Step Restructure ✅ (2026-04-11)
+**Build: 0 TypeScript errors, 25 pages compiled. Testing: 95% pass (iteration_14).**
+
+Files changed (7 files + 1 new):
+1. `components/layout/Sidebar.tsx` — removed `navItems`, added `workerStandardNav` (Dashboard/Tasks/New Task/Media/Departments), `workerIsolatedNav` (empty — Engagement only), updated `adminPrimaryNav` Settings link to `/admin/settings`; 3-way role fork in render
+2. `app/(dashboard)/settings/page.tsx` — replaced full page with pure redirect: super_admin+admin → `/admin/settings`, others → `/`
+3. `app/(dashboard)/admin/settings/page.tsx` — guard relaxed from `super_admin` only to `super_admin || admin`; passes `currentUserRole` to client
+4. `components/admin/AdminSettingsClient.tsx` — accepts `currentUserRole: Role`, threads to `RoleManagementTab`; updated header from "Super Admin Only" to "Admin Access Only"
+5. `components/admin/RoleManagementTab.tsx` — accepts `currentUserRole: string`; `canEdit` logic: admin cannot see EDIT button for super_admin rows
+6. `app/(dashboard)/admin/settings/actions.ts` — `updateProfile` allows admin role; server-side guard blocks admin from modifying super_admin targets
+7. `app/(dashboard)/team/actions.ts` — added `deleteTeamMember(targetId)`: deactivates profile (is_active=false) then auth.admin.deleteUser; guards: caller must be admin+, cannot delete self, admin cannot delete super_admin; partial failure handled (auth_delete_failed flag)
+8. `components/team/TeamPageClient.tsx` (NEW) — client component with EDIT+DELETE UI, inline CONFIRM/CANCEL delete flow, RoleEditorModal reuse, canActOn() logic
+9. `app/(dashboard)/team/page.tsx` — converted to server component: fetches profiles + emails via service-role, renders TeamPageClient
+
+Issue Verifications (code audit):
+- Issue 1 (Task Enum): `tasks/new/page.tsx` uses `action: 'task_created'` — matches established enum; DB fix applied by user; code is correct. NO code changes needed.
+- Issue 2 (Engagement Reject): `validateEngagementSubmission` correctly writes `rejected_by`, `rejected_at`, `rejection_reason` in REJECTED payload; two-phase modal enforces non-empty reason. VERIFIED COMPLETE.
+- Issue 3 (Duplicate Logging): ZERO writes to `notifications` table in any server action. `notifications/actions.ts` only reads `activity_log`. NO duplicate logging. CLEAN.
+
+
 **TypeScript: 0 errors. Build: clean. Self-tested.**
 
 Files changed: `engagement.ts`, `ValidateQueueClient.tsx`, `SubmitProofForm.tsx`, `MySubmissionsClient.tsx`, `types/engagement.ts`
