@@ -11,27 +11,25 @@ interface SidebarProps {
   profile: Profile | null
 }
 
-// Full nav for workers
-const navItems = [
-  { href: '/', label: 'Dashboard', icon: '■' },
-  { href: '/tasks', label: 'Tasks', icon: '▤' },
-  { href: '/tasks/new', label: 'New Task', icon: '+' },
-  { href: '/files', label: 'Media Library', icon: '◫' },
-  { href: '/analytics', label: 'Analytics', icon: '◈' },
-  { href: '/departments', label: 'Departments', icon: '◉' },
-  { href: '/special-projects', label: 'Special Projects', icon: '◆' },
-  { href: '/team', label: 'Team', icon: '◐' },
-  { href: '/settings', label: 'Settings', icon: '⚙' },
-]
-
-// Simplified primary nav for admin/super_admin
+// Primary nav for admin / super_admin — Settings links to /admin/settings directly
 const adminPrimaryNav = [
   { href: '/', label: 'Dashboard', icon: '■' },
   { href: '/analytics', label: 'Analytics', icon: '◈' },
   { href: '/team', label: 'Team', icon: '◐' },
   { href: '/departments', label: 'Departments', icon: '◉' },
-  { href: '/settings', label: 'Settings', icon: '⚙' },
+  { href: '/admin/settings', label: 'Settings', icon: '⚙' },
 ]
+
+// Primary nav for worker_standard — Tasks, Media, Departments only
+const workerStandardNav = [
+  { href: '/', label: 'Dashboard', icon: '■' },
+  { href: '/tasks', label: 'Tasks', icon: '▤' },
+  { href: '/tasks/new', label: 'New Task', icon: '+' },
+  { href: '/files', label: 'Media Library', icon: '◫' },
+  { href: '/departments', label: 'Departments', icon: '◉' },
+]
+
+// worker_isolated has NO primary nav items — only the Engagement section below
 
 // Engagement children for admin collapsible (Validate Queue, Categories, Eng. Settings)
 const engagementAdminChildren = [
@@ -79,6 +77,7 @@ export default function Sidebar({ profile }: SidebarProps) {
 
   const isEngagementActive = pathname.startsWith('/engagement')
   const isAdmin = profile?.role === 'super_admin' || profile?.role === 'admin'
+  const isWorkerIsolated = profile?.role === 'worker_isolated'
 
   const navLinkStyle = (active: boolean): React.CSSProperties => ({
     display: 'flex',
@@ -173,8 +172,13 @@ export default function Sidebar({ profile }: SidebarProps) {
           ))
         ) : (
           <>
-            {/* Primary nav: simplified for admin, full for workers */}
-            {(isAdmin ? adminPrimaryNav : navItems).map(item => (
+            {/* Primary nav: role-gated array */}
+            {(isAdmin
+              ? adminPrimaryNav
+              : isWorkerIsolated
+                ? [] // worker_isolated: no primary nav — Engagement section only
+                : workerStandardNav
+            ).map(item => (
               <Link
                 key={item.href}
                 href={item.href}

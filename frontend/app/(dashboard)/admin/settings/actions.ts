@@ -26,7 +26,22 @@ export async function updateProfile(
   if (!user) return { success: false, error: 'Not authenticated' }
 
   const { data: me } = await supabase.from('profiles').select('role').eq('id', user.id).single()
-  if (me?.role !== 'super_admin') return { success: false, error: 'Insufficient permissions' }
+  // Both super_admin and admin may call this action
+  if (me?.role !== 'super_admin' && me?.role !== 'admin') {
+    return { success: false, error: 'Insufficient permissions' }
+  }
+
+  // Admin cannot modify a super_admin account (server-side enforcement)
+  if (me?.role === 'admin') {
+    const { data: target } = await supabase
+      .from('profiles')
+      .select('role')
+      .eq('id', targetId)
+      .single()
+    if (target?.role === 'super_admin') {
+      return { success: false, error: 'Admins cannot modify a Super Admin account' }
+    }
+  }
 
   const admin = getAdminClient()
 

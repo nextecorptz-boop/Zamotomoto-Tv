@@ -14,7 +14,8 @@ export default async function AdminSettingsPage() {
   if (!user) redirect('/login')
 
   const { data: me } = await supabase.from('profiles').select('role').eq('id', user.id).single()
-  if (me?.role !== 'super_admin') redirect('/')
+  // Both super_admin and admin have access; all other roles are redirected home
+  if (me?.role !== 'super_admin' && me?.role !== 'admin') redirect('/')
 
   // Fetch all profiles
   const { data: profiles } = await supabase
@@ -49,6 +50,7 @@ export default async function AdminSettingsPage() {
     <AdminSettingsClient
       profiles={membersWithEmail}
       currentUserId={user.id}
+      currentUserRole={me!.role as import('@/types').Role}
       stats={stats}
       socialTasks={socialTasks}
     />

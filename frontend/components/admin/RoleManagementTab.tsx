@@ -8,12 +8,13 @@ import type { ProfileWithEmail } from './AdminSettingsClient'
 interface Props {
   profiles: ProfileWithEmail[]
   currentUserId: string
+  currentUserRole: string
   onProfileUpdated: (updated: Partial<ProfileWithEmail> & { id: string }) => void
 }
 
 type SortField = 'full_name' | 'role' | 'department' | 'is_active'
 
-export function RoleManagementTab({ profiles, currentUserId, onProfileUpdated }: Props) {
+export function RoleManagementTab({ profiles, currentUserId, currentUserRole, onProfileUpdated }: Props) {
   const [editingProfile, setEditingProfile] = useState<ProfileWithEmail | null>(null)
   const [sortField, setSortField] = useState<SortField>('full_name')
   const [sortDir, setSortDir] = useState<'asc' | 'desc'>('asc')
@@ -62,6 +63,8 @@ export function RoleManagementTab({ profiles, currentUserId, onProfileUpdated }:
         {sorted.map(member => {
           const roleColor = member.role === 'super_admin' ? '#CC1F1F' : member.role === 'admin' ? '#F59E0B' : '#22C55E'
           const isMe = member.id === currentUserId
+          // admin cannot edit a super_admin row; super_admin can edit anyone except themselves
+          const canEdit = !isMe && !(currentUserRole === 'admin' && member.role === 'super_admin')
 
           return (
             <div
@@ -123,15 +126,22 @@ export function RoleManagementTab({ profiles, currentUserId, onProfileUpdated }:
 
               {/* Actions */}
               <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.4rem' }}>
-                <button
-                  data-testid={`edit-member-${member.id}`}
-                  onClick={() => setEditingProfile(member)}
-                  style={{ background: '#1A1A1A', border: '1px solid #2A2A2A', color: '#FFFFFF', fontFamily: "'IBM Plex Mono', monospace", fontSize: '0.6rem', letterSpacing: '0.1em', padding: '0.25rem 0.6rem', cursor: 'pointer', borderRadius: 0, transition: 'border-color 120ms' }}
-                  onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.borderColor = '#CC1F1F' }}
-                  onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.borderColor = '#2A2A2A' }}
-                >
-                  EDIT
-                </button>
+                {canEdit && (
+                  <button
+                    data-testid={`edit-member-${member.id}`}
+                    onClick={() => setEditingProfile(member)}
+                    style={{ background: '#1A1A1A', border: '1px solid #2A2A2A', color: '#FFFFFF', fontFamily: "'IBM Plex Mono', monospace", fontSize: '0.6rem', letterSpacing: '0.1em', padding: '0.25rem 0.6rem', cursor: 'pointer', borderRadius: 0, transition: 'border-color 120ms' }}
+                    onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.borderColor = '#CC1F1F' }}
+                    onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.borderColor = '#2A2A2A' }}
+                  >
+                    EDIT
+                  </button>
+                )}
+                {isMe && (
+                  <span style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '0.55rem', color: '#555555', letterSpacing: '0.08em', padding: '0.25rem 0' }}>
+                    —
+                  </span>
+                )}
               </div>
             </div>
           )

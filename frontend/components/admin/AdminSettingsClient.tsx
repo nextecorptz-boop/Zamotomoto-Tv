@@ -4,7 +4,7 @@ import { RoleManagementTab } from './RoleManagementTab'
 import { DepartmentSettingsTab } from './DepartmentSettingsTab'
 import { SystemStatusTab } from './SystemStatusTab'
 import { AdminSocialCopyTab } from './AdminSocialCopyTab'
-import type { Profile } from '@/types'
+import type { Profile, Role } from '@/types'
 import type { SystemStats } from '@/app/(dashboard)/admin/settings/actions'
 import type { SocialTaskRow } from '@/app/(dashboard)/social-copy/actions'
 
@@ -22,11 +22,12 @@ const TABS: { id: Tab; label: string }[] = [
 interface Props {
   profiles: ProfileWithEmail[]
   currentUserId: string
+  currentUserRole: Role
   stats: SystemStats
   socialTasks: SocialTaskRow[]
 }
 
-export function AdminSettingsClient({ profiles: initialProfiles, currentUserId, stats, socialTasks }: Props) {
+export function AdminSettingsClient({ profiles: initialProfiles, currentUserId, currentUserRole, stats, socialTasks }: Props) {
   const [activeTab, setActiveTab] = useState<Tab>('roles')
   const [profiles, setProfiles] = useState<ProfileWithEmail[]>(initialProfiles)
 
@@ -36,7 +37,7 @@ export function AdminSettingsClient({ profiles: initialProfiles, currentUserId, 
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
         <div>
           <div style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '0.6rem', color: '#888888', letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: '0.25rem' }}>
-            Super Admin Only
+            Admin Access Only
           </div>
           <h2 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: '2rem', letterSpacing: '0.08em', color: '#FFFFFF', margin: 0 }}>
             Admin Control Panel
@@ -87,6 +88,7 @@ export function AdminSettingsClient({ profiles: initialProfiles, currentUserId, 
           <RoleManagementTab
             profiles={profiles}
             currentUserId={currentUserId}
+            currentUserRole={currentUserRole}
             onProfileUpdated={(updated) => setProfiles(prev => prev.map(p => p.id === updated.id ? { ...p, ...updated } : p))}
           />
         )}
